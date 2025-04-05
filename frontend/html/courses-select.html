@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/courses-select.css">
+    <script type="module" src="../javascript/courses-select.js"></script>
+    <title>Document</title>
+</head>
+<body data-theme="light">
+    <nav>
+        <div class="menu-icon" >
+            <i class='ri-menu-2-fill'></i>
+        </div>
+    </nav>
+    <main>
+        <div class="title">
+            <i class='ri-arrow-left-circle-fill' onclick="window.history.back()"></i>
+            <p>Select Courses</p>
+        </div>
+        <div class="courses-container">
+            <div class="courses-card">
+                <div class="info">
+                    <div class="upper">
+                        <p>EBC 352</p>
+                        <p>3CRH</p>
+                    </div>
+                    <p>Web Technology Design</p>
+                </div>
+                <input type="checkbox" name="" id="">
+            </div>
+            <div class="courses-card">
+                <div class="info">
+                    <div class="upper">
+                        <p>EBC 352</p>
+                        <p>3CRH</p>
+                    </div>
+                    <p>Web Technology Design</p>
+                </div>
+                <input type="checkbox" name="" id="">
+            </div>
+            <div class="courses-card">
+                <div class="info">
+                    <div class="upper">
+                        <p>EBC 352</p>
+                        <p>3CRH</p>
+                    </div>
+                    <p>Web Technology Design</p>
+                </div>
+                <input type="checkbox" name="" id="">
+            </div>
+            <div class="courses-card">
+                <div class="info">
+                    <div class="upper">
+                        <p>EBC 352</p>
+                        <p>3CRH</p>
+                    </div>
+                    <p>Web Technology Design</p>
+                </div>
+                <input type="checkbox" name="" id="">
+            </div>
+        </div>
+        <input type="button" value="Register" id="btnRegister">
+        <div class="lower-info">
+            <p>Courses Selected: 0</p>
+            <p>Total Credit Hours: 0</p>
+        </div>
+    </main>
+    <div class="modal">
+        <div class="card">
+            <h2>Course Submission</h2>
+            <p>Are you sure you want to register for this courses?</p>
+            <div class="action">
+                <input type="button" value="Yes" id="btnYes" onclick="window.location.href='registered-courses.html'">
+                <input type="button" value="No" id="btnNo">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <img src="../assets/images/windows.jpg" alt="">
+        <p>Presbyterian College of Education - Akropong</p>
+    </footer>
+</body>
+</html>
