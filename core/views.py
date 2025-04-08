@@ -12,12 +12,9 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
-# from .tokensGenerator import *
 from pathlib import Path
 from .models import *
-# from .forms import *
 from .utils import *
-import os
 
 # Create your views here.
 
@@ -26,6 +23,18 @@ def index(request):
 
     }
     return render(request, 'admin/manager.html', context= context)
+
+def accountActivation(request, uidb64, token, special):
+    activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)
+    context= {
+        'email': userEmail,
+        'activationMessage': activationMessage
+    }
+    if activationStatus:
+        return render(request, 'students/set-new-password.html', context= context)
+    else:
+        return render(request, 'students/activationFailed.html', context= context)
+
 
 def createStaffUser(request, first_name, last_name, password, email, profileImg, staffDepartment, is_staff, hasFullAccess=False):
     if StaffUserModel.objects.filter(email= email).exists():
@@ -67,7 +76,7 @@ def createNewStudents(request, email):
         else:
             return False, 'Account has been created but failed to send activation link'
 
-def sendActivationLink(request, user, userType):
+def sendActivationLink(request, user, userType, special= False):
     if userType == 'student':
         user= StudentstsModel.objects.get(uid= user.uid)
     elif userType == 'staff':
@@ -75,7 +84,7 @@ def sendActivationLink(request, user, userType):
     else:
         user= None
     if user is not None:
-        linkResponse= getActivationLink(request, user)
+        linkResponse= getActivationLink(request, user, special)
         if linkResponse:
             return True, 'User has been created successfully'
         else:

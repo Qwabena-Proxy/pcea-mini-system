@@ -139,6 +139,7 @@ class StudentsModelManager(BaseUserManager):
     
     def create_user(self,surname, othername, level , email, program, indexNumber,pasword, **extra_fields):
         extra_fields.setdefault("uid", uuid.uuid4)
+        extra_fields.setdefault("is_active", False)
 
         return self._create_user(surname, othername, level , email, program, indexNumber, pasword, **extra_fields)
 # Participants model
@@ -151,6 +152,7 @@ class StudentstsModel(AbstractBaseUser, PermissionsMixin):
     program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE)
     indexNumber= models.CharField(max_length=20, blank= False, null= False, unique=True)
     profile_img= models.ImageField(upload_to='students_images/', default='', null= True, blank= True)
+    is_active= models.BooleanField(default= False)
 
     groups = models.ManyToManyField(Group, related_name='students_groups')
     user_permissions = models.ManyToManyField(Permission, related_name='students_permissions')

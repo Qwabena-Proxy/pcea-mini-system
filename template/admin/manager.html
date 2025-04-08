@@ -8,15 +8,19 @@
 <body>
     <input type="text" name="" id="email">
     <input type="button" value="send" id="send">
+    {% csrf_token %}
     <script>
         const sendBtn= document.getElementById("send");
-        const apiUrl= 'http://127.0.0.1:8000/apis/v1/create-student';
+        const address= 'http://172.20.10.3:8000/'
+        const apiUrl= `${address}/apis/v1/create-student`;
 
         sendBtn.addEventListener("click", () => {
             const email= document.getElementById("email");
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
             let formData= new FormData();
 
             formData.append("email", email.value)
+            formData.append("csrfmiddlewaretoken", csrfToken);
             fetch(apiUrl,{
                 method: 'POST',
                 body: formData,

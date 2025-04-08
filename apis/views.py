@@ -4,7 +4,7 @@
 # from django.contrib.sites.shortcuts import get_current_site
 from django.db.utils import IntegrityError 
 # from django.utils.encoding import force_bytes, force_str
-# from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 # from django.template.loader import render_to_string
 # from django.core.exceptions import ValidationError
 # from django.shortcuts import render, redirect
@@ -120,13 +120,27 @@ class createStaffView(generics.GenericAPIView):
         
 
 class createStudentView(generics.GenericAPIView):
+    
     def post(self, request, *args, **kwargs):
-        email= request.POST.get("email")
-        createResponse, createResponseMessage= createNewStudents( request, email)
+        email = request.data.get("email")
+        createResponse, createResponseMessage = createNewStudents(request, email)
         if createResponse:
-            return Response(data= {'message': createResponseMessage}, status=status.HTTP_201_CREATED)
+            return Response(data={'message': createResponseMessage}, status=status.HTTP_201_CREATED)
         else:
-            return Response(data= {'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(data={'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class createStudentPasswordView(generics.GenericAPIView):
+    
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        student = StudentstsModel.objects.get(email=email)
+        student.set_password(password)
+        student.save()
+        if createResponse:
+            return Response(data={'message': "Success"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(data={'message': "Fail"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 

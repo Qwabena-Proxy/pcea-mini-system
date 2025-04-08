@@ -1,24 +1,5 @@
 # from django.contrib.auth.decorators import login_required
-# from adminSystem.models import AdminDeveloperUserModel
 # from django.views.decorators.csrf import csrf_exempt
-# from django.contrib.auth.models import User, auth 
-# # from django.shortcuts import get_object_or_404
-# from questionSystem.models import QuizHistory
-# from django.shortcuts import render, redirect
-# from django.http import JsonResponse
-# from django.contrib import messages
-# from paymentSystem.models import *
-# from referralSystem.views import *
-# from questionSystem.views import *
-# from paymentSystem.views import *
-# from django.conf import settings
-# from django.urls import reverse
-# from .tokensGenerator import *
-# from pathlib import Path
-# from .models import *
-# from .forms import *
-# from .utils import is_strong_password
-# import os
 
 #Password validator
 #--Rules
@@ -28,10 +9,14 @@
 
 
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
+from django.utils.crypto import constant_time_compare
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
+from django.utils.http import base36_to_int
 from django.core.mail import EmailMessage
 import re, string, random, datetime
 from django.utils import timezone
@@ -74,20 +59,6 @@ def is_strong_password(password, username, email, firstname= None, lastname= Non
                     return True, 'Strong password.'
                 else:
                     return False, 'Password must contain at least one uppercase letter, one number, and one of these special characters. @$!%*?&'
-            
-
-# def generate_unique_participants_code(length=5):
-#     """
-#     Generates a unique alphanumeric participants code.
-#     """
-#     characters = string.ascii_letters + string.digits
-#     code = ''.join(random.choice(characters) for _ in range(length))
-
-#     # Check if the code already exists in the database
-#     while ParticipantCodeModel.objects.filter(code=code).exists():
-#         code = ''.join(random.choice(characters) for _ in range(length))
-
-#     return code
 
 
 def headersAuthorizationCheck(header):
@@ -127,18 +98,23 @@ def generate_token(user):
 
     return {'access': str(access), 'refresh': str(refresh)}
 
-def getActivationLink(request, user):
+def getActivationLink(request, user, special= False):
+    if special:
+        adminRequest= 1
+    else:
+        adminRequest= 0
     try:
         current_site= get_current_site(request) #Geting the curent site domain
-        token= RefreshToken.for_user(user) #Generating hash 
+        token= ActivationValidator.make_token(user) #Generating hash 
         tokenID= ActivationTokensModel.objects.create(token=token, user_id=user.id) # Registering token to database
         tokenID.save()
         mail_subject= 'Account Activation' #Email to be sent preparation process
-        message= render_to_string('mail/accountactivation.html', {
+        message= render_to_string('mail/accountActivation.html', {
             'user': user,
             'domain': current_site,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': token,
+            'special': adminRequest,
         })
         email= EmailMessage(
             mail_subject, message, to=[user.email]
@@ -151,22 +127,65 @@ def getActivationLink(request, user):
 
 
 
-# def activateAccount(request, uidb64, token): 
-#     user= auth.get_user_model()
+def activateAccount(uidb64, token, special): 
+    # user= auth.get_user_model()
 
-#     try: # Decoding the hashes recieved from the link to verify if it a valid link to activate their account
-#         uid= force_str(urlsafe_base64_decode(uidb64))
-#         user= CustomUserModel.objects.get(pk= uid)
-#     except (TypeError, ValidationError, OverflowError, CustomUserModel.DoesNotExist):
-#         user= None
-#     tokenDate= ActivationTokensModel.objects.get(user_id= uid)
-#     if user is not None and check_token(tokenDate.timestamp, settings.ACCOUNT_ACTIVATION_TOKEN_EXPIRY_DURATION): # checking the validity of the token
-#         user.is_active= True
-#         user.save()
-#         ActivationTokensModel.objects.get(token= token).delete()
-#         return render(request, 'mail/accountActivationSuccess.html', context= {})    
-#     else:
-#         return render(request, 'mail/accountActivationFailed.html', context= {})
+    try: # Decoding the hashes recieved from the link to verify if it a valid link to activate their account
+        uid= force_str(urlsafe_base64_decode(uidb64))
+        if int(special) == 1:
+            user= StaffUserModel.objects.get(pk= uid)
+        else:
+            user= StudentstsModel.objects.get(pk= uid)
+    except (TypeError, ValidationError, OverflowError, StaffUserModel.DoesNotExist, StudentstsModel.DoesNotExist):
+        user= None
+
+    if user is not None and ActivationValidator.check_activation_token(user, token, settings.ACCOUNT_ACTIVATION_TOKEN_EXPIRY_DURATION): # checking the validity of the token
+        user.is_active= True
+        user.save()
+        ActivationTokensModel.objects.get(token= token).delete()
+        # auth.login(request, user)
+        return True, user.email , "Account activation successfully"
+    else:
+        return False, None, "Account activation failed"
+
+
+class ActivationValidator(PasswordResetTokenGenerator):
+     
+    def _num_to_timestamp(self, num):
+        """
+        Converts a base36 encoded number to a timestamp.
+        """
+        try:
+            return int(num, 36)
+        except ValueError:
+            raise ValueError("Invalid base36 encoded timestamp")
+        
+    def _make_hash_value(self, user, timestamp):
+        return (
+            str(user.pk) + str(timestamp) + str(user.is_active)
+        )
+    
+    def check_activation_token(self, user, token, duration):
+        try:
+            get_token_from_database= ActivationTokensModel.objects.get(token= token)
+            expiration_time= timezone.now() - timezone.timedelta(minutes= int(duration))
+            if get_token_from_database is not None and get_token_from_database.user_id == user.id: #checking if token exist and also if token was generated by the current user
+                if get_token_from_database.timestamp > expiration_time: #checking if it still valid
+                    return True
+                else:
+                    get_token_from_database.delete() # deleting token if it has expired
+                    return False
+            else:
+                return False
+        except (TypeError, ValueError, OverflowError, ActivationTokensModel.DoesNotExist):
+            return False
+        
+ 
+    
+# Create an instance of the custom token generator Validator
+ActivationValidator = ActivationValidator()
+
+
 
 
             

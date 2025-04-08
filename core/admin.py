@@ -6,3 +6,6 @@ from .models import *
 admin.site.register(ProgrameModel)
 admin.site.register(StudentstsModel)
 admin.site.register(StaffUserModel)
+admin.site.register(StaffDepartmentModel)
+admin.site.register(TokenStorage)
+admin.site.register(ActivationTokensModel)
