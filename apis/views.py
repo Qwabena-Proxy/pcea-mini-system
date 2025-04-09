@@ -132,17 +132,81 @@ class createStudentView(generics.GenericAPIView):
 class createStudentPasswordView(generics.GenericAPIView):
     
     def post(self, request, *args, **kwargs):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        student = StudentstsModel.objects.get(email=email)
-        student.set_password(password)
-        student.save()
-        if createResponse:
+        try:
+            email = request.data.get("email")
+            password = request.data.get("password")
+            print(email, password)
+            student = StudentstsModel.objects.get(email=email)
+            student.set_password(password)
+            student.save()
             return Response(data={'message': "Success"}, status=status.HTTP_201_CREATED)
-        else:
+        except:
             return Response(data={'message': "Fail"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+class logInView(generics.GenericAPIView):
+    serializer_class = StudentsLoginSerializer
 
+    def post(self, request, *args, **kwargs):
+        # Create an instance of the serializer with the request data
+        serializer = self.get_serializer(data=request.data)
+        
+        # Validate the serializer
+        serializer.is_valid(raise_exception=True)
+        
+        # If valid, get the user from the validated data
+        user = serializer.validated_data['user']
+
+        # Generate the access and refresh tokens
+        generateToken= generate_token(user)
+        #Storing of tokens
+        try:
+            StudentsTokenStorage.objects.get(user= user).delete()
+        except StudentsTokenStorage.DoesNotExist:
+            pass
+        StudentsTokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
+        
+
+        # Checking if the user is required to update their info on first login
+        if user.surname == "TestName":
+            updateRequired= True
+        else:
+            updateRequired= False
+
+        # Construct the response data
+        response_data = {
+            'access': generateToken['access'],
+            'refresh': generateToken['refresh'],
+            'email': user.email,
+            'updateRequired': updateRequired,
+            'studentID': user.uid,
+        }
+        
+        # Return a successful response
+        return Response(data= response_data, status=status.HTTP_200_OK)
+
+
+class studentsInfoUpdate(generics.GenericAPIView):
+
+    def post(self, request, *args, **kwargs):
+        studentSurname= request.data.get("studentSurname")
+        otherName= request.data.get("otherName")
+        indexNumber= request.data.get("indexNumber")
+        studentTelephone= request.data.get("studentTelephone")
+        studentProgram= request.data.get("studentProgram")
+        studentLevel= request.data.get("studentLevel")
+        studentEmail= request.data.get("studentEmail")
+        try:
+            student= StudentstsModel.objects.get(email= studentEmail)
+            student.surname= studentSurname
+            student.othername= otherName
+            student.indexNumber= indexNumber
+            student.program= ProgrameModel.objects.get(name= studentProgram)
+            student.level= studentLevel
+            student.save()
+
+            return Response(data= {"message": f"Dear {studentSurname} {otherName}, your information has been recorded successfully."}, status=status.HTTP_200_OK)
+        except StudentstsModel.DoesNotExist:
+            return Response(data= {"message": "Student does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

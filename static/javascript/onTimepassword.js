@@ -4,28 +4,37 @@ const userEmail= document.getElementById("email");
 const submitBtn= document.getElementById("submit-btn");
 
 const passwordValidation= (e) => {
-    if (newPass.value !== confirmPass.value) {
-        return false;
+    console.log(newPass.value, confirmPass.value)
+    if (newPass.value === confirmPass.value) {
+        return true;
     }
 }
 
 submitBtn.addEventListener("click", (e) => {
     if (passwordValidation(e)) {
-        const newPassword= newPass.value;
-        const address= 'http://172.20.10.3:8000/'
-        const apiUrl= `${address}/apis/v1/create-student-password`;
+        
+        const address= 'http://127.0.0.1:8000'
+        const apiUrl= `/apis/v1/create-student-password/`;
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         let formData= new FormData();
 
-        formData.append("password", newPassword.value)
+        formData.append("password", newPass.value)
         formData.append("csrfmiddlewaretoken", csrfToken);
         formData.append("email", userEmail.value)
+        console.log(formData.get("password"))
+
         fetch(apiUrl,{
             method: 'POST',
             body: formData,
         }).then(response => response.json()).
         then(response => {
-            console.log(response)
+            if (response.message === "Success") {
+                alert("Password changed successfully!");
+                window.location.href = `${address}/login/`;
+            }
+            else{
+                alert("Password change failed!");
+            }
         }).catch(err => console.error(err))
 
     }

@@ -22,24 +22,24 @@ from core.models import *
 
 
 class StaffLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, attrs):
-        user = authenticate(username=attrs['username'], password=attrs['password'])
+        user = authenticate(email=attrs['email'], password=attrs['password'])
         if user is None:
-            raise serializers.ValidationError('Invalid username or password')
+            raise serializers.ValidationError('Invalid email or password')
         attrs['user'] = user
         return attrs
 
 class StudentsLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, attrs):
-        user = authenticate(name=attrs['username'], password=attrs['password'])
+        user = authenticate(email=attrs['email'], password=attrs['password'])
         if user is None:
-            raise serializers.ValidationError('Invalid username or password')
+            raise serializers.ValidationError('Invalid email or password')
         attrs['user'] = user
         return attrs
 

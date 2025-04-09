@@ -24,6 +24,25 @@ def index(request):
     }
     return render(request, 'admin/manager.html', context= context)
 
+def loginView(request):
+    context= {
+
+    }
+    return render(request, 'general/login.html', context= context)
+
+def updateStudentInfo(request):
+    Programs= ProgrameModel.objects.all()
+    context= {
+        'studentsPrograms': Programs
+    }
+    return render(request, 'students/updateInfo.html', context= context)
+
+def dashBoard(request):
+    context= {
+
+    }
+    return render(request, 'students/student-dashboard.html', context= context)
+
 def accountActivation(request, uidb64, token, special):
     activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)
     context= {
@@ -89,3 +108,4 @@ def sendActivationLink(request, user, userType, special= False):
             return True, 'User has been created successfully'
         else:
             return False, 'Account has been created but failed to send activation link'
+

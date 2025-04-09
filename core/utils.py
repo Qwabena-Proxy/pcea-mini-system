@@ -180,12 +180,11 @@ class ActivationValidator(PasswordResetTokenGenerator):
         except (TypeError, ValueError, OverflowError, ActivationTokensModel.DoesNotExist):
             return False
         
- 
-    
+   
 # Create an instance of the custom token generator Validator
 ActivationValidator = ActivationValidator()
 
-
+# def updateStudent()
 
 
             
