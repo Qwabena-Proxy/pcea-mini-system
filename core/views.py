@@ -77,6 +77,7 @@ def createStaffUser(request, first_name, last_name, password, email, profileImg,
             return False, 'Account has been created but failed to send activation link'
     
 def createNewStudents(request, email):
+
     if StudentstsModel.objects.filter(email= email).exists():
         return False, 'A user exist with this email'
     else:
@@ -86,7 +87,7 @@ def createNewStudents(request, email):
             level= 'TestLevel',
             email= email,
             program= ProgrameModel.objects.get(name= 'Information & Communication Technology'),
-            indexNumber= 'TestIndexNumber',
+            indexNumber= f'TestIndexNumber{StudentstsModel.objects.count()+1}',
         )
         newStudents.save()
         linkResponse= getActivationLink(request, newStudents)

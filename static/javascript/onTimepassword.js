@@ -30,7 +30,7 @@ submitBtn.addEventListener("click", (e) => {
         then(response => {
             if (response.message === "Success") {
                 alert("Password changed successfully!");
-                window.location.href = `${address}/login/`;
+                window.location.href = `/login/`;
             }
             else{
                 alert("Password change failed!");

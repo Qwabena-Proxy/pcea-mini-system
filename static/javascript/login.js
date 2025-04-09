@@ -30,9 +30,9 @@ authButton.addEventListener("click", () => {
                     'studentID': data.studentID
                 }
                 window.localStorage.setItem('token', JSON.stringify(token))
-                window.location.href= `${address}/students/update-info/`
+                window.location.href= `/students/update-info/`
             }else{
-                window.location.href= `${address}/students/dashboard/`
+                window.location.href= `/students/dashboard/`
             }
         }
         else{
