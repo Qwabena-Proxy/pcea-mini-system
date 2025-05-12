@@ -114,6 +114,25 @@ class ProgrameModel(models.Model):
     def __str__(self):
         return self.name
 
+class LevelModel(models.Model):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    name= models.CharField(max_length= 255, blank= False, null= False, unique= True) 
+
+    def __str__(self):
+        return self.name
+
+class courseModel(models.Model):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    name= models.CharField(max_length= 255, blank= False, null= False, unique= True)
+    code= models.CharField(max_length= 15, blank= False, null= False, unique= True)
+    crh= models.CharField(max_length= 15, blank= False, null= False)
+    level= models.ForeignKey(LevelModel, on_delete= models.CASCADE)
+    program= models.ForeignKey(ProgrameModel, on_delete= models.CASCADE)
+    semester= models.CharField(max_length= 5, blank= False, null= False)
+
+    def __str__(self):
+        return self.name
+
 # Participants model manager
 class StudentsModelManager(BaseUserManager):
     def _create_user(self, surname, othername, level , email, program, indexNumber, password, **extra_fields):

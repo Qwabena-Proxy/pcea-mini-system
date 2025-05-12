@@ -32,8 +32,10 @@ def loginView(request):
 
 def updateStudentInfo(request):
     Programs= ProgrameModel.objects.all()
+    Levels= LevelModel.objects.all()
     context= {
-        'studentsPrograms': Programs
+        'studentsPrograms': Programs,
+        'studentsLevels': Levels,
     }
     return render(request, 'students/updateInfo.html', context= context)
 
@@ -42,6 +44,18 @@ def dashBoard(request):
 
     }
     return render(request, 'students/student-dashboard.html', context= context)
+
+def academics(request):
+    context= {
+
+    }
+    return render(request, 'students/academics.html', context= context)
+
+def courseRegistration(request):
+    context= {
+
+    }
+    return render(request, 'students/courses-select.html', context= context)
 
 def accountActivation(request, uidb64, token, special):
     activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)

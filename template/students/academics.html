@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/student-dashboard.css' %}">
-    <script type="module" src="{% static 'javascript/student-dashboard.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/academics.css' %}">
+    <script type="module" src="{% static 'javascript/academics.js' %}"></script>
     <title>Document</title>
 </head>
 <body data-theme="light">
@@ -29,17 +29,20 @@
         </div>
         <div class="container">
             <div class="section-title">
-                <p>Quick Access</p>
+                <i class='ri-arrow-left-circle-fill' onclick="window.history.back()"></i>
+                <p>Academics</p>
             </div>
-            <div class="cards-container">
-                <a href="{% url 'students-academics' %}">
-                    <div class="card" >
-                        <div class="icon-container">
-                            <i class='ri-graduation-cap-line'></i>
-                        </div>
-                        <p>Academics</p>
-                    </div>
-                </a>
+            <div class="select-drop">
+                <div class="title">
+                    <p>Registration</p>
+                    <i class='ri-triangle-fill'></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'students-academics-course-registration' %}">
+                        <p>Course registration</p>
+                    </a>
+                    <p>Resit registration</p>
+                </div>
             </div>
         </div>
     </main>

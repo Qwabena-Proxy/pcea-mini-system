@@ -95,7 +95,12 @@ main {
     padding: 15px;
 }
 
-.container .cards-container .card {
+.container .cards-container a {
+    text-decoration: none;
+    color: var(--primarytextcolor);
+}
+
+.container .cards-container a .card {
     background-color: honeydew;
     margin: 10px;
     padding: 10px;
@@ -110,7 +115,7 @@ main {
     -moz-box-shadow: -0px 5px 30px var(--boxshadow-color);
 }
 
-.container .cards-container .card .icon-container {
+.container .cards-container a .card .icon-container {
     width: 100%;
     padding: 5px;
     display: flex;
@@ -118,11 +123,11 @@ main {
     justify-content: center;
 }
 
-.container .cards-container .card .icon-container i {
+.container .cards-container a .card .icon-container i {
     font-size: 3.5rem;
 }
 
-.container .cards-container .card > p {
+.container .cards-container a .card > p {
     font-size: large;
     font-weight: 600;
 }

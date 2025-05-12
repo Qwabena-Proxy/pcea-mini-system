@@ -133,7 +133,13 @@ main {
     text-align: center;
 }
 
-.container .select-drop .content p {
+.container .select-drop .content a {
+    text-decoration: none;
+   color: var(--primarytextcolor);
+   width: 100%;
+}
+
+.container .select-drop .content a p {
     border-bottom: 1px solid var(--primarycolor);
     border-top: 1px solid var(--primarycolor);
     width: 100%;

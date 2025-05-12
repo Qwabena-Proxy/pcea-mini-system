@@ -66,9 +66,9 @@ def headersAuthorizationCheck(header):
 
     if headers_access_token and headers_access_token != 'null': # Checking if headaersAccessToken is not None or not == null
         authSplit= headers_access_token.split(' ')
-        if authSplit[0] == bearerAuth:    
+        if authSplit[0] == bearerAuth: 
             try:
-                token= TokenStorage.objects.get(accessToken= authSplit[1])
+                token= StudentsTokenStorage.objects.get(accessToken= authSplit[1])
                 isActive= check_token(token.dateCreated, accessDuration)
                 if isActive:
                     return {"message": "Approved","code": 200, "user": token.user, "status": True}
@@ -188,3 +188,5 @@ ActivationValidator = ActivationValidator()
 
 
             
+
+

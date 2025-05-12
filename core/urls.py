@@ -6,5 +6,7 @@ urlpatterns = [
     path('login/', loginView, name='login-page'),
     path('students/update-info/', updateStudentInfo, name='students-update-info'),
     path('students/dashboard/', dashBoard, name='students-dashboard'),
+    path('students/academics/', academics, name='students-academics'),
+    path('students/academics/course-registration', courseRegistration, name='students-academics-course-registration'),
     path('activate/<str:uidb64>/<str:token>/<int:special>/', accountActivation, name='activate-account'),
 ]

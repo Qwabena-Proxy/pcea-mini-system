@@ -2,17 +2,17 @@
 # from django.contrib.auth import authenticate, login, logout
 # from django.contrib.auth.decorators import login_required
 # from django.contrib.sites.shortcuts import get_current_site
-from django.db.utils import IntegrityError 
 # from django.utils.encoding import force_bytes, force_str
-from django.views.decorators.csrf import csrf_exempt
 # from django.template.loader import render_to_string
 # from django.core.exceptions import ValidationError
 # from django.shortcuts import render, redirect
+# from django.core.mail import EmailMessage
+# from django.core.files import File
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.contrib.auth.models import auth 
 from rest_framework import generics, status
-# from django.core.mail import EmailMessage
-# from django.core.files import File
+from django.db.utils import IntegrityError 
 from django.conf import settings
 from .serializers import *
 from core.models import *
@@ -209,7 +209,38 @@ class studentsInfoUpdate(generics.GenericAPIView):
             return Response(data= {"message": "Student does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetStudentsPrograms(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            cousersInfo= courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program), level= LevelModel.objects.get(name= userID.level), semester= '2')
+            courseDict= {}
+            for index, value in enumerate(cousersInfo):
+                courseDict[index]= {
+                    'ID': value.uid,
+                    'CT': value.name,
+                    'CC': value.code,
+                    'CCHR': value.crh,
+                }
+            return Response(data= courseDict, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message']}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class RegisterCourse(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            selectedCourses= str(request.data.get("courses")).split(",")
+            for i in selectedCourses:
+                print(i)
+            return Response(data={'message': headerCheck['message']} , status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message']}, status=status.HTTP_400_BAD_REQUEST)
 # class CreateProgramView(generics.GenericAPIView):
 #     serializer_class= ProgramSerializer
 
