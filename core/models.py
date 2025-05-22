@@ -194,3 +194,46 @@ class StudentsTokenStorage(models.Model):
         return f'{self.user} ---> {self.dateCreated}'
 
 
+class StudentRegisterCourseModel(models.Model):
+    register_id= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    stud_uuid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    courses= models.CharField(blank= False, null= False, unique= True, max_length= 255)
+    dateRegistered= models.DateTimeField(blank=False, null=False, auto_now_add= True)
+    dateUpdated= models.DateTimeField(blank=False, null=False, auto_now= True)
+    level= models.ForeignKey(LevelModel, on_delete= models.CASCADE)
+    semester= models.CharField(max_length= 5, blank= False, null= False)
+
+    def __str__(self):
+        return f'{self.register_id}'
+
+class SettingsModel(models.Model):
+    settings_id= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    current_semester= models.IntegerField(default= 1)
+
+    def __str__(self):
+        return f'Current semester: {self.pk}'
+
+
+    @classmethod #This helps to access the class objects with needing to use instance
+    def get_current_semeter(cls):
+        semester, _ = cls.objects.get_or_create(pk= 1)
+        return semester.get_current_semeter
+    
+    @classmethod
+    def update_current_semester(cls, new_semester):
+        semester, _ = cls.objects.get_or_create(pk= 1)
+        semester.current_semester= new_semester
+        semester.save()
+        return 'Semester has been updated..'
+    
+    
+class CourseUploadModel(models.Model):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    courseTitle= models.CharField(max_length= 255, blank= False, null= False, unique= True)
+    courseCode= models.CharField(max_length= 15, blank= False, null= False, unique= True)
+    crh= models.CharField(max_length= 15, blank= False, null= False)
+    level= models.ForeignKey(LevelModel, on_delete= models.CASCADE)
+    program= models.ForeignKey(ProgrameModel, on_delete= models.CASCADE)
+    semester= models.CharField(max_length= 5, blank= False, null= False)
+    dateUploaded= models.DateTimeField(blank=False, null=False, auto_now_add= True)
+    uploadedBy= models.CharField(max_length= 255, blank= False, null= False, unique= True)
