@@ -39,7 +39,7 @@ yesBtn.addEventListener("click", () => {
             alert("Courses registered successfully!");
             window.location.href= '/students/academics/registered-courses/';
         }else{
-            alert("Error registering courses. Please try again.");
+            alert("Error registering courses. Please try again if problem still exist try logging in again..");
         }
     }).catch(error => {
         console.error('Error:', error);

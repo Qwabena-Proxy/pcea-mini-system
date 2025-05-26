@@ -255,7 +255,7 @@ class RegisterCourse(generics.GenericAPIView):
                         semester= SettingsModel.objects.all().first().current_semester,
                     )
                     newRegistration.save()
-            except IntegrityError:
+            except (StudentsTokenStorage.DoesNotExist):
                 return Response(data={'message': "You have already registered for this course"}, status=status.HTTP_409_CONFLICT)
             return Response(data={'message': headerCheck['message']} , status=status.HTTP_200_OK)
         else:
