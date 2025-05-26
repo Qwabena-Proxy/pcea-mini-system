@@ -109,7 +109,7 @@ def getActivationLink(request, user, special= False):
         tokenID= ActivationTokensModel.objects.create(token=token, user_id=user.id) # Registering token to database
         tokenID.save()
         mail_subject= 'Account Activation' #Email to be sent preparation process
-        message= render_to_string('mail/accountActivation.html', {
+        message= render_to_string('mail/accountactivation.html', {
             'user': user,
             'domain': current_site,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -129,8 +129,8 @@ def getActivationLink(request, user, special= False):
 
 def activateAccount(uidb64, token, special): 
     # user= auth.get_user_model()
-
     try: # Decoding the hashes recieved from the link to verify if it a valid link to activate their account
+
         uid= force_str(urlsafe_base64_decode(uidb64))
         if int(special) == 1:
             user= StaffUserModel.objects.get(pk= uid)

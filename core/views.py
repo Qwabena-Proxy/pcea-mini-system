@@ -57,6 +57,12 @@ def courseRegistration(request):
     }
     return render(request, 'students/courses-select.html', context= context)
 
+def registeredCourses(request):
+    context= {
+
+    }
+    return render(request, 'students/registered-courses.html', context= context)
+
 def accountActivation(request, uidb64, token, special):
     activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)
     context= {
@@ -105,6 +111,7 @@ def createNewStudents(request, email):
         )
         newStudents.save()
         linkResponse= getActivationLink(request, newStudents)
+        print(linkResponse)
         if linkResponse:
             return True, 'User has been created successfully'
         else:

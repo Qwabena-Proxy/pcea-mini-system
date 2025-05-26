@@ -21,6 +21,8 @@ yesBtn.addEventListener("click", () => {
     modal.style.display= 'none';
     modal.style.visibility= 'hidden';
     const token= getToken();
+    const totalCourseSelected= document.getElementById("couuse-select");
+    const totalCreditHours= document.getElementById("tcrh");
     let formData= new FormData();
     formData.append("courses", selectedCourses);
 
@@ -30,7 +32,27 @@ yesBtn.addEventListener("click", () => {
           'Authorization': `Bearer ${token[0]}`
         },
         body: formData,
-    })
+    }).then(response => Promise.all([response.status, response.json()]))
+    .then(([status, response]) => {
+        if (status == 200){
+            getStudentCourses();
+            alert("Courses registered successfully!");
+            window.location.href= '/students/academics/registered-courses/';
+        }else{
+            alert("Error registering courses. Please try again.");
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while registering courses.");
+    });
+    selectedCourses= [];
+    courseContainer.querySelectorAll(".courses-card > input").forEach(element => {
+        element.checked= false;
+    });
+    totalCourseSelected.textContent= `Courses Selected: 0`
+    totalCreditHours.textContent= `Total Credit Hours: 0`
+    modal.style.display= 'none';
+    modal.style.visibility= 'hidden';
 })
 
 const getStudentCourses= () => {
@@ -49,11 +71,12 @@ const getStudentCourses= () => {
                         <div class="courses-card">
                     <div class="info">
                         <div class="upper">
-                            <p>${response[element].CC}</p>
-                            <p>${response[element].CCHR}</p>
+                            <p>Code: ${response[element].CC}</p>
+                            <p>CRH: ${response[element].CCHR}</p>
                         </div>
                         <p>${response[element].CT}</p>
-                        <input type="hidden" value="${response[element].ID}">
+                        <input type="hidden" id="ID" value="${response[element].ID}">
+                        <input type="hidden" id="CCHR" value="${response[element].CCHR}">
                     </div>
                     <input type="checkbox" name="" id="">
                 </div>
@@ -66,17 +89,25 @@ const getStudentCourses= () => {
 
 
 let selectedCourses= [];
+let totalCreditHoursCalculated= 0;
 const addEvents= () => {
     const cardsChecks= courseContainer.querySelectorAll(".courses-card > input")
-    const coursIDs= courseContainer.querySelectorAll(".courses-card .info > input")
+    const coursIDs= courseContainer.querySelectorAll(".courses-card .info > input#ID")
+    const coursecrh= courseContainer.querySelectorAll(".courses-card .info > input#CCHR")
+    const totalCourseSelected= document.getElementById("couuse-select");
+    const totalCreditHours= document.getElementById("tcrh");
     cardsChecks.forEach((element, index) => {
         element.addEventListener("click", () => {
             let currentID= coursIDs[index].value;
             if(selectedCourses.includes(currentID)){
                 selectedCourses= selectedCourses.filter(IDs => IDs !== currentID);
+                totalCreditHoursCalculated -= parseInt(coursecrh[index].value)
             }else{
                 selectedCourses.push(currentID);
+                totalCreditHoursCalculated += parseInt(coursecrh[index].value)
             }
+            totalCourseSelected.textContent= `Courses Selected: ${selectedCourses.length}`
+            totalCreditHours.textContent= `Total Credit Hours: ${totalCreditHoursCalculated}`
         })
     })
 }

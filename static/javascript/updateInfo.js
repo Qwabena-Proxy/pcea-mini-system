@@ -7,7 +7,7 @@ const studentLevel= document.getElementById("student-level");
 const infoSubmitBtn= document.getElementById("info-submit-btn");
 
 const existingToken= JSON.parse(window.localStorage.getItem('token'))
-const userEmail= existingToken.email
+const userID= existingToken.studentID
 
 infoSubmitBtn.addEventListener("click", () => {
     const apiUrl= `/apis/v1/auth/update-student-info/`;
@@ -20,7 +20,7 @@ infoSubmitBtn.addEventListener("click", () => {
     formData.append("studentTelephone",studentTelephone.value)
     formData.append("studentProgram",studentProgram.value)
     formData.append("studentLevel",studentLevel.value)
-    formData.append("studentEmail", userEmail)
+    formData.append("studentID", userID)
     formData.append("csrfmiddlewaretoken", csrfToken);
 
     fetch(apiUrl,{

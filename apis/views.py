@@ -77,10 +77,10 @@ class StudentsLoginView(generics.GenericAPIView):
         generateToken= generate_token(user)
         #Storing of tokens
         try:
-            ParticipantsTokenStorage.objects.get(user= user).delete()
-        except ParticipantsTokenStorage.DoesNotExist:
+            StudentsTokenStorage.objects.get(user= user).delete()
+        except StudentsTokenStorage.DoesNotExist:
             pass
-        ParticipantsTokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
+        StudentsTokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
         
         # Construct the response data
         response_data = {
@@ -194,9 +194,10 @@ class studentsInfoUpdate(generics.GenericAPIView):
         studentTelephone= request.data.get("studentTelephone")
         studentProgram= request.data.get("studentProgram")
         studentLevel= request.data.get("studentLevel")
-        studentEmail= request.data.get("studentEmail")
+        studentID= request.data.get("studentID")
+        print(studentID)
         try:
-            student= StudentstsModel.objects.get(email= studentEmail)
+            student= StudentstsModel.objects.get(uid= studentID)
             student.surname= studentSurname
             student.othername= otherName
             student.indexNumber= indexNumber
@@ -236,94 +237,75 @@ class RegisterCourse(generics.GenericAPIView):
         if headerCheck['status']:
             userID= headerCheck['user']
             selectedCourses= str(request.data.get("courses")).split(",")
-            for i in selectedCourses:
-                print(i)
+            selectedCoursesd = [course.strip() for course in selectedCourses]
+            joinedCourses = ",".join(selectedCoursesd)
+            try:
+                registeredCourses = StudentRegisterCourseModel.objects.filter(stud_uuid=userID.uid)
+                if registeredCourses.exists():
+                    # If the user has already registered for courses, update with the new courses
+                    existingCourseRegistration = registeredCourses.first()
+                    existingCourseRegistration.courses= joinedCourses
+                    existingCourseRegistration.save()
+                else:
+                    newRegistration= StudentRegisterCourseModel.objects.create(
+                        stud_uuid= userID.uid,
+                        courses= joinedCourses,
+                        program= ProgrameModel.objects.get(name= userID.program),
+                        level= LevelModel.objects.get(name= userID.level),
+                        semester= SettingsModel.objects.all().first().current_semester,
+                    )
+                    newRegistration.save()
+            except IntegrityError:
+                return Response(data={'message': "You have already registered for this course"}, status=status.HTTP_409_CONFLICT)
             return Response(data={'message': headerCheck['message']} , status=status.HTTP_200_OK)
         else:
             return Response(data={'message': headerCheck['message']}, status=status.HTTP_400_BAD_REQUEST)
-# class CreateProgramView(generics.GenericAPIView):
-#     serializer_class= ProgramSerializer
+    
+    def get(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            try:
+                registeredCourses= StudentRegisterCourseModel.objects.get(stud_uuid=userID.uid)
+            except:
+                return Response(data={'message': "Something happened this registration doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+            registeredCourses= registeredCourses.courses.split(',')
+            courseDict= {}
+            for index, course in enumerate(registeredCourses):
+                courseObj= courseModel.objects.get(uid= course)
+                courseDict[index]= {
+                    'code': courseObj.code,
+                    'title': courseObj.name,
+                    'crh': courseObj.crh
+                }
 
-#     def get_queryset(self):
-#         return ProgramModel.objects.all()
-
-#     def get(self, request, *args, **kwargs):
-#         headers= request.headers.get('Authorization')
-#         headersCheck= headersAuthorizationCheck(headers)
-#         if headersCheck["status"]:
-#             programs = self.get_queryset()
-                        
-#             # Serialize the programs but only include specific fields
-#             serializer = self.serializer_class(programs, many=True, fields=('uid', 'name', 'createdBy', 'dateCreated', 'paymentRequired'))  # Specify the fields you want
-            
-#             # Return the serialized data
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         else:
-#             if headersCheck["code"] == 401:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_401_UNAUTHORIZED)
-#             else:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_404_NOT_FOUND)
-
-#     def post(self, request, *args, **kwargs):
-#         # Create an instance of the serializer with the request data
-#         headers= request.headers.get('Authorization')
-#         headersCheck= headersAuthorizationCheck(headers)
-#         if headersCheck["status"]:
-#             programName = request.data.get('name')
-#             paymentRequired = request.data.get('paymentRequired')
+            return Response(data={'message': headerCheck['message'], 'data': courseDict} , status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
-#             if paymentRequired == 'true':
-#                 paymentRequired= True
-#             elif paymentRequired == 'false':
-#                 paymentRequired= False
-#             else:
-#                 pass
-
-#             try:
-#                 newProgram= ProgramModel.objects.create(name= programName, paymentRequired= paymentRequired, createdBy= CustomUserModel.objects.get(username= headersCheck["user"]))
-#                 newProgram.save()
-#             except IntegrityError:
-#                 return Response(data= {"message": "Program Already Exist"}, status=status.HTTP_409_CONFLICT)
-            
-#             # Construct the response data
-#             response_data = {
-#                 'message': 'Program Created'
-#             }
-            
-#             # Return a successful response
-#             return Response(data= response_data, status=status.HTTP_201_CREATED)
-#         else:
-#             if headersCheck["code"] == 401:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_401_UNAUTHORIZED)
-#             else:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_404_NOT_FOUND)
-            
-#     def delete(self, request, *args, **kwargs):
-#         headers= request.headers.get('Authorization')
-#         headersCheck= headersAuthorizationCheck(headers)
-#         if headersCheck["status"]:
-#             programUID = request.headers.get('Program')
-#             try:
-#                 Program= ProgramModel.objects.get(uid= programUID)
-#                 canDeleteProgram= programParticipantsDelete(Program.name)
-#                 if canDeleteProgram:
-#                     Program.delete()
-#             except ProgramModel.DoesNotExist:
-#                 return Response(data= {"message": "Program Does Not Exist"}, status=status.HTTP_400_BAD_REQUEST)
-            
-#             # Construct the response data
-#             response_data = {
-#                 'message': 'Program Deleted'
-#             }
-            
-#             # Return a successful response
-#             return Response(data= response_data, status=status.HTTP_202_ACCEPTED)
-#         else:
-#             if headersCheck["code"] == 401:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_401_UNAUTHORIZED)
-#             else:
-#                 return Response(data= headersCheck["message"], status=status.HTTP_404_NOT_FOUND)
+class StudentRegisterCourse(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            infoDict= {}
+            try:
+                student= StudentstsModel.objects.get(uid= userID.uid)
+                infoDict= {
+                    'indexNumber': student.indexNumber,
+                    'fullName': f'{student.surname} {student.othername}',
+                    'program': f'{student.program}',
+                    'level': f'{student.level}',
+                    'current_semester': f'{SettingsModel.objects.all().first().current_semester}'
+                }
+            except StaffUserModel.DoesNotExist:
+                return Response(data={'message': headerCheck['message'], 'data': 'User Does not Exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': headerCheck['message'], 'data': infoDict} , status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
 '''
