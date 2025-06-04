@@ -308,6 +308,82 @@ class StudentRegisterCourse(generics.GenericAPIView):
             return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class LevelCreateView(generics.GenericAPIView):
+    serializer_class = LevelSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            level = serializer.save()
+            return Response(data={'message': f"Level {level.name} created successfully"}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(data={'message': "Level already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        uid = request.data.get('uid')
+        if not uid:
+            return Response(data={'message': "UID is required for update"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            level = LevelModel.objects.get(uid=uid)
+        except LevelModel.DoesNotExist:
+            return Response(data={'message': "Level not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(level, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data={'message': f"Level {level.name} updated successfully"}, status=status.HTTP_200_OK)
+
+class ProgramCreateView(generics.GenericAPIView):
+    serializer_class = ProgramlSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            program = serializer.save()
+            return Response(data={'message': f"Level {program.name} created successfully"}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(data={'message': "Level already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CourseCreateView(generics.GenericAPIView):
+    serializer_class = CourseSerializer
+
+    def get(self, request, *args, **kwargs):
+        courses = courseModel.objects.all()
+        serializer = self.get_serializer(courses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            course = serializer.save()
+            return Response(
+                data={'message': f"Course {course.name} created successfully"},
+                status=status.HTTP_201_CREATED
+            )
+        except IntegrityError:
+            return Response(
+                data={'message': "Course already exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+
+class getUpdateM(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        levels= []
+        for level in LevelModel.objects.all():
+            levels.append(level.name)
+        programs= []
+        for program in ProgrameModel.objects.all():
+            programs.append(program.name)
+        course= []
+        for cous in courseModel.objects.all():
+            course.append(cous.name)
+        return Response(data={'level': levels, 'program': programs, 'course': course}, status=status.HTTP_200_OK)
+
 '''
 user must reset default password, resetlink must be send to their email
 
