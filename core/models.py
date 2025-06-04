@@ -210,6 +210,13 @@ class StudentRegisterCourseModel(models.Model):
 class SettingsModel(models.Model):
     settings_id= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
     current_semester= models.IntegerField(default= 1)
+    academic_year= models.CharField(max_length= 20, blank= False, null= False, default='2023/2024')
+    academic_year_start= models.DateField(blank= False, null= False, default='2023-08-01')
+    academic_year_end= models.DateField(blank= False, null= False, default='2024-07-31')
+    academic_year_levels= models.CharField(max_length= 255, blank= False, null= False, default='100,200,300,400')
+    academic_year_levels_tution= models.CharField(max_length= 255, blank= False, null= False, default='1000,1200,1500,1800')
+    dateCreated= models.DateTimeField(blank=False, null=False, auto_now_add= True)
+    active= models.BooleanField(default= True)
 
     def __str__(self):
         return f'Settings ID: {self.settings_id} ---------> Current semester: {self.current_semester}'
