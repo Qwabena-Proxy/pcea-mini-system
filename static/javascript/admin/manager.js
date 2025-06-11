@@ -3,6 +3,7 @@ const csrfToken = document
   .getAttribute("content");
 const levelInputElement = document.getElementById("level-input");
 const programInputElement = document.getElementById("program-input");
+const programMinorInputElement = document.getElementById("program-input-mn");
 
 //Btns
 const singleAccountSendBtn = document.getElementById("send");
@@ -26,7 +27,11 @@ const getupdate = `/apis/v1/get-update`;
 const settingsApiUrl = `/apis/v1/create-settigns/`;
 
 const clearBtns = [levelClear, progamClear];
-const clearInputs = [levelInputElement, programInputElement];
+const clearInputs = [
+  levelInputElement,
+  programInputElement,
+  programMinorInputElement,
+];
 
 clearBtns.forEach((element, index) => {
   element.addEventListener("click", (e) => {
@@ -105,6 +110,7 @@ const levelSubmitHandler = (e) => {
 const programSubmitHandler = (e) => {
   let formData = new FormData();
   formData.append("name", programInputElement.value);
+  formData.append("minor", programMinorInputElement.value);
   fetch(`${address}${programCreateApiUrl}`, {
     method: "POST",
     headers: {
@@ -154,7 +160,6 @@ const courseSubmitHandler = (e) => {
     alert("Please fill in all fields.");
     return;
   }
-  alert(!upCCheckbox.checked);
 
   let formData = new FormData();
   formData.append("code", courseCodeInputElement.value);
@@ -286,6 +291,7 @@ const getlevel = () => {
   const programList = document.getElementById("program-list");
   const courseList = document.getElementById("course-list");
   const programDataList = document.getElementById("programs-data");
+  const programDataListMn = document.getElementById("programs-data-mn");
   const levelDataList = document.getElementById("level-data");
   const tutionContainer = document.querySelector(".tution");
   levelList.innerHTML = "";
@@ -310,6 +316,7 @@ const getlevel = () => {
       for (const x of program) {
         programList.innerHTML += `<li>${x}</li>`;
         programDataList.innerHTML += `<option value="${x}"></option>`;
+        programDataListMn.innerHTML += `<option value="${x}"></option>`;
       }
       programDataList.innerHTML += `<option value="General Course"></option>`;
       for (const x of course) {

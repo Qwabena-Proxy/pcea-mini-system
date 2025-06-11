@@ -202,7 +202,7 @@ class studentsInfoUpdate(generics.GenericAPIView):
             student.othername= otherName
             student.indexNumber= indexNumber
             student.program= ProgrameModel.objects.get(name= studentProgram)
-            student.minor_program= ProgrameModel.objects.get(name= "None")
+            # student.minor_program= ProgrameModel.objects.get(name= "None")
             student.level= LevelModel.objects.get(name= studentLevel)
             student.save()
             debtResponse= createDebtforStudent(student.uid)
@@ -226,6 +226,28 @@ class studentsInfoUpdate(generics.GenericAPIView):
             return Response(data= {"message": "Student does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+def get_student_courses(student):
+    # Major and minor programs
+    major = student.program
+    minor = getattr(student, 'minor_program', None)  # If you have this field
+
+    # Courses for major
+    major_courses = courseModel.objects.filter(program=major, level=student.level)
+    
+    # Courses for minor (if any)
+    if minor:
+        minor_courses = courseModel.objects.filter(program=minor, level=student.level)
+    else:
+        minor_courses = courseModel.objects.none()
+    
+    # General courses
+    general_courses = courseModel.objects.filter(is_general=True, level=student.level)
+
+    # Combine all (avoid duplicates)
+    all_courses = major_courses | minor_courses | general_courses
+    all_courses = all_courses.distinct()
+    return all_courses
+
 class GetStudentsPrograms(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         headers= request.headers.get('Authorization')
@@ -241,12 +263,21 @@ class GetStudentsPrograms(generics.GenericAPIView):
             try:
                 debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
                 if not debtCheck.cleared:
+                    print(debtCheck.cleared)
                     return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
             except TutionModel.DoesNotExist:
                 return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
-            cousersInfo= courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program), level= LevelModel.objects.get(name= userID.level), semester= '2')
+            
+            majorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.name) , level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
+            minorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.minor), level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
+            generalCourses = courseModel.objects.filter(isGeneral= True, level= LevelModel.objects.get(name= userID.level))
+            # Combine all courses
+            allCourses = majorCourses | minorCourses | generalCourses
+            allCourses = allCourses.distinct()  # Remove duplicates
+            print(majorCourses, minorCourses, generalCourses, allCourses)
+            # Prepare the response data
             courseDict= {}
-            for index, value in enumerate(cousersInfo):
+            for index, value in enumerate(allCourses):
                 courseDict[index]= {
                     'ID': value.uid,
                     'CT': value.name,
@@ -255,7 +286,7 @@ class GetStudentsPrograms(generics.GenericAPIView):
                 }
             return Response(data= courseDict, status=status.HTTP_200_OK)
         else:
-            return Response(data={'message': headerCheck['message']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': headerCheck['message']}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RegisterCourse(generics.GenericAPIView):
@@ -327,7 +358,7 @@ class StudentRegisterCourse(generics.GenericAPIView):
                     'fullName': f'{student.surname} {student.othername}',
                     'program': f'{student.program}',
                     'level': f'{student.level}',
-                    'current_semester': f'{SettingsModel.objects.all().first().current_semester}'
+                    'current_semester': f'{SettingsModel.objects.filter(active= True).first().current_semester}'
                 }
             except StaffUserModel.DoesNotExist:
                 return Response(data={'message': headerCheck['message'], 'data': 'User Does not Exist'}, status=status.HTTP_400_BAD_REQUEST)

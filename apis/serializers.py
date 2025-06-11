@@ -51,7 +51,7 @@ class LevelSerializer(serializers.ModelSerializer):
 class ProgramlSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgrameModel
-        fields = ['uid', 'name']
+        fields = ['uid', 'name', 'minor']
 
 class CourseSerializer(serializers.ModelSerializer):
     level_name = serializers.CharField(source='level.name', read_only=True)

@@ -110,7 +110,13 @@
       </div>
       <div class="program">
         <h2>Program</h2>
-        <input type="text" placeholder="program" id="program-input" />
+        <input type="text" placeholder="program major" id="program-input" />
+        <input
+          type="text"
+          placeholder="program minor"
+          id="program-input-mn"
+          list="programs-data-mn"
+        />
         <div class="actions">
           <input type="button" value="submit" id="submit-program" />
           <input type="button" value="clear" id="clear-program" />
@@ -190,18 +196,9 @@
           <p></p>
         </div>
       </div>
-      <datalist id="programs-data">
-        <!-- <option value="ICT"></option> -->
-        <!-- {% for program in studentsPrograms %}
-                <option value="{{program.name}}">
-            {% endfor %} -->
-      </datalist>
-      <datalist id="level-data">
-        <!-- <option value="100"></option> -->
-        <!-- {% for program in studentsPrograms %}
-                <option value="{{program.name}}">
-            {% endfor %} -->
-      </datalist>
+      <datalist id="programs-data"> </datalist>
+      <datalist id="programs-data-mn"> </datalist>
+      <datalist id="level-data"> </datalist>
     </div>
     <div class="three">
       <div class="settings">
