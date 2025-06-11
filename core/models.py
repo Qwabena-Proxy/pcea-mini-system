@@ -127,8 +127,9 @@ class courseModel(models.Model):
     code= models.CharField(max_length= 15, blank= False, null= False, unique= True)
     crh= models.CharField(max_length= 15, blank= False, null= False)
     level= models.ForeignKey(LevelModel, on_delete= models.CASCADE)
-    program= models.ForeignKey(ProgrameModel, on_delete= models.CASCADE)
+    program= models.ForeignKey(ProgrameModel, on_delete= models.CASCADE, null= True, blank= True, related_name='courses')
     isGeneral= models.BooleanField(default= False)
+    isJHS= models.BooleanField(default= True)
     semester= models.CharField(max_length= 5, blank= False, null= False)
 
     def __str__(self):

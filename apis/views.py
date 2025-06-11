@@ -202,6 +202,7 @@ class studentsInfoUpdate(generics.GenericAPIView):
             student.othername= otherName
             student.indexNumber= indexNumber
             student.program= ProgrameModel.objects.get(name= studentProgram)
+            student.minor_program= ProgrameModel.objects.get(name= "None")
             student.level= LevelModel.objects.get(name= studentLevel)
             student.save()
             debtResponse= createDebtforStudent(student.uid)

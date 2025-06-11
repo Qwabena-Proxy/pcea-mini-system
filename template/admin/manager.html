@@ -1,218 +1,275 @@
 {% load static%}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script defer src="{% static 'javascript/admin/manager.js' %}"></script>
     <style>
-        body {
-            display: flex;
-            gap: 1rem;
-        }
+      body {
+        display: flex;
+        gap: 1rem;
+      }
 
-        .academic-settings {
-            display: none;
-        }
+      .academic-settings,
+      #upg {
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="one">
-        <div class="account-activation">
-            <h2>Account-activation</h2>
-            <div class="single-send">
-                <h3>Single send</h3>
-                <input type="text" name="" id="email">
-                <div class="actions">
-                    <input type="button" value="send" id="send">
-                    <input type="button" value="clear" id="clear">
-                </div>
-                <div class="response-s">
-                    <p></p>
-                </div>
-            </div>
-            <div class="bulk-send">
-                <h3>Single send</h3>
-                <input type="file" name=""  id="account-activation-b" accept=".csv, .xlsx, .xls, .ods">
-                <p>Note: The file should contain a column named <br> "email" with the emails to send activation links to.</p>
-                <p>Note: The file should be in <br> CSV, XLSX, XLS, or ODS format.</p>
-                <p>Upload a CSV or Excel file with a column named <br> "email" containing the emails to send activation links to.</p>
-                <div class="actions">
-                    <input type="button" value="analyze" id="analyze">
-                    <input type="button" value="send" id="send">
-                    <input type="button" value="clear" id="clear">
-                </div>
-                <div class="response-b">
-                    <p></p>
-                </div>
-            </div>
+      <div class="account-activation">
+        <h2>Account-activation</h2>
+        <div class="single-send">
+          <h3>Single send</h3>
+          <input type="text" name="" id="email" />
+          <div class="actions">
+            <input type="button" value="send" id="send" />
+            <input type="button" value="clear" id="clear" />
+          </div>
+          <div class="response-s">
+            <p></p>
+          </div>
         </div>
-        <div class="account-reset">
-            <h2>Account-reset</h2>
-            <div class="single-send">
-                <h3>Single send</h3>
-                <input type="text" name="" id="email-r">
-                <div class="actions">
-                    <input type="button" value="send" id="send-r">
-                    <input type="button" value="clear" id="clear-r">
-                </div>
-                <div class="response-s-r">
-                    <p></p>
-                </div>
-            </div>
-            <div class="bulk-send">
-                <h3>Single send</h3>
-                <input type="file" name="" id="email-r-b">
-                <div class="actions">
-                    <input type="button" value="analyze" id="analyze-r-b">
-                    <input type="button" value="send" id="send-r-b">
-                    <input type="button" value="clear" id="clear-r-b">
-                </div>
-                <div class="response-b-r">
-                    <p></p>
-                </div>
-            </div>
+        <div class="bulk-send">
+          <h3>Single send</h3>
+          <input
+            type="file"
+            name=""
+            id="account-activation-b"
+            accept=".csv, .xlsx, .xls, .ods"
+          />
+          <p>
+            Note: The file should contain a column named <br />
+            "email" with the emails to send activation links to.
+          </p>
+          <p>
+            Note: The file should be in <br />
+            CSV, XLSX, XLS, or ODS format.
+          </p>
+          <p>
+            Upload a CSV or Excel file with a column named <br />
+            "email" containing the emails to send activation links to.
+          </p>
+          <div class="actions">
+            <input type="button" value="analyze" id="analyze" />
+            <input type="button" value="send" id="send" />
+            <input type="button" value="clear" id="clear" />
+          </div>
+          <div class="response-b">
+            <p></p>
+          </div>
         </div>
+      </div>
+      <div class="account-reset">
+        <h2>Account-reset</h2>
+        <div class="single-send">
+          <h3>Single send</h3>
+          <input type="text" name="" id="email-r" />
+          <div class="actions">
+            <input type="button" value="send" id="send-r" />
+            <input type="button" value="clear" id="clear-r" />
+          </div>
+          <div class="response-s-r">
+            <p></p>
+          </div>
+        </div>
+        <div class="bulk-send">
+          <h3>Single send</h3>
+          <input type="file" name="" id="email-r-b" />
+          <div class="actions">
+            <input type="button" value="analyze" id="analyze-r-b" />
+            <input type="button" value="send" id="send-r-b" />
+            <input type="button" value="clear" id="clear-r-b" />
+          </div>
+          <div class="response-b-r">
+            <p></p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="two">
-        <div class="level">
-            <h2>Level</h2>
-            <input type="text" placeholder="level" id="level-input">
-            <div class="actions">
-                <input type="button" value="submit" id="submit-level"> 
-                <input type="button" value="clear" id="clear-level"> 
-            </div>
-            <div class="info-level">
-                <p></p>
-            </div>
-            <input type="text" placeholder="level">
-            <div class="actions">
-                <input type="button" value="update level"> 
-                <input type="button" value="clear"> 
-            </div>
+      <div class="level">
+        <h2>Level</h2>
+        <input type="text" placeholder="level" id="level-input" />
+        <div class="actions">
+          <input type="button" value="submit" id="submit-level" />
+          <input type="button" value="clear" id="clear-level" />
         </div>
-        <div class="program">
-            <h2>Program</h2>
-            <input type="text" placeholder="program" id="program-input">
-            <div class="actions">
-                <input type="button" value="submit" id="submit-program"> 
-                <input type="button" value="clear" id="clear-program"> 
-            </div>
-            <div class="info-program">
-                <p></p>
-            </div>
-            <input type="text" placeholder="program">
-            <div class="actions">
-                <input type="button" value="update-program"> 
-                <input type="button" value="clear-program"> 
-            </div>
+        <div class="info-level">
+          <p></p>
         </div>
-        <div class="course">
-            <h2>Course</h2>
-            <input type="text" placeholder="course-code" id="course-code"><br>
-            <input type="text" placeholder="course-title" id="course-title"><br>
-            <input type="text" placeholder="credit-hours" id="course-credit"><br>
-            <input type="text" placeholder="level" id="course-level" list="level-data"><br>
-            <input type="text" placeholder="program" id="course-program" list="programs-data"><br>
-            <p>Semester</p>
-            <input type="radio" name="semester" id="s1" value="1">
-            <label for="s1">1</label>
-            <input type="radio" name="semester" id="s2" value="2">
-            <label for="s2">2</label>
-            <div class="actions">
-                <input type="button" value="submit-course" id="submit-course"> 
-                <input type="button" value="clear-course"> 
-            </div>
-            <div class="info-course">
-                <p></p>
-            </div>
-            <h4>Update course</h4>
-            <input type="text" placeholder="course-code"><br>
-            <input type="text" placeholder="course-title"><br>
-            <input type="text" placeholder="credit hours"><br>
-            <input type="text" placeholder="level" id="course-level" list="level-data"><br>
-            <input type="text" placeholder="program" id="course-program" list="programs-data"><br>
-            <p>Semester</p>
-            <input type="radio" name="semester" id="s1" value="1">
-            <label for="s1">1</label>
-            <input type="radio" name="semester" id="s2" value="2">
-            <label for="s2">2</label>
-            <div class="actions">
-                <input type="button" value="update-course"> 
-                <input type="button" value="clear-course"> 
-            </div>
-            <div class="info-course">
-                <p></p>
-            </div>
+        <input type="text" placeholder="level" />
+        <div class="actions">
+          <input type="button" value="update level" />
+          <input type="button" value="clear" />
         </div>
-        <datalist id="programs-data">
-            <!-- <option value="ICT"></option> -->
-            <!-- {% for program in studentsPrograms %}
+      </div>
+      <div class="program">
+        <h2>Program</h2>
+        <input type="text" placeholder="program" id="program-input" />
+        <div class="actions">
+          <input type="button" value="submit" id="submit-program" />
+          <input type="button" value="clear" id="clear-program" />
+        </div>
+        <div class="info-program">
+          <p></p>
+        </div>
+        <input type="text" placeholder="program" />
+        <div class="actions">
+          <input type="button" value="update-program" />
+          <input type="button" value="clear-program" />
+        </div>
+      </div>
+      <div class="course">
+        <h2>Course</h2>
+        <input type="text" placeholder="course-code" id="course-code" /><br />
+        <input type="text" placeholder="course-title" id="course-title" /><br />
+        <input
+          type="text"
+          placeholder="credit-hours"
+          id="course-credit"
+        /><br />
+        <input
+          type="text"
+          placeholder="level"
+          id="course-level"
+          list="level-data"
+        /><br />
+        <input
+          type="text"
+          placeholder="program"
+          id="course-program"
+          list="programs-data"
+        /><br />
+        <div id="upg">
+          <input type="checkbox" name="upC" id="upC" />
+          <label for="upC">Upper Primary Course</label>
+        </div>
+        <p>Semester</p>
+        <input type="radio" name="semester" id="s1" value="1" />
+        <label for="s1">1</label>
+        <input type="radio" name="semester" id="s2" value="2" />
+        <label for="s2">2</label>
+        <div class="actions">
+          <input type="button" value="submit-course" id="submit-course" />
+          <input type="button" value="clear-course" />
+        </div>
+        <div class="info-course">
+          <p></p>
+        </div>
+        <h4>Update course</h4>
+        <input type="text" placeholder="course-code" /><br />
+        <input type="text" placeholder="course-title" /><br />
+        <input type="text" placeholder="credit hours" /><br />
+        <input
+          type="text"
+          placeholder="level"
+          id="course-level"
+          list="level-data"
+        /><br />
+        <input
+          type="text"
+          placeholder="program"
+          id="course-program"
+          list="programs-data"
+        /><br />
+        <p>Semester</p>
+        <input type="radio" name="semester" id="s1" value="1" />
+        <label for="s1">1</label>
+        <input type="radio" name="semester" id="s2" value="2" />
+        <label for="s2">2</label>
+        <div class="actions">
+          <input type="button" value="update-course" />
+          <input type="button" value="clear-course" />
+        </div>
+        <div class="info-course">
+          <p></p>
+        </div>
+      </div>
+      <datalist id="programs-data">
+        <!-- <option value="ICT"></option> -->
+        <!-- {% for program in studentsPrograms %}
                 <option value="{{program.name}}">
             {% endfor %} -->
-         </datalist>
-         <datalist id="level-data">
-            <!-- <option value="100"></option> -->
-            <!-- {% for program in studentsPrograms %}
+      </datalist>
+      <datalist id="level-data">
+        <!-- <option value="100"></option> -->
+        <!-- {% for program in studentsPrograms %}
                 <option value="{{program.name}}">
             {% endfor %} -->
-         </datalist>
+      </datalist>
     </div>
     <div class="three">
-        <div class="settings">
-            <h2>Settings</h2>
-            <div class="semester-settings">
-                <h4>Semester</h4>
-                <input type="radio" name="semester" id="ss1" value="1" disabled>
-                <label for="ss1">1</label>
-                <input type="radio" name="semester" id="ss2" value="2" disabled>
-                <label for="ss2">2</label>
-                <div class="actions">
-                    <input type="button" value="save changes" id="settings-save-change">
-                    <input type="button" value="make changes" id="settings-make-change">
-                </div>
-            </div>
+      <div class="settings">
+        <h2>Settings</h2>
+        <div class="semester-settings">
+          <h4>Semester</h4>
+          <input type="radio" name="semester" id="ss1" value="1" disabled />
+          <label for="ss1">1</label>
+          <input type="radio" name="semester" id="ss2" value="2" disabled />
+          <label for="ss2">2</label>
+          <div class="actions">
+            <input
+              type="button"
+              value="save changes"
+              id="settings-save-change"
+            />
+            <input
+              type="button"
+              value="make changes"
+              id="settings-make-change"
+            />
+          </div>
         </div>
-        <div class="academic-y">
-            <p>Academic year: 2025</p>
-            <div class="actions">
-                <input type="button" value="add academic year" id="add-academic-year">
-            </div>
-            <div class="academic-settings">
-                <h3>Academic Year Settings</h3>
-                <div class="year">
-                    <label for="academic-year">Academic year</label>
-                    <input type="text" name="" id="academic-year"><br>
-                    <label for="academic-year-start">Academic year start</label>
-                    <input type="date" name="" id="academic-year-start"><br>
-                    <label for="academic-year-end">Academic year end</label>
-                    <input type="date" name="" id="academic-year-end"><br>
-                </div>
-                <h3>Academic Fees Settings</h3>
-                <div class="tution">
-
-                </div>
-                <div class="actions">
-                    <input type="button" value="Save academic year" id="save-academic-year">
-                </div>
-            </div>
+      </div>
+      <div class="academic-y">
+        <p>Academic year: 2025</p>
+        <div class="actions">
+          <input
+            type="button"
+            value="add academic year"
+            id="add-academic-year"
+          />
         </div>
+        <div class="academic-settings">
+          <h3>Academic Year Settings</h3>
+          <div class="year">
+            <label for="academic-year">Academic year</label>
+            <input type="text" name="" id="academic-year" /><br />
+            <label for="academic-year-start">Academic year start</label>
+            <input type="date" name="" id="academic-year-start" /><br />
+            <label for="academic-year-end">Academic year end</label>
+            <input type="date" name="" id="academic-year-end" /><br />
+          </div>
+          <h3>Academic Fees Settings</h3>
+          <div class="tution"></div>
+          <div class="actions">
+            <input
+              type="button"
+              value="Save academic year"
+              id="save-academic-year"
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="four">
-        <div class="level">
-            <h2>Levels</h2>
-            <ul id="level-list"></ul>
-        </div>
-        <div class="programs">
-            <h2>Programs</h2>
-            <ul id="program-list"></ul>
-        </div>
-        <div class="courses">
-            <h2>Courses</h2>
-            <ul id="course-list"></ul>
-        </div>
+      <div class="level">
+        <h2>Levels</h2>
+        <ul id="level-list"></ul>
+      </div>
+      <div class="programs">
+        <h2>Programs</h2>
+        <ul id="program-list"></ul>
+      </div>
+      <div class="courses">
+        <h2>Courses</h2>
+        <ul id="course-list"></ul>
+      </div>
     </div>
-</body>
+  </body>
 </html>

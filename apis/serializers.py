@@ -54,27 +54,44 @@ class ProgramlSerializer(serializers.ModelSerializer):
         fields = ['uid', 'name']
 
 class CourseSerializer(serializers.ModelSerializer):
-    # For reading: show the name
     level_name = serializers.CharField(source='level.name', read_only=True)
-    program_name = serializers.CharField(source='program.name', read_only=True)
-    # For writing: accept the name
+    program_name = serializers.SerializerMethodField()
+
     level = serializers.SlugRelatedField(
         queryset=LevelModel.objects.all(),
-        slug_field='name', # This is the field used for writing and you can use any field that is unique
+        slug_field='name',
         write_only=True
     )
     program = serializers.SlugRelatedField(
         queryset=ProgrameModel.objects.all(),
         slug_field='name',
-        write_only=True
+        write_only=True,
+        required=False,
+        allow_null=True
     )
+
+    isJHS = serializers.BooleanField()
+
 
     class Meta:
         model = courseModel
         fields = [
             'uid', 'name', 'code', 'crh', 'level', 'program', 'semester',
-            'level_name', 'program_name'
+            'level_name', 'program_name', 'isGeneral', 'isJHS'
         ]
+
+    def to_internal_value(self, data):
+        data = data.copy()
+        if 'isJHS' in data:
+            val = data['isJHS']
+            if isinstance(val, str):
+                data['isJHS'] = val.lower() in ('true', '1', 'yes')
+        return super().to_internal_value(data)
+    
+    def get_program_name(self, obj):
+        if obj.isGeneral or obj.program is None:
+            return "General"
+        return obj.program.name
 
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:
