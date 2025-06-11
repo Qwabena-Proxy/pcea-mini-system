@@ -10,6 +10,10 @@
             display: flex;
             gap: 1rem;
         }
+
+        .academic-settings {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -159,13 +163,13 @@
             <h2>Settings</h2>
             <div class="semester-settings">
                 <h4>Semester</h4>
-                <input type="radio" name="semester" id="ss1" value="1">
+                <input type="radio" name="semester" id="ss1" value="1" disabled>
                 <label for="ss1">1</label>
-                <input type="radio" name="semester" id="ss2" value="2">
+                <input type="radio" name="semester" id="ss2" value="2" disabled>
                 <label for="ss2">2</label>
                 <div class="actions">
-                    <input type="button" value="save changes" id="add-semester">
-                    <input type="button" value="make changes" id="clear-semester">
+                    <input type="button" value="save changes" id="settings-save-change">
+                    <input type="button" value="make changes" id="settings-make-change">
                 </div>
             </div>
         </div>
@@ -173,6 +177,24 @@
             <p>Academic year: 2025</p>
             <div class="actions">
                 <input type="button" value="add academic year" id="add-academic-year">
+            </div>
+            <div class="academic-settings">
+                <h3>Academic Year Settings</h3>
+                <div class="year">
+                    <label for="academic-year">Academic year</label>
+                    <input type="text" name="" id="academic-year"><br>
+                    <label for="academic-year-start">Academic year start</label>
+                    <input type="date" name="" id="academic-year-start"><br>
+                    <label for="academic-year-end">Academic year end</label>
+                    <input type="date" name="" id="academic-year-end"><br>
+                </div>
+                <h3>Academic Fees Settings</h3>
+                <div class="tution">
+
+                </div>
+                <div class="actions">
+                    <input type="button" value="Save academic year" id="save-academic-year">
+                </div>
             </div>
         </div>
     </div>

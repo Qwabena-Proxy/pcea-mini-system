@@ -4,7 +4,7 @@ const programInputElement= document.getElementById("program-input");
 
 
 //Btns
-const singleAccountSendBtn= document.getElementById("send-r");
+const singleAccountSendBtn= document.getElementById("send");
 const levelSubmit= document.getElementById("submit-level");
 const levelClear= document.getElementById("clear-level");
 const programSubmit= document.getElementById("submit-program");
@@ -211,13 +211,13 @@ const saveAcademicYearHandler = (e) => {
 
 }
 singleAccountSendBtn.addEventListener("click", () => {
-    const email= document.getElementById("email-r");
+    const email= document.getElementById("email");
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let formData= new FormData();
 
     formData.append("email", email.value)
     formData.append("csrfmiddlewaretoken", csrfToken);
-    fetch(apiUrl,{
+    fetch(`${address}${singleStudentCreateApiUrl}`,{
         method: 'POST',
         body: formData,
     }).then(response => response.json()).

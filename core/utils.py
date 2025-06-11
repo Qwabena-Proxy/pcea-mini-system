@@ -184,7 +184,12 @@ class ActivationValidator(PasswordResetTokenGenerator):
 # Create an instance of the custom token generator Validator
 ActivationValidator = ActivationValidator()
 
-# def updateStudent()
+def createDebtforStudents(uid):
+    currentSettings= SettingsModel.objects.get(settings_id= uid)
+    levels= (currentSettings.academic_year_levels).split(',')
+    levelsTution= (currentSettings.academic_year_levels_tution).split(',')
+    print(levels, levelsTution)
+
 
 
             

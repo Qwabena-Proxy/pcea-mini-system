@@ -75,3 +75,12 @@ class CourseSerializer(serializers.ModelSerializer):
             'uid', 'name', 'code', 'crh', 'level', 'program', 'semester',
             'level_name', 'program_name'
         ]
+
+class SettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SettingsModel
+        fields = [
+            'settings_id', 'current_semester', 'academic_year', 'academic_year_start',
+            'academic_year_end', 'academic_year_levels', 'academic_year_levels_tution',
+            'dateCreated', 'active'
+        ]

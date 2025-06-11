@@ -369,6 +369,24 @@ class CourseCreateView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+class SettingsView(generics.GenericAPIView):
+    serializer_class = SettingsSerializer
+
+    def get(self, request, *args, **kwargs):
+        settings = SettingsModel.objects.all()
+        serializer = self.get_serializer(settings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        for x in SettingsModel.objects.all():
+            x.active= False
+            x.save()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        settings = serializer.save()
+        createDebtforStudents(SettingsModel.objects.filter(active= True)[0].settings_id)
+        return Response({'message': f"Settings for {settings.academic_year} created."}, status=status.HTTP_201_CREATED)
+
 
 
 class getUpdateM(generics.GenericAPIView):

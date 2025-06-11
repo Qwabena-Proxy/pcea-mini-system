@@ -1,13 +1,19 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script defer src="{% static 'javascript/admin/manager.js' %}"></script>
     <style>
         body {
             display: flex;
             gap: 1rem;
+        }
+
+        .academic-settings {
+            display: none;
         }
     </style>
 </head>
@@ -28,7 +34,10 @@
             </div>
             <div class="bulk-send">
                 <h3>Single send</h3>
-                <input type="file" name="" id="email">
+                <input type="file" name=""  id="account-activation-b" accept=".csv, .xlsx, .xls, .ods">
+                <p>Note: The file should contain a column named <br> "email" with the emails to send activation links to.</p>
+                <p>Note: The file should be in <br> CSV, XLSX, XLS, or ODS format.</p>
+                <p>Upload a CSV or Excel file with a column named <br> "email" containing the emails to send activation links to.</p>
                 <div class="actions">
                     <input type="button" value="analyze" id="analyze">
                     <input type="button" value="send" id="send">
@@ -69,10 +78,10 @@
     <div class="two">
         <div class="level">
             <h2>Level</h2>
-            <input type="text" placeholder="level">
+            <input type="text" placeholder="level" id="level-input">
             <div class="actions">
-                <input type="button" value="submit"> 
-                <input type="button" value="clear"> 
+                <input type="button" value="submit" id="submit-level"> 
+                <input type="button" value="clear" id="clear-level"> 
             </div>
             <div class="info-level">
                 <p></p>
@@ -85,10 +94,10 @@
         </div>
         <div class="program">
             <h2>Program</h2>
-            <input type="text" placeholder="program">
+            <input type="text" placeholder="program" id="program-input">
             <div class="actions">
-                <input type="button" value="submit-program"> 
-                <input type="button" value="clear-program"> 
+                <input type="button" value="submit" id="submit-program"> 
+                <input type="button" value="clear" id="clear-program"> 
             </div>
             <div class="info-program">
                 <p></p>
@@ -101,18 +110,18 @@
         </div>
         <div class="course">
             <h2>Course</h2>
-            <input type="text" placeholder="course-code"><br>
-            <input type="text" placeholder="course-title"><br>
-            <input type="text" placeholder="credit hours"><br>
-            <input type="text" placeholder="level" id="course-level" list="level"><br>
-            <input type="text" placeholder="program" id="course-program" list="programs"><br>
+            <input type="text" placeholder="course-code" id="course-code"><br>
+            <input type="text" placeholder="course-title" id="course-title"><br>
+            <input type="text" placeholder="credit-hours" id="course-credit"><br>
+            <input type="text" placeholder="level" id="course-level" list="level-data"><br>
+            <input type="text" placeholder="program" id="course-program" list="programs-data"><br>
             <p>Semester</p>
             <input type="radio" name="semester" id="s1" value="1">
             <label for="s1">1</label>
             <input type="radio" name="semester" id="s2" value="2">
             <label for="s2">2</label>
             <div class="actions">
-                <input type="button" value="submit-course"> 
+                <input type="button" value="submit-course" id="submit-course"> 
                 <input type="button" value="clear-course"> 
             </div>
             <div class="info-course">
@@ -122,8 +131,8 @@
             <input type="text" placeholder="course-code"><br>
             <input type="text" placeholder="course-title"><br>
             <input type="text" placeholder="credit hours"><br>
-            <input type="text" placeholder="level" id="course-level" list="level"><br>
-            <input type="text" placeholder="program" id="course-program" list="programs"><br>
+            <input type="text" placeholder="level" id="course-level" list="level-data"><br>
+            <input type="text" placeholder="program" id="course-program" list="programs-data"><br>
             <p>Semester</p>
             <input type="radio" name="semester" id="s1" value="1">
             <label for="s1">1</label>
@@ -137,14 +146,14 @@
                 <p></p>
             </div>
         </div>
-        <datalist id="programs">
-            <option value="ICT"></option>
+        <datalist id="programs-data">
+            <!-- <option value="ICT"></option> -->
             <!-- {% for program in studentsPrograms %}
                 <option value="{{program.name}}">
             {% endfor %} -->
          </datalist>
-         <datalist id="level">
-            <option value="100"></option>
+         <datalist id="level-data">
+            <!-- <option value="100"></option> -->
             <!-- {% for program in studentsPrograms %}
                 <option value="{{program.name}}">
             {% endfor %} -->
@@ -155,13 +164,13 @@
             <h2>Settings</h2>
             <div class="semester-settings">
                 <h4>Semester</h4>
-                <input type="radio" name="semester" id="ss1" value="1">
+                <input type="radio" name="semester" id="ss1" value="1" disabled>
                 <label for="ss1">1</label>
-                <input type="radio" name="semester" id="ss2" value="2">
+                <input type="radio" name="semester" id="ss2" value="2" disabled>
                 <label for="ss2">2</label>
                 <div class="actions">
-                    <input type="button" value="save changes" id="add-semester">
-                    <input type="button" value="make changes" id="clear-semester">
+                    <input type="button" value="save changes" id="settings-save-change">
+                    <input type="button" value="make changes" id="settings-make-change">
                 </div>
             </div>
         </div>
@@ -170,29 +179,61 @@
             <div class="actions">
                 <input type="button" value="add academic year" id="add-academic-year">
             </div>
+            <div class="academic-settings">
+                <h3>Academic Year Settings</h3>
+                <div class="year">
+                    <label for="academic-year">Academic year</label>
+                    <input type="text" name="" id="academic-year"><br>
+                    <label for="academic-year-start">Academic year start</label>
+                    <input type="date" name="" id="academic-year-start"><br>
+                    <label for="academic-year-end">Academic year end</label>
+                    <input type="date" name="" id="academic-year-end"><br>
+                </div>
+                <h3>Academic Fees Settings</h3>
+                <div class="tution">
+
+                </div>
+                <div class="actions">
+                    <input type="button" value="Save academic year" id="save-academic-year">
+                </div>
+            </div>
         </div>
     </div>
-    <!-- {% csrf_token %} -->
+    <div class="four">
+        <div class="level">
+            <h2>Levels</h2>
+            <ul id="level-list"></ul>
+        </div>
+        <div class="programs">
+            <h2>Programs</h2>
+            <ul id="program-list"></ul>
+        </div>
+        <div class="courses">
+            <h2>Courses</h2>
+            <ul id="course-list"></ul>
+        </div>
+    </div>
+    {% csrf_token %}
     <script>
-        const sendBtn= document.getElementById("send");
-        const address= 'http://127.0.0.1:8000'
-        const apiUrl= `/apis/v1/create-student/`;
+        // const sendBtn= document.getElementById("send");
+        // const address= 'http://127.0.0.1:8000'
+        // const apiUrl= `/apis/v1/create-student/`;
 
-        sendBtn.addEventListener("click", () => {
-            const email= document.getElementById("email");
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            let formData= new FormData();
+        // sendBtn.addEventListener("click", () => {
+        //     const email= document.getElementById("email");
+        //     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        //     let formData= new FormData();
 
-            formData.append("email", email.value)
-            formData.append("csrfmiddlewaretoken", csrfToken);
-            fetch(apiUrl,{
-                method: 'POST',
-                body: formData,
-            }).then(response => response.json()).
-            then(response => {
-                console.log(response)
-            }).catch(err => console.error(err))
-        })
+        //     formData.append("email", email.value)
+        //     formData.append("csrfmiddlewaretoken", csrfToken);
+        //     fetch(apiUrl,{
+        //         method: 'POST',
+        //         body: formData,
+        //     }).then(response => response.json()).
+        //     then(response => {
+        //         console.log(response)
+        //     }).catch(err => console.error(err))
+        // })
     </script>
 </body>
 </html>

@@ -98,15 +98,25 @@ def createStaffUser(request, first_name, last_name, password, email, profileImg,
     
 def createNewStudents(request, email):
 
+    try:
+        testProgram= ProgrameModel.objects.get("TestProgram")
+    except ProgrameModel.DoesNotExist:
+        ProgrameModel.objects.create("TestProgram").save()
+
+    try:
+        testLevel= LevelModel.objects.get("TestLevel")
+    except LevelModel.DoesNotExist:
+        LevelModel.objects.create("TestLevel").save()
+
     if StudentstsModel.objects.filter(email= email).exists():
         return False, 'A user exist with this email'
     else:
         newStudents= StudentstsModel.objects.create(
             surname= 'TestName',
             othername= 'TestName',
-            level= 'TestLevel',
+            level= testLevel,
             email= email,
-            program= ProgrameModel.objects.get(name= 'Information & Communication Technology'),
+            program= testProgram,
             indexNumber= f'TestIndexNumber{StudentstsModel.objects.count()+1}',
         )
         newStudents.save()

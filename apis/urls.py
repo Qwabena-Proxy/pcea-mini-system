@@ -14,6 +14,7 @@ urlpatterns = [
     path("create-level/", LevelCreateView.as_view(), name='create-level'),
     path("create-program/", ProgramCreateView.as_view(), name='create-program'),
     path("create-course/", CourseCreateView.as_view(), name='create-course'),
+    path("create-settigns/", SettingsView.as_view(), name='create-settigns'),
     path("get-update/", getUpdateM.as_view(), name='get-update'),
 
 ]

@@ -14,7 +14,7 @@ import uuid
 
 #Account models
 
-class StaffDepartmentModel(models.Model):
+class DepartmentModel(models.Model):
     uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
     name= models.CharField(max_length= 255, blank= False, null= False, unique= True)
     dateCreated= models.DateTimeField(auto_now_add= True)
@@ -166,7 +166,7 @@ class StudentstsModel(AbstractBaseUser, PermissionsMixin):
     uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
     surname= models.CharField(max_length= 255, blank= False, null= False)
     othername= models.CharField(max_length= 255, blank= False, null= False)
-    level= models.CharField(max_length= 5, blank= False, null= False)
+    level= models.ForeignKey(LevelModel, on_delete=models.CASCADE)
     email= models.CharField(max_length= 255, blank= False, null= False, unique= True)
     program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE)
     indexNumber= models.CharField(max_length=20, blank= False, null= False, unique=True)
@@ -216,7 +216,7 @@ class SettingsModel(models.Model):
     academic_year_levels= models.CharField(max_length= 255, blank= False, null= False, default='100,200,300,400')
     academic_year_levels_tution= models.CharField(max_length= 255, blank= False, null= False, default='1000,1200,1500,1800')
     dateCreated= models.DateTimeField(blank=False, null=False, auto_now_add= True)
-    active= models.BooleanField(default= True)
+    active= models.BooleanField(default= False)
 
     def __str__(self):
         return f'Settings ID: {self.settings_id} ---------> Current semester: {self.current_semester}'
