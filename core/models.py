@@ -128,6 +128,7 @@ class courseModel(models.Model):
     crh= models.CharField(max_length= 15, blank= False, null= False)
     level= models.ForeignKey(LevelModel, on_delete= models.CASCADE)
     program= models.ForeignKey(ProgrameModel, on_delete= models.CASCADE)
+    isGeneral= models.BooleanField(default= False)
     semester= models.CharField(max_length= 5, blank= False, null= False)
 
     def __str__(self):
@@ -168,7 +169,8 @@ class StudentstsModel(AbstractBaseUser, PermissionsMixin):
     othername= models.CharField(max_length= 255, blank= False, null= False)
     level= models.ForeignKey(LevelModel, on_delete=models.CASCADE)
     email= models.CharField(max_length= 255, blank= False, null= False, unique= True)
-    program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE)
+    program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE, related_name='students_major')
+    minor_program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE, related_name='students_minor')
     indexNumber= models.CharField(max_length=20, blank= False, null= False, unique=True)
     profile_img= models.ImageField(upload_to='students_images/', default='', null= True, blank= True)
     is_active= models.BooleanField(default= False)
@@ -233,6 +235,17 @@ class SettingsModel(models.Model):
         semester.current_semester= new_semester
         semester.save()
         return 'Semester has been updated..'
+    
+class TutionModel(models.Model):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    student= models.ForeignKey(StudentstsModel, on_delete=models.CASCADE)
+    academicYear= models.CharField(max_length= 5, blank= False, null= False)
+    amount= models.DecimalField(max_digits= 10, decimal_places= 2, blank=False, null=False)
+    cleared= models.BooleanField(default=False)
+    dateCreated= models.DateTimeField(blank=False, null=False, auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.student.indexNumber} - {self.academicYear} - {self.amount} - {self.cleared}'
     
     
 # class CourseUploadModel(models.Model):

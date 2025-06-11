@@ -7,7 +7,7 @@
 # from django.core.exceptions import ValidationError
 # from django.shortcuts import render, redirect
 # from django.core.mail import EmailMessage
-# from django.core.files import File
+from django.core.files import File
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.contrib.auth.models import auth 
@@ -110,7 +110,7 @@ class createStaffView(generics.GenericAPIView):
             password= password,
             email= email,
             profileImg= profileImg,
-            staffDepartment= StaffDepartmentModel.objects.get(name= DepartmentName),
+            staffDepartment= DepartmentModel.objects.get(name= DepartmentName),
             is_staff= True
         )
         if createResponse:
@@ -202,8 +202,23 @@ class studentsInfoUpdate(generics.GenericAPIView):
             student.othername= otherName
             student.indexNumber= indexNumber
             student.program= ProgrameModel.objects.get(name= studentProgram)
-            student.level= studentLevel
+            student.level= LevelModel.objects.get(name= studentLevel)
             student.save()
+            debtResponse= createDebtforStudent(student.uid)
+            print(debtResponse)
+            # If the student has a profile image, save it
+            # if 'profileImg' in request.FILES:
+            #     profileImg = request.FILES['profileImg']
+            #     student.profile_img.save(f"{student.uid}_profile.jpg", File(profileImg))
+            # else:
+            #     student.profile_img = None
+            # student.save()
+            # # If the student has a telephone number, save it  
+            # if studentTelephone:
+            #     student.telephone = studentTelephone
+            # else:
+            #     student.telephone = None
+            # student.save()
 
             return Response(data= {"message": f"Dear {studentSurname} {otherName}, your information has been recorded successfully."}, status=status.HTTP_200_OK)
         except StudentstsModel.DoesNotExist:
@@ -216,6 +231,18 @@ class GetStudentsPrograms(generics.GenericAPIView):
         headerCheck= headersAuthorizationCheck(headers)
         if headerCheck['status']:
             userID= headerCheck['user']
+            # Get active settings
+            try:
+                activeSettings= SettingsModel.objects.get(active= True)
+            except SettingsModel.DoesNotExist:
+                return Response(data={'message': "No active settings found"}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if student is debt cleared
+            try:
+                debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
+                if not debtCheck.cleared:
+                    return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
+            except TutionModel.DoesNotExist:
+                return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
             cousersInfo= courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program), level= LevelModel.objects.get(name= userID.level), semester= '2')
             courseDict= {}
             for index, value in enumerate(cousersInfo):
@@ -384,7 +411,8 @@ class SettingsView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         settings = serializer.save()
-        createDebtforStudents(SettingsModel.objects.filter(active= True)[0].settings_id)
+        debtResponse= createDebtforStudents(SettingsModel.objects.filter(active= True)[0].settings_id)
+        print(debtResponse)
         return Response({'message': f"Settings for {settings.academic_year} created."}, status=status.HTTP_201_CREATED)
 
 

@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script defer src="{% static 'javascript/admin/manager.js' %}"></script>
@@ -213,27 +214,5 @@
             <ul id="course-list"></ul>
         </div>
     </div>
-    {% csrf_token %}
-    <script>
-        // const sendBtn= document.getElementById("send");
-        // const address= 'http://127.0.0.1:8000'
-        // const apiUrl= `/apis/v1/create-student/`;
-
-        // sendBtn.addEventListener("click", () => {
-        //     const email= document.getElementById("email");
-        //     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        //     let formData= new FormData();
-
-        //     formData.append("email", email.value)
-        //     formData.append("csrfmiddlewaretoken", csrfToken);
-        //     fetch(apiUrl,{
-        //         method: 'POST',
-        //         body: formData,
-        //     }).then(response => response.json()).
-        //     then(response => {
-        //         console.log(response)
-        //     }).catch(err => console.error(err))
-        // })
-    </script>
 </body>
 </html>

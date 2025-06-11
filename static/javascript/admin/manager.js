@@ -1,4 +1,4 @@
-const sendBtn= document.getElementById("send");
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const levelInputElement= document.getElementById("level-input");
 const programInputElement= document.getElementById("program-input");
 
@@ -90,6 +90,9 @@ const levelSubmitHandler = (e) => {
     formData.append("name", levelInputElement.value);
     fetch(`${address}${levelCreateApiUrl}`, {
     method: 'POST',
+    headers: {
+    'X-CSRFToken': csrfToken
+        },
     body: formData
     })
     .then(response => response.json())
@@ -106,6 +109,9 @@ const programSubmitHandler = (e) => {
     formData.append("name", programInputElement.value);
     fetch(`${address}${programCreateApiUrl}`, {
     method: 'POST',
+    headers: {
+    'X-CSRFToken': csrfToken
+        },
     body: formData
     })
     .then(response => response.json())
@@ -139,6 +145,9 @@ const courseSubmitHandler = (e) => {
     formData.append("semester", semesterValue);
     fetch(`${address}${courseCreateApiUrl}`, {
         method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
         body: formData
     })
     .then(response => response.json())
@@ -193,6 +202,9 @@ const saveAcademicYearHandler = (e) => {
     formData.append("active", true);
     fetch(`${address}${settingsApiUrl}`, {
         method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
         body: formData,
     })
     .then(response => response.json())
@@ -212,13 +224,14 @@ const saveAcademicYearHandler = (e) => {
 }
 singleAccountSendBtn.addEventListener("click", () => {
     const email= document.getElementById("email");
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let formData= new FormData();
 
     formData.append("email", email.value)
-    formData.append("csrfmiddlewaretoken", csrfToken);
     fetch(`${address}${singleStudentCreateApiUrl}`,{
         method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
         body: formData,
     }).then(response => response.json()).
     then(response => {

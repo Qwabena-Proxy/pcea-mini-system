@@ -184,12 +184,81 @@ class ActivationValidator(PasswordResetTokenGenerator):
 # Create an instance of the custom token generator Validator
 ActivationValidator = ActivationValidator()
 
-def createDebtforStudents(uid):
-    currentSettings= SettingsModel.objects.get(settings_id= uid)
-    levels= (currentSettings.academic_year_levels).split(',')
-    levelsTution= (currentSettings.academic_year_levels_tution).split(',')
-    print(levels, levelsTution)
+def createDebtforStudent(uid):
+    try:
+        student = StudentstsModel.objects.get(uid=uid)
+    except StudentstsModel.DoesNotExist:
+        return "Student not found."
 
+    # Get the current settings
+    settings = SettingsModel.objects.filter(active=True).first()
+    if not settings:
+        return "No active settings found."
+
+    # Parse levels and tuitions
+    levels = [level.strip() for level in settings.academic_year_levels.split(',')]
+    tuitions = [tution.strip() for tution in settings.academic_year_levels_tution.split(',')]
+
+    if len(levels) != len(tuitions):
+        return "Levels and tuition counts do not match."
+
+    # Map level name to tuition amount
+    level_tuition_map = dict(zip(levels, tuitions))
+    
+    student_level_name = student.level.name
+    if student_level_name in level_tuition_map:
+        amount = level_tuition_map[student_level_name]
+        # Check if debt already exists for this student and academic year
+        if not TutionModel.objects.filter(student=student, academicYear=settings.academic_year).exists():
+            TutionModel.objects.create(
+                student=student,
+                academicYear=settings.academic_year,
+                amount=amount,
+                cleared=False
+            )
+            return f"Debt created for student {student.surname} {student.othername}."
+        else:
+            return "Debt already exists for this student."
+    else:
+        return "Student's level does not match any defined tuition levels."
+
+def createDebtforStudents(settings_id):
+    try:
+        settings = SettingsModel.objects.get(settings_id=settings_id)
+    except SettingsModel.DoesNotExist:
+        return "Settings not found."
+
+    # Parse levels and tuitions
+    levels = [level.strip() for level in settings.academic_year_levels.split(',')]
+    tuitions = [tution.strip() for tution in settings.academic_year_levels_tution.split(',')]
+
+    if len(levels) != len(tuitions):
+        return "Levels and tuition counts do not match."
+
+    # Map level name to tuition amount
+    level_tuition_map = dict(zip(levels, tuitions))
+    print(level_tuition_map)
+
+    students = StudentstsModel.objects.all()
+    created_count = 0
+    if not students:
+        return "No students found."
+    else:
+        for student in students:
+            student_level_name = student.level.name
+            if student_level_name in level_tuition_map:
+                amount = level_tuition_map[student_level_name]
+                # Check if debt already exists for this student and academic year
+                if not TutionModel.objects.filter(student=student, academicYear=settings.academic_year).exists():
+                    TutionModel.objects.create(
+                        student=student,
+                        academicYear=settings.academic_year,
+                        amount=amount,
+                        cleared=False
+                    )
+                    created_count += 1
+
+        return f"Debt created for {created_count} students."
 
 
             

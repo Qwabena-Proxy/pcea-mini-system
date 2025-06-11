@@ -31,8 +31,8 @@ def loginView(request):
     return render(request, 'general/login.html', context= context)
 
 def updateStudentInfo(request):
-    Programs= ProgrameModel.objects.all()
-    Levels= LevelModel.objects.all()
+    Programs= ProgrameModel.objects.exclude(name="TestProgram")
+    Levels= LevelModel.objects.exclude(name="TestLevel")
     context= {
         'studentsPrograms': Programs,
         'studentsLevels': Levels,
@@ -99,14 +99,14 @@ def createStaffUser(request, first_name, last_name, password, email, profileImg,
 def createNewStudents(request, email):
 
     try:
-        testProgram= ProgrameModel.objects.get("TestProgram")
+        testProgram= ProgrameModel.objects.get(name= "TestProgram")
     except ProgrameModel.DoesNotExist:
-        ProgrameModel.objects.create("TestProgram").save()
+        testProgram= ProgrameModel.objects.create(name= "TestProgram").save()
 
     try:
-        testLevel= LevelModel.objects.get("TestLevel")
+        testLevel= LevelModel.objects.get(name= "TestLevel")
     except LevelModel.DoesNotExist:
-        LevelModel.objects.create("TestLevel").save()
+        testLevel= LevelModel.objects.create(name= "TestLevel").save()
 
     if StudentstsModel.objects.filter(email= email).exists():
         return False, 'A user exist with this email'
