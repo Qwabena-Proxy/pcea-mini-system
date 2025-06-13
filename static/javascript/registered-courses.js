@@ -100,7 +100,6 @@ const getStudentRegisterInfo = () => {
           "semester"
         ).textContent = `Semester: ${userInfo.current_semester}`;
       } else if (status == 400) {
-        // console.log(`try: ${response.message}`);
         displayModal(response);
       }
     })

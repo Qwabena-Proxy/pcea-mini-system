@@ -25,7 +25,7 @@ SelectDropdown.addEventListener("click", () => {
 
 const getStudentRegisterInfo = () => {
   const token = getToken();
-  fetch("/apis/v1/student-register-course/", {
+  fetch("/apis/v1/student-info/", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token[0]}`,

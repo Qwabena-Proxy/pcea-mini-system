@@ -245,7 +245,7 @@ class GetStudentsPrograms(generics.GenericAPIView):
             try:
                 debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
                 if not debtCheck.cleared:
-                    return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(data={'message': "You have an outstanding debt, please vist the account office to clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
             except TutionModel.DoesNotExist:
                 return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -341,7 +341,7 @@ class StudentRegisterCourse(generics.GenericAPIView):
             try:
                 debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
                 if not debtCheck.cleared:
-                    return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(data={'message': "You have an outstanding debt, please visit the account office to clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
             except TutionModel.DoesNotExist:
                 return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
             try:
@@ -360,7 +360,25 @@ class StudentRegisterCourse(generics.GenericAPIView):
         else:
             return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
-
+class StudentInfoView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            infoDict= {}
+            try:
+                student= StudentstsModel.objects.get(uid= userID.uid)
+                infoDict= {
+                    'fullName': f'{student.surname} {student.othername}',
+                    'program': f'{student.program}',
+                    'pogram_level': f'{student.isProgramJHS}',
+                }
+            except StaffUserModel.DoesNotExist:
+                return Response(data={'message': headerCheck['message'], 'data': 'User Does not Exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': headerCheck['message'], 'data': infoDict} , status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
 class LevelCreateView(generics.GenericAPIView):
     serializer_class = LevelSerializer

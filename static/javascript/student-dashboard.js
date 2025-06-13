@@ -8,7 +8,7 @@ const studentProgramLevel = document.getElementById("student-program-level");
 const studentProgram = document.getElementById("student-program");
 const getStudentRegisterInfo = () => {
   const token = getToken();
-  fetch("/apis/v1/student-register-course/", {
+  fetch("/apis/v1/student-info/", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token[0]}`,
@@ -58,6 +58,8 @@ const getStudentRegisterInfo = () => {
               window.location.href = "/login/";
             }
           });
+      } else {
+        console.log(response);
       }
     })
     .catch((err) => console.error(err));
