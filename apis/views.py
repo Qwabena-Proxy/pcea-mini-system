@@ -443,8 +443,13 @@ class CourseCreateView(generics.GenericAPIView):
 class SettingsView(generics.GenericAPIView):
     serializer_class = SettingsSerializer
 
+    # def get(self, request, *args, **kwargs):
+    #     settings = SettingsModel.objects.all()
+    #     serializer = self.get_serializer(settings, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
     def get(self, request, *args, **kwargs):
-        settings = SettingsModel.objects.all()
+        settings = SettingsModel.objects.filter(active=True)
         serializer = self.get_serializer(settings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -459,7 +464,21 @@ class SettingsView(generics.GenericAPIView):
         print(debtResponse)
         return Response({'message': f"Settings for {settings.academic_year} created."}, status=status.HTTP_201_CREATED)
 
+    def put(self, request, *args, **kwargs):
+        settings_id = request.data.get("settings_id")
+        current_semester = request.data.get("current_semester")
 
+        if not settings_id or not current_semester:
+            return Response({"message": "Missing settings_id or current_semester."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            settings = SettingsModel.objects.get(settings_id=settings_id)
+        except SettingsModel.DoesNotExist:
+            return Response({"message": "Settings not found."}, status=status.HTTP_404_NOT_FOUND)
+        settings.current_semester = current_semester
+        settings.save()
+        serializer = self.get_serializer(settings)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class TokenRegeneration(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):

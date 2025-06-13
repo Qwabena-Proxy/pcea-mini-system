@@ -70,6 +70,27 @@ makeChanges.addEventListener("click", (e) => {
 });
 
 saveChanges.addEventListener("click", (e) => {
+  const settingsID = document.getElementById("settingsID");
+  const semester1Radio = document.getElementById("ss1");
+  const semester2Radio = document.getElementById("ss2");
+  let formData = new FormData();
+  formData.append("settings_id", settingsID.value);
+  formData.append("current_semester", semester1Radio.checked ? 1 : 2);
+  fetch(`${address}${settingsApiUrl}`, {
+    method: "PUT",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      getSettings(); // Handle response
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
   disableSemesterSettingsHandler(e);
 });
 
@@ -256,14 +277,6 @@ const saveAcademicYearHandler = (e) => {
     .catch((error) => {
       console.error("Error:", error);
     });
-  console.log(
-    academicYear.value,
-    academicYearStart.value,
-    academicYearEnd.value
-  );
-  levelTutions.forEach((element) => {
-    console.log(element.value);
-  });
 
   showAcademicSettings.style.display = "none";
 };
@@ -326,4 +339,29 @@ const getlevel = () => {
     .catch((err) => console.error(err));
 };
 
+const getSettings = () => {
+  fetch(`${address}${settingsApiUrl}`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const settingsID = document.getElementById("settingsID");
+      const academicYear = document.querySelector(".academic-y > p");
+      const semester1 = document.getElementById("ss1");
+      const semester2 = document.getElementById("ss2");
+
+      const settings = data[0];
+      settings.current_semester === 1
+        ? (semester1.checked = true)
+        : (semester2.checked = true);
+      settingsID.value = settings.settings_id;
+      academicYear.textContent = `Academic Year: ${settings.academic_year}`;
+
+      console.log(data); // Handle response
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+getSettings();
 getlevel();
