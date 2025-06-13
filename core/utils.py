@@ -98,6 +98,7 @@ def generate_token(user):
 
     return {'access': str(access), 'refresh': str(refresh)}
 
+
 def getActivationLink(request, user, special= False):
     if special:
         adminRequest= 1

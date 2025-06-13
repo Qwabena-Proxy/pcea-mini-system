@@ -9,6 +9,7 @@ urlpatterns = [
     path("get-course/", GetStudentsPrograms.as_view(), name='get-course'),
     path("register-course/", RegisterCourse.as_view(), name='register-course'),
     path("student-register-course/", StudentRegisterCourse.as_view(), name='student-register-course'),
+    path("token-regenerate/", TokenRegeneration.as_view(), name='token-regenerate'),
 
     #Managers Api
     path("create-level/", LevelCreateView.as_view(), name='create-level'),

@@ -1,46 +1,94 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/updateInfo.css' %}">
-    <script type="module" src="{% static 'javascript/updateInfo.js' %}"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/updateInfo.css' %}" />
+    <script
+      type="module"
+      src="{% static 'javascript/updateInfo.js' %}"
+    ></script>
     <title>Document</title>
-</head>
-<body data-theme="light">
+  </head>
+  <body data-theme="light">
     <div class="container">
-        <div class="selectors">
-            <h2 class="active">Student</h2>
-        </div>
-        <div class="profile-img">
-            <img src="{% static 'assets/images/windows.jpg' %}" alt="">
-        </div>
-        <div class="inputs-group">
-            {% csrf_token %}
-            <input type="text" name="surname" placeholder="Surname" id="student-surname">
-            <input type="text" name="otherName" placeholder="Other Name" id="student-otherName">
-            <input type="text" name="indexNumber" placeholder="Index Number" id="student-indexNumber">
-            <input type="text" name="telephone" placeholder="Telephone Number" id="student-telephone">
-            <input type="text" name="program" placeholder="Program" id="student-program" list="programs">
-            <input type="text" name="level" placeholder="Level" id="student-level" list="levels">
-            <datalist id="programs">
-               {% for program in studentsPrograms %}
-                   <option value="{{program.name}}">
-               {% endfor %}
-            </datalist>
-            <datalist id="levels">
-               {% for level in studentsLevels %}
-                   <option value="{{level.name}}">
-               {% endfor %}
-            </datalist>
-            
-        </div>
-        <div class="auth-btn">
-            <input type="button" value="Submit" id="info-submit-btn">
-        </div>
+      <div class="selectors">
+        <h2 class="active">Student</h2>
+      </div>
+      <div class="profile-img">
+        <img src="{% static 'assets/images/windows.jpg' %}" alt="" />
+      </div>
+      <div class="inputs-group">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="surname"
+          placeholder="Surname"
+          id="student-surname"
+        />
+        <input
+          type="text"
+          name="otherName"
+          placeholder="Other Name"
+          id="student-otherName"
+        />
+        <input
+          type="text"
+          name="indexNumber"
+          placeholder="Index Number"
+          id="student-indexNumber"
+        />
+        <input
+          type="text"
+          name="telephone"
+          placeholder="Telephone Number"
+          id="student-telephone"
+        />
+        <input
+          type="text"
+          name="program"
+          placeholder="Program"
+          id="student-program"
+          list="programs"
+        />
+        <input
+          type="text"
+          name="program"
+          placeholder="J.H.S or Primary"
+          id="student-program-level"
+          list="programs-level"
+        />
+        <input
+          type="text"
+          name="level"
+          placeholder="Level"
+          id="student-level"
+          list="levels"
+        />
+        <datalist id="programs">
+          {% for program in studentsPrograms %}
+          <option value="{{program.name}}">{% endfor %}</option>
+        </datalist>
+
+        <datalist id="programs-level">
+          {% for program in programLevels %}
+          <option value="{{program.name}}">{% endfor %}</option>
+        </datalist>
+
+        <datalist id="levels">
+          {% for level in studentsLevels %}
+          <option value="{{level.name}}">{% endfor %}</option>
+        </datalist>
+      </div>
+      <div class="auth-btn">
+        <input type="button" value="Submit" id="info-submit-btn" />
+      </div>
     </div>
-</body>
+  </body>
 </html>

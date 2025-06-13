@@ -1,78 +1,86 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/registered-courses.css' %}">
-    <script type="module" src="{% static 'javascript/registered-courses.js' %}"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/registered-courses.css' %}" />
+    <script
+      type="module"
+      src="{% static 'javascript/registered-courses.js' %}"
+    ></script>
     <title>Document</title>
-</head>
-<body data-theme="light">
+  </head>
+  <body data-theme="light">
     <nav>
-        <div class="menu-icon" >
-            <i class='ri-menu-2-fill'></i>
-        </div>
+      <div class="menu-icon">
+        <i class="ri-menu-2-fill"></i>
+      </div>
     </nav>
     <main>
-        <div class="title">
-            <i class='ri-arrow-left-circle-fill' onclick="window.history.back()"></i>
-            <p>Registered Courses</p>
-        </div>
-        <div class="head">
-            <img src="{% static 'assets/images/windows.jpg' %}" alt="">
-            <p>Presbyterian College of Education - Akropong</p>
-        </div>
-        <div class="student-info">
-            <p id="index-number">Index Number: </p>
-            <p id="name">Full Name: </p>
-            <p id="program">Program: </p>
-            <p id="level">Level: </p>
-            <p id="semester">Semester: </p>
-        </div>
-        <div class="course-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th> Code</th>
-                        <th colspan="4">Course Title</th>
-                        <th>CRH</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   <!-- <tr>
-                    <td>EBC 352</td>
-                    <td colspan="4">Web Technology Design</td>
-                    <td>3</td>
-                   </tr>
-                   <tr>
-                    <td>EBC 352</td>
-                    <td colspan="4">Web Technology Design</td>
-                    <td>3</td>
-                   </tr>
-                   <tr>
-                    <td>EBC 352</td>
-                    <td colspan="4">Web Technology Design</td>
-                    <td>3</td>
-                   </tr>
-                   <tr>
-                    <td>EBC 352</td>
-                    <td colspan="4">Teaching and Assessing Mathematics J.H.S </td>
-                    <td>3</td>
-                   </tr> -->                   
-                </tbody>
-            </table>
-        </div>
-        <div class="action">
-            <input type="button" value="Print" id="btnPrint" onclick="window.print()">
-            <input type="button" value="Re-register" id="btnRe-register" onclick="window.location.href='/students/academics/course-registration/'">
-        </div>
-    </main>
-    <footer>
-        <img src="{% static 'assets/images/windows.jpg' %}" alt="">
+      <div class="title">
+        <i
+          class="ri-arrow-left-circle-fill"
+          onclick="window.history.back()"
+        ></i>
+        <p>Registered Courses</p>
+      </div>
+      <div class="head">
+        <img src="{% static 'assets/images/windows.jpg' %}" alt="" />
         <p>Presbyterian College of Education - Akropong</p>
+      </div>
+      <div class="student-info">
+        <p id="index-number">Index Number:</p>
+        <p id="name">Full Name:</p>
+        <p id="program">Program:</p>
+        <p id="level">Level:</p>
+        <p id="semester">Semester:</p>
+      </div>
+      <div class="course-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th colspan="4">Course Title</th>
+              <th>CRH</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="action">
+        <input
+          type="button"
+          value="Print"
+          id="btnPrint"
+          onclick="window.print()"
+        />
+        <input
+          type="button"
+          value="Re-register"
+          id="btnRe-register"
+          onclick="window.location.href='/students/academics/course-registration/'"
+        />
+      </div>
+    </main>
+    <div class="modal-authorization">
+      <div class="card">
+        <h2></h2>
+        <p></p>
+        <div class="action">
+          <input type="button" value="No" id="" />
+        </div>
+      </div>
+    </div>
+    <footer>
+      <img src="{% static 'assets/images/windows.jpg' %}" alt="" />
+      <p>Presbyterian College of Education - Akropong</p>
     </footer>
-</body>
+  </body>
 </html>

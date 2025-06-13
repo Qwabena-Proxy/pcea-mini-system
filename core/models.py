@@ -122,6 +122,13 @@ class LevelModel(models.Model):
 
     def __str__(self):
         return self.name
+    
+class ProgramsLevel(models.Model):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
+    name= models.CharField(max_length= 255, blank= False, null= False, unique= True) 
+
+    def __str__(self):
+        return self.name
 
 class courseModel(models.Model):
     uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
@@ -174,6 +181,7 @@ class StudentstsModel(AbstractBaseUser, PermissionsMixin):
     email= models.CharField(max_length= 255, blank= False, null= False, unique= True)
     program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE, related_name='students_major')
     # minor_program= models.ForeignKey(ProgrameModel, on_delete=models.CASCADE, related_name='students_minor')
+    isProgramJHS= models.BooleanField(default= True)
     indexNumber= models.CharField(max_length=20, blank= False, null= False, unique=True)
     profile_img= models.ImageField(upload_to='students_images/', default='', null= True, blank= True)
     is_active= models.BooleanField(default= False)

@@ -1,5 +1,8 @@
 import { getToken } from "./general.js";
 
+const csrfToken = document
+  .querySelector('meta[name="csrf-token"]')
+  .getAttribute("content");
 const registerbtn = document.querySelector("#btnRegister");
 const modal = document.querySelector("body .modal");
 const noBtn = document.getElementById("btnNo");
@@ -29,6 +32,7 @@ yesBtn.addEventListener("click", () => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token[0]}`,
+      "X-CSRFToken": csrfToken,
     },
     body: formData,
   })
@@ -39,6 +43,7 @@ yesBtn.addEventListener("click", () => {
         alert("Courses registered successfully!");
         window.location.href = "/students/academics/registered-courses/";
       } else {
+        console.log(response);
         alert(
           "Error registering courses. Please try again if problem still exist try logging in again.."
         );
@@ -61,6 +66,12 @@ yesBtn.addEventListener("click", () => {
 });
 
 const getStudentCourses = () => {
+  const modal = document.querySelector(".modal-authorization");
+  const modalTitle = document.querySelector(".modal-authorization .card > h2");
+  const modalMessage = document.querySelector(".modal-authorization .card > p");
+  const modalAction = document.querySelector(
+    ".modal-authorization .card .action > input"
+  );
   const token = getToken();
   fetch("/apis/v1/get-course/", {
     method: "GET",
@@ -90,10 +101,26 @@ const getStudentCourses = () => {
         }
         addEvents();
       } else if (status == 401) {
-        alert("You are not authorized to view this page. Please log in again.");
-        window.location.href = "/login/";
+        modal.style.display = "flex";
+        modal.style.visibility = "visible";
+        modalTitle.textContent = "Error";
+        modalMessage.textContent =
+          "You are not authorized to view this page. Please log in again.";
+        modalAction.addEventListener("click", (e) => {
+          window.location.href = "/login/";
+        });
+        modalAction.value = "Login";
       } else if (status == 400) {
-        alert(response.message || "Bad request. Please try again.");
+        modal.style.display = "flex";
+        modal.style.visibility = "visible";
+        modalTitle.textContent = "Error";
+        modalMessage.textContent = `${
+          response.message || "Bad request. Please try again."
+        }`;
+        modalAction.addEventListener("click", () => {
+          window.history.back();
+        });
+        modalAction.value = "Go Back";
       }
     });
 };

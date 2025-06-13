@@ -1,57 +1,64 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/academics.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/academics.css' %}" />
     <script type="module" src="{% static 'javascript/academics.js' %}"></script>
     <title>Document</title>
-</head>
-<body data-theme="light">
+  </head>
+  <body data-theme="light">
     <nav>
-        <div class="menu-icon">
-            <i class='ri-menu-2-fill'></i>
-        </div>
+      <div class="menu-icon">
+        <i class="ri-menu-2-fill"></i>
+      </div>
     </nav>
     <main>
-        <div class="student-info">
-            <div class="profile-img">
-                <img src="{% static 'assets/images/windows.jpg' %}" alt="">
-            </div>
-            <div class="text-info">
-                <p class="name">Osei Michael Nana Bonsu</p>
-                <p class="program-category">Bachelor of Education (J.H.S)</p>
-                <p class="program">Information & Com. Technology</p>
-            </div>
+      <div class="student-info">
+        <div class="profile-img">
+          <img src="{% static 'assets/images/windows.jpg' %}" alt="" />
         </div>
-        <div class="container">
-            <div class="section-title">
-                <i class='ri-arrow-left-circle-fill' onclick="window.history.back()"></i>
-                <p>Academics</p>
-            </div>
-            <div class="select-drop">
-                <div class="title">
-                    <p>Registration</p>
-                    <i class='ri-triangle-fill'></i>
-                </div>
-                <div class="content">
-                    <a href="{% url 'students-academics-course-registration' %}">
-                        <p>Course registration</p>
-                    </a>
-                    <a href="{% url 'students-academics-registered-courses' %}">
-                        <p>View Registered Courses</p>
-                    </a>
-                    <p>Resit registration</p>
-                </div>
-            </div>
+        <div class="text-info">
+          <p class="name" id="student-name"></p>
+          <p class="program-category" id="student-program-level"></p>
+          <p class="program" id="student-program"></p>
         </div>
+      </div>
+      <div class="container">
+        <div class="section-title">
+          <i
+            class="ri-arrow-left-circle-fill"
+            onclick="window.history.back()"
+          ></i>
+          <p>Academics</p>
+        </div>
+        <div class="select-drop">
+          <div class="title">
+            <p>Registration</p>
+            <i class="ri-triangle-fill"></i>
+          </div>
+          <div class="content">
+            <a href="{% url 'students-academics-course-registration' %}">
+              <p>Course registration</p>
+            </a>
+            <a href="{% url 'students-academics-registered-courses' %}">
+              <p>View Registered Courses</p>
+            </a>
+            <p>Resit registration</p>
+          </div>
+        </div>
+      </div>
     </main>
     <footer>
-        <img src="{% static 'assets/images/windows.jpg' %}" alt="">
-        <p>Presbyterian College of Education - Akropong</p>
+      <img src="{% static 'assets/images/windows.jpg' %}" alt="" />
+      <p>Presbyterian College of Education - Akropong</p>
     </footer>
-</body>
+  </body>
 </html>

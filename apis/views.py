@@ -193,8 +193,10 @@ class studentsInfoUpdate(generics.GenericAPIView):
         indexNumber= request.data.get("indexNumber")
         studentTelephone= request.data.get("studentTelephone")
         studentProgram= request.data.get("studentProgram")
+        studentProgramLevel= request.data.get("studentProgramLevel")
         studentLevel= request.data.get("studentLevel")
         studentID= request.data.get("studentID")
+
         print(studentID)
         try:
             student= StudentstsModel.objects.get(uid= studentID)
@@ -204,6 +206,8 @@ class studentsInfoUpdate(generics.GenericAPIView):
             student.program= ProgrameModel.objects.get(name= studentProgram)
             # student.minor_program= ProgrameModel.objects.get(name= "None")
             student.level= LevelModel.objects.get(name= studentLevel)
+            if studentProgramLevel == "Primmary":
+                student.isProgramJHS= False
             student.save()
             debtResponse= createDebtforStudent(student.uid)
             print(debtResponse)
@@ -226,28 +230,6 @@ class studentsInfoUpdate(generics.GenericAPIView):
             return Response(data= {"message": "Student does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_student_courses(student):
-    # Major and minor programs
-    major = student.program
-    minor = getattr(student, 'minor_program', None)  # If you have this field
-
-    # Courses for major
-    major_courses = courseModel.objects.filter(program=major, level=student.level)
-    
-    # Courses for minor (if any)
-    if minor:
-        minor_courses = courseModel.objects.filter(program=minor, level=student.level)
-    else:
-        minor_courses = courseModel.objects.none()
-    
-    # General courses
-    general_courses = courseModel.objects.filter(is_general=True, level=student.level)
-
-    # Combine all (avoid duplicates)
-    all_courses = major_courses | minor_courses | general_courses
-    all_courses = all_courses.distinct()
-    return all_courses
-
 class GetStudentsPrograms(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         headers= request.headers.get('Authorization')
@@ -263,14 +245,13 @@ class GetStudentsPrograms(generics.GenericAPIView):
             try:
                 debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
                 if not debtCheck.cleared:
-                    print(debtCheck.cleared)
                     return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
             except TutionModel.DoesNotExist:
                 return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
             
             majorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.name) , level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
             minorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.minor), level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
-            generalCourses = courseModel.objects.filter(isGeneral= True, level= LevelModel.objects.get(name= userID.level))
+            generalCourses = courseModel.objects.filter(isGeneral= True, isJHS= userID.isProgramJHS, semester= activeSettings.current_semester, level= LevelModel.objects.get(name= userID.level))
             # Combine all courses
             allCourses = majorCourses | minorCourses | generalCourses
             allCourses = allCourses.distinct()  # Remove duplicates
@@ -351,6 +332,18 @@ class StudentRegisterCourse(generics.GenericAPIView):
         if headerCheck['status']:
             userID= headerCheck['user']
             infoDict= {}
+           # Get active settings
+            try:
+                activeSettings= SettingsModel.objects.get(active= True)
+            except SettingsModel.DoesNotExist:
+                return Response(data={'message': "No active settings found"}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if student is debt cleared
+            try:
+                debtCheck= TutionModel.objects.get(student= userID, academicYear= activeSettings.academic_year)
+                if not debtCheck.cleared:
+                    return Response(data={'message': "You have an outstanding debt, please clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
+            except TutionModel.DoesNotExist:
+                return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 student= StudentstsModel.objects.get(uid= userID.uid)
                 infoDict= {
@@ -358,7 +351,8 @@ class StudentRegisterCourse(generics.GenericAPIView):
                     'fullName': f'{student.surname} {student.othername}',
                     'program': f'{student.program}',
                     'level': f'{student.level}',
-                    'current_semester': f'{SettingsModel.objects.filter(active= True).first().current_semester}'
+                    'current_semester': f'{activeSettings.current_semester}',
+                    'pogram_level': f'{student.isProgramJHS}',
                 }
             except StaffUserModel.DoesNotExist:
                 return Response(data={'message': headerCheck['message'], 'data': 'User Does not Exist'}, status=status.HTTP_400_BAD_REQUEST)
@@ -448,6 +442,32 @@ class SettingsView(generics.GenericAPIView):
         return Response({'message': f"Settings for {settings.academic_year} created."}, status=status.HTTP_201_CREATED)
 
 
+
+class TokenRegeneration(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        refreshToken= request.data.get("refToken")
+        try:
+            userTokenObject= StudentsTokenStorage.objects.get(refToken= refreshToken)
+            user= userTokenObject.user
+            checkTokenValidity= check_token(userTokenObject.dateCreated, refreshDuration)
+            if checkTokenValidity:
+                generateToken= generate_token(userTokenObject.user)
+                response_data = {
+                    'access': generateToken['access'],
+                    'refresh': generateToken['refresh'],
+                    'studentID': user.uid,
+                }
+                #Storing of tokens
+                try:
+                    StudentsTokenStorage.objects.get(user= user).delete()
+                except StudentsTokenStorage.DoesNotExist:
+                    pass
+                StudentsTokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
+                return Response({'message': f"Token generation successful.", 'token': response_data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message': f"Token generation failed."}, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response({'message': f"Token generation failed."}, status=status.HTTP_400_BAD_REQUEST)
 
 class getUpdateM(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):

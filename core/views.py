@@ -31,11 +31,15 @@ def loginView(request):
     return render(request, 'general/login.html', context= context)
 
 def updateStudentInfo(request):
+    isJhs, created= ProgramsLevel.objects.get_or_create(name= 'J.H.S')
+    isPri, created= ProgramsLevel.objects.get_or_create(name= 'Primmary')
     Programs= ProgrameModel.objects.exclude(name="TestProgram")
     Levels= LevelModel.objects.exclude(name="TestLevel")
+    programLeves= ProgramsLevel.objects.all()
     context= {
         'studentsPrograms': Programs,
         'studentsLevels': Levels,
+        'programLevels': programLeves,
     }
     return render(request, 'students/updateInfo.html', context= context)
 
@@ -97,16 +101,8 @@ def createStaffUser(request, first_name, last_name, password, email, profileImg,
             return False, 'Account has been created but failed to send activation link'
     
 def createNewStudents(request, email):
-
-    try:
-        testProgram= ProgrameModel.objects.get(name= "TestProgram")
-    except ProgrameModel.DoesNotExist:
-        testProgram= ProgrameModel.objects.create(name= "TestProgram").save()
-
-    try:
-        testLevel= LevelModel.objects.get(name= "TestLevel")
-    except LevelModel.DoesNotExist:
-        testLevel= LevelModel.objects.create(name= "TestLevel").save()
+    testProgram, created= ProgrameModel.objects.get_or_create(name= "TestProgram")
+    testLevel, created= LevelModel.objects.get_or_create(name= "TestLevel")
 
     if StudentstsModel.objects.filter(email= email).exists():
         return False, 'A user exist with this email'
