@@ -75,8 +75,21 @@ def headersAuthorizationCheck(header):
                 else:
                     return {'message': 'Access token has expired use your refresh token to generate new tokens and try again.', "code": 401, "status": False}
                 
-            except TokenStorage.DoesNotExist:
-                return {"message": "Access token doesn't exist.","code": 400, "status": False}
+            except StudentsTokenStorage.DoesNotExist:
+                try:
+                    token= TokenStorage.objects.get(accessToken= authSplit[1])
+                    isActive= check_token(token.dateCreated, accessDuration)
+                    if isActive:
+                        return {"message": "Approved","code": 200, "user": token.user, "status": True}
+                    else:
+                        return {'message': 'Access token has expired use your refresh token to generate new tokens and try again.', "code": 401, "status": False}   
+                except TokenStorage.DoesNotExist:
+                    # If token doesn't exist in both storage
+                    if authSplit[1] == 'null':
+                        return {"message": "Access token doesn't exist.","code": 400, "status": False}
+                    else:
+                        # If token doesn't exist in both storage and is not null
+                        return {"message": "Access token doesn't exist.","code": 400, "status": False}
         else:
             return {"message": f"The authorization scheme used is incorrect. Please use '{bearerAuth} <token>' as the format for the Authorization header.", "code": 401, "status": False}
     return {'message': 'Access token is required.', "code": 401, "status": False}

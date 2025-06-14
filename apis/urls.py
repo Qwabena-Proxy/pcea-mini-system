@@ -16,6 +16,7 @@ urlpatterns = [
     path("student-register-course/", StudentRegisterCourse.as_view(), name='student-register-course'),
     path("token-regenerate/", TokenRegeneration.as_view(), name='token-regenerate'),
     path("student-info/", StudentInfoView.as_view(), name='student-info'),
+    path("staff-info/", StafftInfoView.as_view(), name='staff-info'),
 
     #Managers Api
     path("create-department/", DepartmentCreateView.as_view(), name='create-department'),

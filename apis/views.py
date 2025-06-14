@@ -478,6 +478,26 @@ class StudentInfoView(generics.GenericAPIView):
         else:
             return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
 
+class StafftInfoView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        headers= request.headers.get('Authorization')
+        headerCheck= headersAuthorizationCheck(headers)
+        if headerCheck['status']:
+            userID= headerCheck['user']
+            infoDict= {}
+            try:
+                staff= StaffUserModel.objects.get(uid= userID.uid)
+                infoDict= {
+                    'fullName': f'{staff.last_name} {staff.first_name}',
+                    'email': f'{staff.email}',
+                    'department': f'{staff.staffDepartment.name} Department' if staff.staffDepartment else 'No Department Assigned',
+                }
+            except StaffUserModel.DoesNotExist:
+                return Response(data={'message': headerCheck['message'], 'data': 'User Does not Exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': headerCheck['message'], 'data': infoDict} , status=status.HTTP_200_OK)
+        else:
+            return Response(data={'message': headerCheck['message'], 'data': ''}, status=status.HTTP_400_BAD_REQUEST)
+
 class LevelCreateView(generics.GenericAPIView):
     serializer_class = LevelSerializer
 
@@ -618,8 +638,30 @@ class TokenRegeneration(generics.GenericAPIView):
                 return Response({'message': f"Token generation successful.", 'token': response_data}, status=status.HTTP_201_CREATED)
             else:
                 return Response({'message': f"Token generation failed."}, status=status.HTTP_401_UNAUTHORIZED)
-        except:
-            return Response({'message': f"Token generation failed."}, status=status.HTTP_400_BAD_REQUEST)
+        except StudentsTokenStorage.DoesNotExist:
+            try:
+                userTokenObject= TokenStorage.objects.get(refToken= refreshToken)
+                user= userTokenObject.user
+                checkTokenValidity= check_token(userTokenObject.dateCreated, refreshDuration)
+                if checkTokenValidity:
+                    generateToken= generate_token(userTokenObject.user)
+                    response_data = {
+                        'access': generateToken['access'],
+                        'refresh': generateToken['refresh'],
+                        'staffID': user.uid,
+                    }
+                    #Storing of tokens
+                    try:
+                        TokenStorage.objects.get(user= user).delete()
+                    except TokenStorage.DoesNotExist:
+                        pass
+                    TokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
+                    return Response({'message': f"Token generation successful.", 'token': response_data}, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({'message': f"Token generation failed."}, status=status.HTTP_401_UNAUTHORIZED)
+            except TokenStorage.DoesNotExist:
+                # If no token found, return an error response
+                return Response({'message': f"Token generation failed."}, status=status.HTTP_400_BAD_REQUEST)
 
 class ClearStudentView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
