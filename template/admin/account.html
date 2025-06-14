@@ -1,157 +1,165 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
-    <link rel="stylesheet" href="../../css/general.css">
-    <link rel="stylesheet" href="../../css/admin/account.css">
-    <script type="module" src="../../javascript/admin/account.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/admin/account.css' %}" />
+    <script
+      type="module"
+      src="{% static 'javascript/admin/account.js' %}"
+    ></script>
     <title>Document</title>
-</head>
-<body data-theme="light">
+  </head>
+  <body data-theme="light">
     <nav>
-        <div class="user-info">
-            <div class="profile">
-                <img src="../../assets/images/windows.jpg" alt="profile">
-            </div>
-            <div class="user-data">
-                <p>Osei Michael Nana</p>
-                <p>qwabenamike91@gmail.com</p>
-                <p>Account Department</p>
-            </div>
+      <div class="user-info">
+        <div class="profile">
+          <img src="{% static 'assets/images/windows.jpg' %}" alt="profile" />
         </div>
-        <div class="links">
-            <ul>
-                <li>Clear students</li>
-                <li>Update Info</li>
-            </ul>
-            <ul>
-                <li onclick="window.location.href='../login.html'">LogOut</li>
-            </ul>
+        <div class="user-data">
+          <p>Osei Michael Nana</p>
+          <p>qwabenamike91@gmail.com</p>
+          <p>Account Department</p>
         </div>
+      </div>
+      <div class="links">
+        <ul>
+          <li>Clear students</li>
+          <li>Update Info</li>
+        </ul>
+        <ul>
+          <li onclick="window.location.href='../login.html'">LogOut</li>
+        </ul>
+      </div>
     </nav>
     <main>
-        <div class="depts-container active">
-            <div class="head">
-                <h1>Student's With Debt's Data</h1>
-            </div>
-            <div class="slider">
-                <p class="selected">2022</p>
-                <p>2023</p>
-                <p>2024</p>
-                <p>2025</p>
-            </div>
-            <div class="student-container">
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                    <input type="button" value="Clear student">
-                </div>
-            </div>
-            <div class="action">
-                <input type="button" value="Print List">
-            </div>
+      <div class="depts-container active">
+        <div class="head">
+          <h1>Student's With Debt's Data</h1>
         </div>
-        <div class="w-dept-container">
-            <div class="head">
-                <h1>Student's Without Debt's Data</h1>
-            </div>
-            <div class="slider">
-                <p class="selected">2022</p>
-                <p>2023</p>
-                <p>2024</p>
-                <p>2025</p>
-            </div>
-            <div class="student-container">
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-                <div class="card">
-                    <p>2050152</p>
-                    <p>Osei Michael Nana Bonsu</p>
-                </div>
-            </div>
-            <div class="action">
-                <input type="button" value="Print List">
-            </div>
+        <div class="slider">
+          <p class="selected">2022</p>
+          <p>2023</p>
+          <p>2024</p>
+          <p>2025</p>
         </div>
-            
+        <div class="student-container">
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+        </div>
+        <div class="action">
+          <input type="button" value="Print List" />
+        </div>
+      </div>
+      <div class="w-dept-container">
+        <div class="head">
+          <h1>Student's Without Debt's Data</h1>
+        </div>
+        <div class="slider">
+          <p class="selected">2022</p>
+          <p>2023</p>
+          <p>2024</p>
+          <p>2025</p>
+        </div>
+        <div class="student-container">
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+          </div>
+        </div>
+        <div class="action">
+          <input type="button" value="Print List" />
+        </div>
+      </div>
     </main>
     <aside>
-        <input type="text" name="" id="" placeholder="Search by name...">
-        <h1>Student's</h1>
-        <input class="active" type="button" value="with debt's" id="btnWD">
-        <input type="button" value="without debt's" id="btnWOD">
+      <input type="text" name="" id="" placeholder="Search by name..." />
+      <h1>Student's</h1>
+      <input class="active" type="button" value="with debt's" id="btnWD" />
+      <input type="button" value="without debt's" id="btnWOD" />
     </aside>
-</body>
+  </body>
 </html>

@@ -1,12 +1,26 @@
 const csrfToken = document
   .querySelector('meta[name="csrf-token"]')
   .getAttribute("content");
+const emailSingleAccount = document.getElementById("email");
 const levelInputElement = document.getElementById("level-input");
 const programInputElement = document.getElementById("program-input");
 const programMinorInputElement = document.getElementById("program-input-mn");
+const courseProgramInput = document.getElementById("course-program");
+const departmentInputElement = document.getElementById("department-input");
+const singleDepartmentUserCreate = document.getElementById("department-email");
+const upgDiv = document.getElementById("upg");
+const fileInputBulkAccountActivation = document.getElementById(
+  "account-activation-b"
+);
+const bulkActivationBtn = document.getElementById("send-bulk");
 
 //Btns
 const singleAccountSendBtn = document.getElementById("send");
+const singleAccountClearBtn = document.getElementById("clear");
+const signleDepartmentSendBtn = document.getElementById("department-send");
+const singleDepartmentClearBtn = document.getElementById("department-clear");
+const departmentSubmit = document.getElementById("submit-department");
+const departmentClear = document.getElementById("clear-department");
 const levelSubmit = document.getElementById("submit-level");
 const levelClear = document.getElementById("clear-level");
 const programSubmit = document.getElementById("submit-program");
@@ -20,17 +34,28 @@ const saveAcademicYear = document.getElementById("save-academic-year");
 
 const address = "http://127.0.0.1:8000";
 const singleStudentCreateApiUrl = `/apis/v1/create-student/`;
+const bulkAccountActivationApiUrl = `/apis/v1/bulk-account-activation/`;
 const levelCreateApiUrl = `/apis/v1/create-level/`;
 const programCreateApiUrl = `/apis/v1/create-program/`;
 const courseCreateApiUrl = `/apis/v1/create-course/`;
 const getupdate = `/apis/v1/get-update`;
 const settingsApiUrl = `/apis/v1/create-settigns/`;
+const singleDepartmentCreateApiUrl = `/apis/v1/create-department/`;
+const singleDepartmentUserCreateApiUrl = `/apis/v1/create-staff/`;
 
-const clearBtns = [levelClear, progamClear];
+const clearBtns = [
+  levelClear,
+  progamClear,
+  singleAccountClearBtn,
+  departmentClear,
+  singleDepartmentClearBtn,
+];
 const clearInputs = [
   levelInputElement,
   programInputElement,
-  programMinorInputElement,
+  emailSingleAccount,
+  departmentInputElement,
+  singleDepartmentUserCreate,
 ];
 
 clearBtns.forEach((element, index) => {
@@ -102,6 +127,20 @@ saveAcademicYear.addEventListener("click", (e) => {
   saveAcademicYearHandler(e);
 });
 
+bulkActivationBtn.addEventListener("click", (e) => {
+  bulkAccountHandler(e);
+});
+
+departmentSubmit.addEventListener("click", (e) => {
+  departmentSubmitHandler(e);
+  clearElement(departmentInputElement);
+});
+
+signleDepartmentSendBtn.addEventListener("click", (e) => {
+  departmentUserCreateHandler(e);
+  clearElement(singleDepartmentUserCreate);
+});
+
 const clearElement = (e) => {
   e.value = "";
   e.focus();
@@ -147,9 +186,6 @@ const programSubmitHandler = (e) => {
       console.error("Error:", error);
     });
 };
-
-const courseProgramInput = document.getElementById("course-program");
-const upgDiv = document.getElementById("upg");
 
 courseProgramInput.addEventListener("input", function () {
   if (this.value.trim() === "General Course") {
@@ -281,10 +317,9 @@ const saveAcademicYearHandler = (e) => {
   showAcademicSettings.style.display = "none";
 };
 singleAccountSendBtn.addEventListener("click", () => {
-  const email = document.getElementById("email");
   let formData = new FormData();
 
-  formData.append("email", email.value);
+  formData.append("email", emailSingleAccount.value);
   fetch(`${address}${singleStudentCreateApiUrl}`, {
     method: "POST",
     headers: {
@@ -298,6 +333,80 @@ singleAccountSendBtn.addEventListener("click", () => {
     })
     .catch((err) => console.error(err));
 });
+
+const bulkAccountHandler = (e) => {
+  if (fileInputBulkAccountActivation.files.length === 0) {
+    alert("Please select a file to upload.");
+    return;
+  }
+  let formData = new FormData();
+  formData.append("file", fileInputBulkAccountActivation.files[0]);
+  fetch(`${address}${bulkAccountActivationApiUrl}`, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+      alert("Bulk activation request sent successfully.");
+    })
+    .catch((err) => console.error(err));
+};
+
+const departmentSubmitHandler = (e) => {
+  e.preventDefault();
+  const departmentName = departmentInputElement.value.trim();
+  if (departmentName === "") {
+    alert("Please enter a department name.");
+    return;
+  }
+  let formData = new FormData();
+  formData.append("name", departmentName);
+  fetch(`${address}/apis/v1/create-department/`, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); // Handle response
+      clearElement(departmentInputElement);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+const departmentUserCreateHandler = (e) => {
+  e.preventDefault();
+  const departmentEmail = singleDepartmentUserCreate.value.trim();
+  if (departmentEmail === "") {
+    alert("Please enter account email.");
+    return;
+  }
+  let formData = new FormData();
+  formData.append("email", departmentEmail);
+  fetch(`${address}${singleDepartmentUserCreateApiUrl}`, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); // Handle response
+      clearElement(singleDepartmentUserCreate);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
 
 const getlevel = () => {
   const levelList = document.getElementById("level-list");
@@ -337,7 +446,7 @@ const getlevel = () => {
       }
     })
     .catch((err) => console.error(err));
-};
+}; //create-staff/
 
 const getSettings = () => {
   fetch(`${address}${settingsApiUrl}`, {

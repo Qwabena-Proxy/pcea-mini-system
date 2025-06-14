@@ -67,45 +67,55 @@ def registeredCourses(request):
     }
     return render(request, 'students/registered-courses.html', context= context)
 
+
+def accountOffice(request):
+    context= {
+        'students': StudentstsModel.objects.all(),
+        'staffs': StaffUserModel.objects.all(),
+    }
+    return render(request, 'admin/account.html', context= context)
+
 def accountActivation(request, uidb64, token, special):
     activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)
     context= {
         'email': userEmail,
         'activationMessage': activationMessage
     }
-    if activationStatus:
+    if activationStatus and special == 0:
         return render(request, 'students/set-new-password.html', context= context)
+    elif activationStatus and special == 1:
+        return render(request, 'admin/set-new-password-staff.html', context= context)
     else:
         return render(request, 'students/activationFailed.html', context= context)
 
 
-def createStaffUser(request, first_name, last_name, password, email, profileImg, staffDepartment, is_staff, hasFullAccess=False):
-    if StaffUserModel.objects.filter(email= email).exists():
-        return False, 'A user exist with this email'
+def createStaffUser(request, email, hasFullAccess=False, is_staff= True, profileImg=None):
+    if StaffUserModel.objects.filter(email= email).exists() or StudentstsModel.objects.filter(email= email).exists():
+        return False, 'A user exist with this email', email
     else:
+        testDepartment, created= DepartmentModel.objects.get_or_create(name= "TestDepartment")
         newStaff= StaffUserModel.objects.create(
-            first_name= first_name,
-            last_name= last_name,
+            first_name= 'first_name',
+            last_name= 'last_name',
             email= email,
             hasFullAccess= hasFullAccess,
-            staffDepartment= staffDepartment,
+            staffDepartment= testDepartment,
             is_staff= is_staff,
             profile_img= profileImg
         )
-        newStaff.set_password(password)
         newStaff.save()
-        linkResponse= getActivationLink(request, newStaff)
+        linkResponse= getActivationLink(request, newStaff, True)
         if linkResponse:
-            return True, 'User has been created successfully'
+            return True, 'User has been created successfully', newStaff.email
         else:
-            return False, 'Account has been created but failed to send activation link'
+            return False, 'Account has been created but failed to send activation link', newStaff.email
     
 def createNewStudents(request, email):
     testProgram, created= ProgrameModel.objects.get_or_create(name= "TestProgram")
     testLevel, created= LevelModel.objects.get_or_create(name= "TestLevel")
 
-    if StudentstsModel.objects.filter(email= email).exists():
-        return False, 'A user exist with this email'
+    if StudentstsModel.objects.filter(email= email).exists() or StaffUserModel.objects.filter(email= email).exists():
+        return False, 'A user exist with this email', email
     else:
         newStudents= StudentstsModel.objects.create(
             surname= 'TestName',
@@ -117,17 +127,16 @@ def createNewStudents(request, email):
         )
         newStudents.save()
         linkResponse= getActivationLink(request, newStudents)
-        print(linkResponse)
         if linkResponse:
-            return True, 'User has been created successfully'
+            return True, 'User has been created successfully', newStudents.email
         else:
-            return False, 'Account has been created but failed to send activation link'
+            return False, 'Account has been created but failed to send activation link', newStudents.email
 
-def sendActivationLink(request, user, userType, special= False):
+def sendActivationLink(request, email, userType, special= False):
     if userType == 'student':
-        user= StudentstsModel.objects.get(uid= user.uid)
+        user= StudentstsModel.objects.get(email= email)
     elif userType == 'staff':
-        user= StaffUserModel.objects.get(uid= user.uid)
+        user= StaffUserModel.objects.get(email= email)
     else:
         user= None
     if user is not None:

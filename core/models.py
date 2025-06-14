@@ -71,7 +71,7 @@ class StaffUserModel(AbstractBaseUser, PermissionsMixin):
     email= models.EmailField(db_index= True, unique= True, max_length= 240)
     profile_img= models.ImageField(upload_to='profile_images/', default='', null= True, blank= True)
     hasFullAccess= models.BooleanField(default= False)
-    staffDepartment= models.CharField(max_length= 240, default= '')
+    staffDepartment= models.ForeignKey(DepartmentModel, on_delete=models.CASCADE, default='')
     is_staff= models.BooleanField(default= False)
     is_active= models.BooleanField(default= False)
     is_superuser= models.BooleanField(default= False)

@@ -10,4 +10,5 @@ urlpatterns = [
     path('students/academics/course-registration/', courseRegistration, name='students-academics-course-registration'),
     path('students/academics/registered-courses/', registeredCourses, name='students-academics-registered-courses'),
     path('activate/<str:uidb64>/<str:token>/<int:special>/', accountActivation, name='activate-account'),
+    path('account-office/', accountOffice, name='account-office'),
 ]

@@ -43,6 +43,12 @@ class StudentsLoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepartmentModel
+        fields = ['uid', 'name']
+
 class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelModel

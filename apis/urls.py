@@ -2,8 +2,11 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path("create-staff/", createStaffView.as_view(), name='create-staff'),
     path("create-student/", createStudentView.as_view(), name='create-student'),
+    path("bulk-account-activation/", createBulkStudentsView.as_view(), name='bulk-account-activation'),
     path("create-student-password/", createStudentPasswordView.as_view(), name='create-student-password'),
+    path("create-staff-password/", createStaffPasswordView.as_view(), name='create-staff-password'),
     path("auth/update-student-info/", studentsInfoUpdate.as_view(), name='update-student-info'),
     path("auth/login/", logInView.as_view(), name='logIn'),
     path("get-course/", GetStudentsPrograms.as_view(), name='get-course'),
@@ -13,6 +16,7 @@ urlpatterns = [
     path("student-info/", StudentInfoView.as_view(), name='student-info'),
 
     #Managers Api
+    path("create-department/", DepartmentCreateView.as_view(), name='create-department'),
     path("create-level/", LevelCreateView.as_view(), name='create-level'),
     path("create-program/", ProgramCreateView.as_view(), name='create-program'),
     path("create-course/", CourseCreateView.as_view(), name='create-course'),

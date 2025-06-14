@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="bulk-send">
-          <h3>Single send</h3>
+          <h3>Bulk Account Send</h3>
           <input
             type="file"
             name=""
@@ -47,17 +47,17 @@
             "email" with the emails to send activation links to.
           </p>
           <p>
-            Note: The file should be in <br />
-            CSV, XLSX, XLS, or ODS format.
+            Note: The file should be an excel file<br />
+            <!-- CSV, XLSX, XLS, or ODS format. -->
           </p>
-          <p>
+          <!-- <p>
             Upload a CSV or Excel file with a column named <br />
             "email" containing the emails to send activation links to.
-          </p>
+          </p> -->
           <div class="actions">
-            <input type="button" value="analyze" id="analyze" />
-            <input type="button" value="send" id="send" />
-            <input type="button" value="clear" id="clear" />
+            <input type="button" value="analyze" id="analyze" disabled />
+            <input type="button" value="send" id="send-bulk" />
+            <input type="button" value="clear" id="clear" disabled />
           </div>
           <div class="response-b">
             <p></p>
@@ -93,7 +93,7 @@
     </div>
     <div class="two">
       <div class="level">
-        <h2>Level</h2>
+        <h2>Create Level</h2>
         <input type="text" placeholder="level" id="level-input" />
         <div class="actions">
           <input type="button" value="submit" id="submit-level" />
@@ -109,7 +109,7 @@
         </div>
       </div>
       <div class="program">
-        <h2>Program</h2>
+        <h2>Create Program</h2>
         <input type="text" placeholder="program major" id="program-input" />
         <input
           type="text"
@@ -131,7 +131,7 @@
         </div>
       </div>
       <div class="course">
-        <h2>Course</h2>
+        <h2>Create Course</h2>
         <input type="text" placeholder="course-code" id="course-code" /><br />
         <input type="text" placeholder="course-title" id="course-title" /><br />
         <input
@@ -251,6 +251,61 @@
               value="Save academic year"
               id="save-academic-year"
             />
+          </div>
+        </div>
+      </div>
+      <h1>Department Section</h1>
+      <div class="department">
+        <h2>Create Department</h2>
+        <input type="text" placeholder="department" id="department-input" />
+        <div class="actions">
+          <input type="button" value="submit" id="submit-department" />
+          <input type="button" value="clear" id="clear-department" />
+        </div>
+        <div class="info-department">
+          <p></p>
+        </div>
+      </div>
+      <div class="account-activation">
+        <h2>Account-activation</h2>
+        <div class="single-send">
+          <h3>Single send</h3>
+          <input type="text" name="" id="department-email" />
+          <div class="actions">
+            <input type="button" value="send" id="department-send" />
+            <input type="button" value="clear" id="department-clear" />
+          </div>
+          <div class="response-s">
+            <p></p>
+          </div>
+        </div>
+        <div class="bulk-send">
+          <h3>Bulk Account Send</h3>
+          <input
+            type="file"
+            name=""
+            id="account-activation-b"
+            accept=".csv, .xlsx, .xls, .ods"
+          />
+          <p>
+            Note: The file should contain a column named <br />
+            "email" with the emails to send activation links to.
+          </p>
+          <p>
+            Note: The file should be an excel file<br />
+            <!-- CSV, XLSX, XLS, or ODS format. -->
+          </p>
+          <!-- <p>
+            Upload a CSV or Excel file with a column named <br />
+            "email" containing the emails to send activation links to.
+          </p> -->
+          <div class="actions">
+            <input type="button" value="analyze" id="analyze" disabled />
+            <input type="button" value="send" id="department-send-bulk" />
+            <input type="button" value="clear" id="department-clear" disabled />
+          </div>
+          <div class="response-b">
+            <p></p>
           </div>
         </div>
       </div>

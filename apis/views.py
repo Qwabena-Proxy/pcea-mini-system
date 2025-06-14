@@ -19,6 +19,8 @@ from core.models import *
 from core.utils import *
 from core.views import *
 from pathlib import Path
+import openpyxl.workbook
+import openpyxl
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 accessDuration= settings.ACCESS_TOKEN_DURATION
@@ -95,50 +97,103 @@ class StudentsLoginView(generics.GenericAPIView):
 class createStaffView(generics.GenericAPIView):
     
     def post(self, request, *args, **kwargs):
-        first_name= request.POST.get("firstName")
-        last_name= request.POST.get("lastName")
-        email= request.POST.get("email")
-        password= request.POST.get("password")
-        profileImg= request.FILES.get("profileImg")
-        DepartmentName= request.POST.get("department")
-        if profileImg == None:
-            profileImg= ''
-        createResponse, createResponseMessage= createStaffUser(
-            request= request,
-            first_name= first_name,
-            last_name= last_name,
-            password= password,
-            email= email,
-            profileImg= profileImg,
-            staffDepartment= DepartmentModel.objects.get(name= DepartmentName),
-            is_staff= True
-        )
+        email = request.data.get("email")
+        createResponse, createResponseMessage, staffEmail = createStaffUser(request, email)
         if createResponse:
-            return Response(data= {'message': createResponseMessage}, status=status.HTTP_201_CREATED)
+            return Response(data={'message': createResponseMessage}, status=status.HTTP_201_CREATED)
         else:
-            return Response(data= {'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(data={'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
         
-
 class createStudentView(generics.GenericAPIView):
     
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
-        createResponse, createResponseMessage = createNewStudents(request, email)
+        createResponse, createResponseMessage, studentEmail = createNewStudents(request, email)
         if createResponse:
             return Response(data={'message': createResponseMessage}, status=status.HTTP_201_CREATED)
         else:
             return Response(data={'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+class createBulkStudentsView(generics.GenericAPIView):
+    
+    def post(self, request, *args, **kwargs):
+        file = request.FILES.get('file')
+        if not file:
+            return Response({"error": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        DataFile = openpyxl.load_workbook(filename=file, read_only=True)
+        # print(DataFile.get_sheet_names())
+        # Assuming the first sheet contains the data
+        sheet = DataFile.active
+        # Read the first column of the sheet
+        emails = []
+        for row in sheet.iter_rows(min_row=2, max_col=1, values_only=True):  # Skip header row
+            email = row[0]
+            if email:
+                emails.append(email.strip())
+        if not emails:
+            return Response({"error": "No valid emails found in the file."}, status=status.HTTP_400_BAD_REQUEST)
+        # check for duplicates
+        emails = list(set(emails))
+
+        created = 0
+        existedUsers = 0
+        failedAccSend = []
+        for email in emails:
+            # logic to create account and send activation link
+            createResponse, createResponseMessage, studentEmail = createNewStudents(request, email)
+            if not createResponse:
+                if "user exist" in createResponseMessage:
+                    existedUsers += 1
+                    continue
+                elif "failed to send activation link" in createResponseMessage:
+                    failedAccSend.append(email)
+                    continue
+            if createResponse:
+                created += 1
+            # Optionally, handle/report failures
+
+        return Response({"message": f"Processed {created} emails. Already Exist Account {existedUsers}. FailedAccsend {len(failedAccSend)}", "FailedAccSend": failedAccSend}, status=status.HTTP_200_OK)
+    
+    # def post(self, request, *args, **kwargs):
+    #     file = request.FILES.get("file")
+    #     if not file:
+    #         return Response(data={'message': "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     try:
+    #         # Assuming the file is a CSV
+    #         df = pd.read_csv(file)
+    #         for index, row in df.iterrows():
+    #             email = row.get("email")
+    #             if email:
+    #                 createResponse, createResponseMessage = createNewStudents(request, email)
+    #                 if not createResponse:
+    #                     return Response(data={'message': createResponseMessage}, status=status.HTTP_406_NOT_ACCEPTABLE)
+    #         return Response(data={'message': "Bulk student creation successful"}, status=status.HTTP_201_CREATED)
+    #     except Exception as e:
+    #         return Response(data={'message': f"Error processing file: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 class createStudentPasswordView(generics.GenericAPIView):
     
     def post(self, request, *args, **kwargs):
         try:
             email = request.data.get("email")
             password = request.data.get("password")
-            print(email, password)
             student = StudentstsModel.objects.get(email=email)
             student.set_password(password)
             student.save()
+            return Response(data={'message': "Success"}, status=status.HTTP_201_CREATED)
+        except:
+            return Response(data={'message': "Fail"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class createStaffPasswordView(generics.GenericAPIView):
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            email = request.data.get("email")
+            password = request.data.get("password")
+            staff = StaffUserModel.objects.get(email=email)
+            staff.set_password(password)
+            staff.save()
             return Response(data={'message': "Success"}, status=status.HTTP_201_CREATED)
         except:
             return Response(data={'message': "Fail"}, status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -413,9 +468,26 @@ class ProgramCreateView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             program = serializer.save()
-            return Response(data={'message': f"Level {program.name} created successfully"}, status=status.HTTP_201_CREATED)
+            return Response(data={'message': f"Program {program.name} created successfully"}, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            return Response(data={'message': "Level already exists"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': "Program already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DepartmentCreateView(generics.GenericAPIView):
+    serializer_class = DepartmentSerializer
+    def get(self, request, *args, **kwargs):
+        departments = DepartmentModel.objects.all()
+        serializer = self.get_serializer(departments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            department = serializer.save()
+            return Response(data={'message': f"Department {department.name} created successfully"}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(data={'message': "Department already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 class CourseCreateView(generics.GenericAPIView):
     serializer_class = CourseSerializer
