@@ -79,9 +79,8 @@ def accountOffice(request):
     Levels= LevelModel.objects.exclude(name="TestLevel")
     deptorsDict = {}
     wdeptosDict = {}
-    levels = LevelModel.objects.all()
 
-    for level in levels:
+    for level in Levels:
         students_in_level = StudentstsModel.objects.filter(level=level)
         # Get tuitions for these students (optionally filter for uncleared debts)
         tuitions = TutionModel.objects.filter(student__in=students_in_level, cleared=False)
