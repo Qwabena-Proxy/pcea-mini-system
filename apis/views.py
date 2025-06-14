@@ -64,6 +64,7 @@ class StaffLoginView(generics.GenericAPIView):
             'email': user.email,
             'updateRequired': updateRequired,
             'staffID': user.uid,
+            'department': user.staffDepartment.name if user.staffDepartment else None,
         }
         
         # Return a successful response

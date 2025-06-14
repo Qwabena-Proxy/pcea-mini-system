@@ -39,6 +39,7 @@ authButton.addEventListener("click", () => {
     .then((response) => Promise.all([response.status, response.json()]))
     .then(([status, data]) => {
       if (status == 200) {
+        console.log(data);
         const token = {
           accessToken: data.access,
           refreshToken: data.refresh,
