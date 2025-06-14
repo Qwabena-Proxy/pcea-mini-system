@@ -8,7 +8,10 @@ const sliderSwitchers = document.querySelectorAll(".slider.dept > p");
 const deptList = document.querySelectorAll(".student-container.debt");
 const sliderWSwitchers = document.querySelectorAll(".slider.w-dept > p");
 const deptWList = document.querySelectorAll(".student-container.w-debt");
+const cards = document.querySelectorAll(".card");
 const switcherBtnList = [btnWithDebt, btnWithoutDebt];
+
+const address = "http://127.0.0.1:8000";
 
 btnWithDebt.addEventListener("click", () => {
   contents.forEach((x, i) => {
@@ -47,5 +50,35 @@ sliderSwitchers.forEach((x, index) => {
     });
     e.target.classList.add("selected");
     deptList[index].classList.add("active");
+  });
+});
+
+cards.forEach((element, index) => {
+  const btn = element.querySelector("input");
+  const stdIndexNumber = element.querySelector("p:first-of-type");
+
+  let formData = new FormData();
+  formData.append("indexNumber", stdIndexNumber.textContent);
+
+  btn.addEventListener("click", (e) => {
+    const url =
+      e.target.value == "Clear student"
+        ? "/apis/v1/clear-student/"
+        : "/apis/v1/debt-student/";
+    fetch(`${address}${url}`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrfToken,
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data); // Handle response
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   });
 });

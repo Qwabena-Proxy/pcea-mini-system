@@ -621,6 +621,23 @@ class TokenRegeneration(generics.GenericAPIView):
         except:
             return Response({'message': f"Token generation failed."}, status=status.HTTP_400_BAD_REQUEST)
 
+class ClearStudentView(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        studentIndexNumber= request.data.get("indexNumber")
+        tutionObject= TutionModel.objects.get(student= StudentstsModel.objects.get(indexNumber= studentIndexNumber))
+        tutionObject.cleared= True
+        tutionObject.save()
+        return Response(data={'message': f'{tutionObject.student.indexNumber} was cleared..'}, status=status.HTTP_200_OK)
+
+class DebtStudentView(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        studentIndexNumber= request.data.get("indexNumber")
+        tutionObject= TutionModel.objects.get(student= StudentstsModel.objects.get(indexNumber= studentIndexNumber))
+        tutionObject.cleared= False
+        tutionObject.save()
+        return Response(data={'message': f'{tutionObject.student.indexNumber} was debt..'}, status=status.HTTP_200_OK)
+
+        
 class getUpdateM(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         levels= []

@@ -25,4 +25,9 @@ urlpatterns = [
     path("create-settigns/", SettingsView.as_view(), name='create-settigns'),
     path("get-update/", getUpdateM.as_view(), name='get-update'),
 
+    # Account department Api
+    path("clear-student/", ClearStudentView.as_view(), name='clear-student'),
+    path("debt-student/", DebtStudentView.as_view(), name='debt-student'),
+
+
 ]
