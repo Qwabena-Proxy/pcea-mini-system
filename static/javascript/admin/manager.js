@@ -466,7 +466,7 @@ const getSettings = () => {
       settingsID.value = settings.settings_id;
       academicYear.textContent = `Academic Year: ${settings.academic_year}`;
 
-      console.log(data); // Handle response
+      // console.log(data); // Handle response
     })
     .catch((error) => {
       console.error("Error:", error);

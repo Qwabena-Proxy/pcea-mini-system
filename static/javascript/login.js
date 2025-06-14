@@ -46,18 +46,22 @@ authButton.addEventListener("click", () => {
           email: data.email,
           studentID: data.studentID,
         };
+        if (!studentActive) {
+          token.studentID = data.staffID;
+        }
         storeToken(token.accessToken, token.refreshToken, token.studentID);
         if (data.updateRequired) {
           if (studentActive) {
             window.location.href = `/students/update-info/`;
           } else {
-            // window.location.href = `/staff/update-info/`;
-            alert(
-              "You need to update your information before proceeding. Please contact the admin for assistance."
-            );
+            window.location.href = `/staff/update-info/`;
           }
         } else {
-          window.location.href = `/students/dashboard/`;
+          if (studentActive) {
+            window.location.href = `/students/dashboard/`;
+          } else {
+            window.location.href = `/account-office/`;
+          }
         }
       } else {
         console.log(data);

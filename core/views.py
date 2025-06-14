@@ -30,6 +30,13 @@ def loginView(request):
     }
     return render(request, 'general/login.html', context= context)
 
+def updateStaffInfo(request):
+    departments= DepartmentModel.objects.exclude(name="TestDepartment")
+    context= {
+        'departments': departments,
+    }
+    return render(request, 'admin/updateInfoStaff.html', context= context)
+
 def updateStudentInfo(request):
     isJhs, created= ProgramsLevel.objects.get_or_create(name= 'J.H.S')
     isPri, created= ProgramsLevel.objects.get_or_create(name= 'Primmary')
@@ -69,9 +76,28 @@ def registeredCourses(request):
 
 
 def accountOffice(request):
+    Levels= LevelModel.objects.exclude(name="TestLevel")
+    deptorsDict = {}
+    wdeptosDict = {}
+    levels = LevelModel.objects.all()
+
+    for level in levels:
+        students_in_level = StudentstsModel.objects.filter(level=level)
+        # Get tuitions for these students (optionally filter for uncleared debts)
+        tuitions = TutionModel.objects.filter(student__in=students_in_level, cleared=False)
+        wTutions = TutionModel.objects.filter(student__in=students_in_level, cleared=True)
+
+        # Collect debtors (e.g., student emails or objects)
+        debtors = [t.student for t in tuitions]
+        deptorsDict[level.name] = debtors
+
+        wdeptors = [t.student for t in wTutions]
+        wdeptosDict[level.name] = wdeptors
+    print(deptorsDict, wdeptosDict)
     context= {
-        'students': StudentstsModel.objects.all(),
-        'staffs': StaffUserModel.objects.all(),
+        'levels': Levels,
+        'deptorsDict': deptorsDict,
+        'wdeptosDict': wdeptosDict,
     }
     return render(request, 'admin/account.html', context= context)
 

@@ -207,6 +207,8 @@ def createDebtforStudent(uid):
     level_tuition_map = dict(zip(levels, tuitions))
     
     student_level_name = student.level.name
+
+    print(student_level_name, level_tuition_map, levels, tuitions)
     if student_level_name in level_tuition_map:
         amount = level_tuition_map[student_level_name]
         # Check if debt already exists for this student and academic year

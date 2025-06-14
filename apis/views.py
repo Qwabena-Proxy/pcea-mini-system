@@ -294,6 +294,40 @@ class studentsInfoUpdate(generics.GenericAPIView):
             return Response(data= {"message": "Student does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class staffsInfoUpdate(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        staffFirstName= request.data.get("otherName")
+        staffLastName= request.data.get("staffSurname")
+        staffDepartment= request.data.get("department")
+        staffID= request.data.get("staffID")
+        print(staffDepartment)
+
+        try:
+            staff= StaffUserModel.objects.get(uid= staffID)
+            staff.first_name= staffFirstName
+            staff.last_name= staffLastName
+            # If the staff has a profile image, save it
+            # if 'profileImg' in request.FILES:
+            #     profileImg = request.FILES['profileImg']
+            #     staff.profile_img.save(f"{staff.uid}_profile.jpg", File(profileImg))
+            # else:
+            #     staff.profile_img = None
+            staff.save()
+            # If the staff has a telephone number, save it  
+            # if staffTelephone:
+            #     staff.telephone = staffTelephone
+            # else:
+            #     staff.telephone = None
+            # if not StaffUserModel.objects.filter(email= staff.email).exists():
+            #     return Response(data= {"message": "Staff does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            if not DepartmentModel.objects.filter(name= staffDepartment).exists():
+                return Response(data= {"message": "Department does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            staff.staffDepartment= DepartmentModel.objects.get(name= staffDepartment)
+            staff.save()
+            return Response(data= {"message": f"Dear {staffFirstName} {staffLastName}, your information has been recorded successfully."}, status=status.HTTP_200_OK)
+        except StaffUserModel.DoesNotExist:
+            return Response(data= {"message": "Staff does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
 class GetStudentsPrograms(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         headers= request.headers.get('Authorization')

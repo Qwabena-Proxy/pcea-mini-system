@@ -8,6 +8,7 @@ urlpatterns = [
     path("create-student-password/", createStudentPasswordView.as_view(), name='create-student-password'),
     path("create-staff-password/", createStaffPasswordView.as_view(), name='create-staff-password'),
     path("auth/update-student-info/", studentsInfoUpdate.as_view(), name='update-student-info'),
+    path("auth/update-staff-info/", staffsInfoUpdate.as_view(), name='update-staff-info'),
     path("auth/login/", logInView.as_view(), name='logIn'),
     path("auth/staff-login/", StaffLoginView.as_view(), name='staff-logIn'),
     path("get-course/", GetStudentsPrograms.as_view(), name='get-course'),

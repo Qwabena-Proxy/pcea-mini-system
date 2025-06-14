@@ -17,6 +17,11 @@
       #upg {
         display: none;
       }
+      .updateLevel,
+      .updateProgram,
+      .updateCourse {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -102,10 +107,12 @@
         <div class="info-level">
           <p></p>
         </div>
-        <input type="text" placeholder="level" />
-        <div class="actions">
-          <input type="button" value="update level" />
-          <input type="button" value="clear" />
+        <div class="updateLevel">
+          <input type="text" placeholder="level" />
+          <div class="actions">
+            <input type="button" value="update level" />
+            <input type="button" value="clear" />
+          </div>
         </div>
       </div>
       <div class="program">
@@ -124,10 +131,12 @@
         <div class="info-program">
           <p></p>
         </div>
-        <input type="text" placeholder="program" />
-        <div class="actions">
-          <input type="button" value="update-program" />
-          <input type="button" value="clear-program" />
+        <div class="updateProgram">
+          <input type="text" placeholder="program" />
+          <div class="actions">
+            <input type="button" value="update-program" />
+            <input type="button" value="clear-program" />
+          </div>
         </div>
       </div>
       <div class="course">
@@ -167,33 +176,35 @@
         <div class="info-course">
           <p></p>
         </div>
-        <h4>Update course</h4>
-        <input type="text" placeholder="course-code" /><br />
-        <input type="text" placeholder="course-title" /><br />
-        <input type="text" placeholder="credit hours" /><br />
-        <input
-          type="text"
-          placeholder="level"
-          id="course-level"
-          list="level-data"
-        /><br />
-        <input
-          type="text"
-          placeholder="program"
-          id="course-program"
-          list="programs-data"
-        /><br />
-        <p>Semester</p>
-        <input type="radio" name="semester" id="s1" value="1" />
-        <label for="s1">1</label>
-        <input type="radio" name="semester" id="s2" value="2" />
-        <label for="s2">2</label>
-        <div class="actions">
-          <input type="button" value="update-course" />
-          <input type="button" value="clear-course" />
-        </div>
-        <div class="info-course">
-          <p></p>
+        <div class="updateCourse">
+          <h4>Update course</h4>
+          <input type="text" placeholder="course-code" /><br />
+          <input type="text" placeholder="course-title" /><br />
+          <input type="text" placeholder="credit hours" /><br />
+          <input
+            type="text"
+            placeholder="level"
+            id="course-level"
+            list="level-data"
+          /><br />
+          <input
+            type="text"
+            placeholder="program"
+            id="course-program"
+            list="programs-data"
+          /><br />
+          <p>Semester</p>
+          <input type="radio" name="semester" id="s1" value="1" />
+          <label for="s1">1</label>
+          <input type="radio" name="semester" id="s2" value="2" />
+          <label for="s2">2</label>
+          <div class="actions">
+            <input type="button" value="update-course" />
+            <input type="button" value="clear-course" />
+          </div>
+          <div class="info-course">
+            <p></p>
+          </div>
         </div>
       </div>
       <datalist id="programs-data"> </datalist>

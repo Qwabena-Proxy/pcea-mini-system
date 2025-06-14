@@ -1,222 +1,238 @@
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--general-background);
-    color: var(--primarycolor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--general-background);
+  color: var(--primarycolor);
 }
 
-nav, main, aside {
-    background-color: white;
-    height: 95vh;
-    width: fit-content;
-    flex: 1;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;
-    box-shadow: 0px 15px 30px var(--boxshadow-color);
-    -webkit-box-shadow: -0px 15px 30px var(--boxshadow-color);
-    -moz-box-shadow: -0px 15px 30px var(--boxshadow-color);
+nav,
+main,
+aside {
+  background-color: white;
+  height: 95vh;
+  width: fit-content;
+  flex: 1;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 15px 30px var(--boxshadow-color);
+  -webkit-box-shadow: -0px 15px 30px var(--boxshadow-color);
+  -moz-box-shadow: -0px 15px 30px var(--boxshadow-color);
 }
 
 nav .user-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 nav .user-info .profile img {
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
 }
 
 nav .user-info .user-data {
-    padding: 10px;
-    font-size: 12px;
+  padding: 10px;
+  font-size: 12px;
 }
 
 nav .user-info .user-data p:first-child {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-nav .links{
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: start;
-    height: 80%;
+nav .links {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  height: 80%;
 }
 
 nav .links ul {
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 nav .links ul li {
-    padding: 5px;
-    width: 100%;
-    border-top: 1px solid var(--primarycolor);
-    border-bottom: 1px solid var(--primarycolor);
+  padding: 5px;
+  width: 100%;
+  border-top: 1px solid var(--primarycolor);
+  border-bottom: 1px solid var(--primarycolor);
 }
 
 nav .links ul:first-child li:first-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 main {
-    flex: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 main .depts-container,
 main .w-dept-container {
-    width: 100%;
-    height: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 main .active {
-    display: flex;
+  display: flex;
 }
 
 main .head {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main .slider {
-    border: 1px solid var(--primarycolor);
-    border-radius: 10px;
-    width: 90%;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+  border: 1px solid var(--primarycolor);
+  border-radius: 10px;
+  width: 90%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 main .slider p {
-    font-weight: 600;
-    padding: 10px;
-    width: 15%;
-    text-align: center;
-    border-radius: 5px;
+  font-weight: 600;
+  padding: 10px;
+  width: 15%;
+  text-align: center;
+  border-radius: 5px;
 }
 
 main .slider p.selected {
-    background-color: var(--primarycolor);
-    color: white;
+  background-color: var(--primarycolor);
+  color: white;
 }
 
 main .student-container {
-    width: 95%;
-    height: 75%;
-    max-height: 75%;
-    overflow-y: scroll;
-    padding: 5px;
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 15px;
+  width: 95%;
+  height: 75%;
+  max-height: 75%;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
 }
 
 main .student-container .card {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border-radius: 5px;
-    padding: 10px;
-    color: var(--primarytextcolor);
-    border: 1px solid var(--primarycolor);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+  padding: 10px;
+  color: var(--primarytextcolor);
+  border: 1px solid var(--primarycolor);
 }
 
 main .student-container .card:hover {
-    box-shadow: 0px 15px 30px var(--boxshadow-color);
-    -webkit-box-shadow: -0px 15px 30px var(--boxshadow-color);
-    -moz-box-shadow: -0px 15px 30px var(--boxshadow-color);
+  box-shadow: 0px 15px 30px var(--boxshadow-color);
+  -webkit-box-shadow: -0px 15px 30px var(--boxshadow-color);
+  -moz-box-shadow: -0px 15px 30px var(--boxshadow-color);
 }
 
-main .student-container .card p:nth-child(odd){
-    flex: 1;
+main .student-container .card p:nth-child(odd) {
+  flex: 1;
 }
 
 main .student-container .card p:nth-child(even) {
-    flex: 5;
+  flex: 5;
 }
 
 main .student-container .card input {
-    padding: 10px;
-    border: none;
-    background-color: var(--primarycolor);
-    color: white;
-    border-radius: 5px;
+  padding: 10px;
+  border: none;
+  background-color: var(--primarycolor);
+  color: white;
+  border-radius: 5px;
+}
+
+main .student-container .card input:hover {
+  background-color: #0d0850e0;
+}
+
+main .student-container.debt,
+main .student-container.w-debt {
+  display: none;
+}
+
+main .student-container.debt.active,
+main .student-container.w-debt.active {
+  display: flex;
 }
 
 main .action {
-    width: 100%;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main .action input {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    color: white;
-    background-color: var(--primarycolor);
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+  background-color: var(--primarycolor);
 }
 
 aside {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px;
-    gap: 1%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  gap: 1%;
 }
 
 aside input {
-    border-radius: 5px;
-    border: 1px solid var(--primarycolor);
-    color: var(--primarycolor);
-    background-color: white;
+  border-radius: 5px;
+  border: 1px solid var(--primarycolor);
+  color: var(--primarycolor);
+  background-color: white;
 }
 
-aside input[type='text'] {
-    padding: 10px;
-    outline: none;
+aside input[type="text"] {
+  padding: 10px;
+  outline: none;
 }
 
-aside input[type='text']::placeholder {
-    font-style: italic;
+aside input[type="text"]::placeholder {
+  font-style: italic;
 }
 
-aside input[type='button'] {
-    width: 70%;
-    padding: 5px;
+aside input[type="button"] {
+  width: 70%;
+  padding: 5px;
 }
 
-aside input[type='button'].active {
-    color: white;
-    background-color: var(--primarycolor);
+aside input[type="button"].active {
+  color: white;
+  background-color: var(--primarycolor);
 }

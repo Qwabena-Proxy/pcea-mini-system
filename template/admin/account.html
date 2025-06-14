@@ -4,7 +4,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token }}" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
@@ -45,59 +44,26 @@
         <div class="head">
           <h1>Student's With Debt's Data</h1>
         </div>
-        <div class="slider">
-          <p class="selected">2022</p>
-          <p>2023</p>
-          <p>2024</p>
-          <p>2025</p>
+        <div class="slider dept">
+          {% for level in levels %}
+          <p {% if forloop.first %} class="selected" {% endif %}>{{level}}</p>
+          {% endfor %}
         </div>
-        <div class="student-container">
+
+        {% for level, debtors in deptorsDict.items %}
+        <div
+          class="student-container debt {% if forloop.first %} active {% endif %}"
+        >
+          {% for student in debtors %}
           <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
+            <p>{{ student.indexNumber }}</p>
+            <p>{{ student.surname }} {{ student.othername }}</p>
             <input type="button" value="Clear student" />
+            <!-- Add more student fields as needed -->
           </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-            <input type="button" value="Clear student" />
-          </div>
+          {% endfor %}
         </div>
+        {% endfor %}
         <div class="action">
           <input type="button" value="Print List" />
         </div>
@@ -106,50 +72,26 @@
         <div class="head">
           <h1>Student's Without Debt's Data</h1>
         </div>
-        <div class="slider">
-          <p class="selected">2022</p>
-          <p>2023</p>
-          <p>2024</p>
-          <p>2025</p>
+        <div class="slider w-dept">
+          {% for level in levels %}
+          <p {% if forloop.first %} class="selected" {% endif %}>{{level}}</p>
+          {% endfor %}
         </div>
-        <div class="student-container">
+
+        {% for level, wdeptors in wdeptosDict.items %}
+        <div
+          class="student-container w-debt {% if forloop.first %} active {% endif %}"
+        >
+          {% for student in wdeptors %}
           <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
+            <p>{{ student.indexNumber }}</p>
+            <p>{{ student.surname }} {{ student.othername }}</p>
+            <input type="button" value="Add to debt" />
+            <!-- Add more student fields as needed -->
           </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
-          <div class="card">
-            <p>2050152</p>
-            <p>Osei Michael Nana Bonsu</p>
-          </div>
+          {% endfor %}
         </div>
+        {% endfor %}
         <div class="action">
           <input type="button" value="Print List" />
         </div>

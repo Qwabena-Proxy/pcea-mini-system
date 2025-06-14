@@ -5,6 +5,7 @@ urlpatterns = [
     path('', index, name='index-page'),
     path('login/', loginView, name='login-page'),
     path('students/update-info/', updateStudentInfo, name='students-update-info'),
+    path('staff/update-info/', updateStaffInfo, name='staff-update-info'),
     path('students/dashboard/', dashBoard, name='students-dashboard'),
     path('students/academics/', academics, name='students-academics'),
     path('students/academics/course-registration/', courseRegistration, name='students-academics-course-registration'),
