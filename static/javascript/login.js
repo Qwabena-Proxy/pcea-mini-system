@@ -15,8 +15,13 @@ selectors.forEach((e) => {
 });
 
 authButton.addEventListener("click", () => {
-  if (selectors[0].classList.contains("active")) {
+  const studentActive = selectors[0].classList.contains("active")
+    ? true
+    : false;
+  if (studentActive) {
     var apiUrl = `/apis/v1/auth/login/`;
+  } else {
+    var apiUrl = `/apis/v1/auth/staff-login/`;
   }
   const email = authEmail.value.trim();
   const password = authPassword.value.trim();
@@ -42,7 +47,14 @@ authButton.addEventListener("click", () => {
         };
         storeToken(token.accessToken, token.refreshToken, token.studentID);
         if (data.updateRequired) {
-          window.location.href = `/students/update-info/`;
+          if (studentActive) {
+            window.location.href = `/students/update-info/`;
+          } else {
+            // window.location.href = `/staff/update-info/`;
+            alert(
+              "You need to update your information before proceeding. Please contact the admin for assistance."
+            );
+          }
         } else {
           window.location.href = `/students/dashboard/`;
         }

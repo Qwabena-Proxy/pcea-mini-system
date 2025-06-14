@@ -66,6 +66,7 @@ class StaffUserManager(BaseUserManager):
 
 #Custom User Model for creating accounts
 class StaffUserModel(AbstractBaseUser, PermissionsMixin):
+    uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
     first_name= models.CharField(max_length= 240)
     last_name= models.CharField(max_length= 240)
     email= models.EmailField(db_index= True, unique= True, max_length= 240)

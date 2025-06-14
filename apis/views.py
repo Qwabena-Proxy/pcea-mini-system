@@ -51,11 +51,19 @@ class StaffLoginView(generics.GenericAPIView):
             pass
         TokenStorage.objects.create(user= user, accessToken= generateToken['access'], refToken= generateToken['refresh']).save()
         
+        # Checking if the user is required to update their info on first login
+        if user.first_name == "first_name":
+            updateRequired= True
+        else:
+            updateRequired= False
+
         # Construct the response data
         response_data = {
             'access': generateToken['access'],
             'refresh': generateToken['refresh'],
             'email': user.email,
+            'updateRequired': updateRequired,
+            'staffID': user.uid,
         }
         
         # Return a successful response

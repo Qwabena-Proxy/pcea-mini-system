@@ -9,6 +9,7 @@ urlpatterns = [
     path("create-staff-password/", createStaffPasswordView.as_view(), name='create-staff-password'),
     path("auth/update-student-info/", studentsInfoUpdate.as_view(), name='update-student-info'),
     path("auth/login/", logInView.as_view(), name='logIn'),
+    path("auth/staff-login/", StaffLoginView.as_view(), name='staff-logIn'),
     path("get-course/", GetStudentsPrograms.as_view(), name='get-course'),
     path("register-course/", RegisterCourse.as_view(), name='register-course'),
     path("student-register-course/", StudentRegisterCourse.as_view(), name='student-register-course'),
