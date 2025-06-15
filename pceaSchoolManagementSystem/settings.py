@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c!aqjry@$@78p^$!j(q=dxt2+^iyfdr&46m56dl0er)wn4nz1%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,10 +79,10 @@ AUTHENTICATION_BACKENDS = [
 
 TOKEN_EXPIRATION_DELTA = datetime.timedelta(days=1)
 
-# ACCESS_TOKEN_DURATION= 24 * 60
-# REFRESH_TOKEN_DURATION= 48 * 60
-ACCESS_TOKEN_DURATION= 5
-REFRESH_TOKEN_DURATION= 10
+ACCESS_TOKEN_DURATION= 24 * 60
+REFRESH_TOKEN_DURATION= 48 * 60
+# ACCESS_TOKEN_DURATION= 5
+# REFRESH_TOKEN_DURATION= 10
 BEARER_KEY= 'Bearer'
 
 ROOT_URLCONF = 'pceaSchoolManagementSystem.urls'

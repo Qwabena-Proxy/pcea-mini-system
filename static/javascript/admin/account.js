@@ -86,7 +86,7 @@ cards.forEach((element, index) => {
       e.target.value == "Clear student"
         ? "/apis/v1/clear-student/"
         : "/apis/v1/debt-student/";
-    fetch(`${address}${url}`, {
+    fetch(`${url}`, {
       method: "POST",
       headers: {
         "X-CSRFToken": csrfToken,
@@ -95,7 +95,7 @@ cards.forEach((element, index) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Handle response
+        alert(data.message); // Handle response
         window.location.reload();
       })
       .catch((error) => {

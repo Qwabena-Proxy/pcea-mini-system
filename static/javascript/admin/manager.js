@@ -32,7 +32,7 @@ const saveChanges = document.getElementById("settings-save-change");
 const addAcademicYear = document.getElementById("add-academic-year");
 const saveAcademicYear = document.getElementById("save-academic-year");
 
-const address = "http://127.0.0.1:8000";
+// const address = "http://127.0.0.1:8000";
 const singleStudentCreateApiUrl = `/apis/v1/create-student/`;
 const bulkAccountActivationApiUrl = `/apis/v1/bulk-account-activation/`;
 const levelCreateApiUrl = `/apis/v1/create-level/`;
@@ -101,16 +101,18 @@ saveChanges.addEventListener("click", (e) => {
   let formData = new FormData();
   formData.append("settings_id", settingsID.value);
   formData.append("current_semester", semester1Radio.checked ? 1 : 2);
-  fetch(`${address}${settingsApiUrl}`, {
+  fetch(`${settingsApiUrl}`, {
     method: "PUT",
     headers: {
       "X-CSRFToken": csrfToken,
     },
     body: formData,
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
+    .then((response) => Promise.all([response.status, response.json()]))
+    .then(([status, response]) => {
+      if (status == 200) {
+        alert("Semester changes was successful");
+      }
       getSettings(); // Handle response
     })
     .catch((error) => {
@@ -151,7 +153,7 @@ const clearElement = (e) => {
 const levelSubmitHandler = (e) => {
   let formData = new FormData();
   formData.append("name", levelInputElement.value);
-  fetch(`${address}${levelCreateApiUrl}`, {
+  fetch(`${levelCreateApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -160,7 +162,7 @@ const levelSubmitHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -171,7 +173,7 @@ const programSubmitHandler = (e) => {
   let formData = new FormData();
   formData.append("name", programInputElement.value);
   formData.append("minor", programMinorInputElement.value);
-  fetch(`${address}${programCreateApiUrl}`, {
+  fetch(`${programCreateApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -180,7 +182,7 @@ const programSubmitHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -233,7 +235,7 @@ const courseSubmitHandler = (e) => {
     formData.append("isGeneral", false);
     formData.append("isJHS", false);
   }
-  fetch(`${address}${courseCreateApiUrl}`, {
+  fetch(`${courseCreateApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -242,7 +244,7 @@ const courseSubmitHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -299,7 +301,7 @@ const saveAcademicYearHandler = (e) => {
       .join(",")
   );
   formData.append("active", true);
-  fetch(`${address}${settingsApiUrl}`, {
+  fetch(`${settingsApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -308,7 +310,7 @@ const saveAcademicYearHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -320,7 +322,7 @@ singleAccountSendBtn.addEventListener("click", () => {
   let formData = new FormData();
 
   formData.append("email", emailSingleAccount.value);
-  fetch(`${address}${singleStudentCreateApiUrl}`, {
+  fetch(`${singleStudentCreateApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -329,19 +331,20 @@ singleAccountSendBtn.addEventListener("click", () => {
   })
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
+      alert(response.message);
     })
     .catch((err) => console.error(err));
 });
 
 const bulkAccountHandler = (e) => {
+  alert("Bulk activation request sent successfully.");
   if (fileInputBulkAccountActivation.files.length === 0) {
     alert("Please select a file to upload.");
     return;
   }
   let formData = new FormData();
   formData.append("file", fileInputBulkAccountActivation.files[0]);
-  fetch(`${address}${bulkAccountActivationApiUrl}`, {
+  fetch(`${bulkAccountActivationApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -350,8 +353,7 @@ const bulkAccountHandler = (e) => {
   })
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
-      alert("Bulk activation request sent successfully.");
+      alert(response.message);
     })
     .catch((err) => console.error(err));
 };
@@ -365,7 +367,7 @@ const departmentSubmitHandler = (e) => {
   }
   let formData = new FormData();
   formData.append("name", departmentName);
-  fetch(`${address}/apis/v1/create-department/`, {
+  fetch(`/apis/v1/create-department/`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -374,7 +376,7 @@ const departmentSubmitHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
       clearElement(departmentInputElement);
     })
     .catch((error) => {
@@ -391,7 +393,7 @@ const departmentUserCreateHandler = (e) => {
   }
   let formData = new FormData();
   formData.append("email", departmentEmail);
-  fetch(`${address}${singleDepartmentUserCreateApiUrl}`, {
+  fetch(`${singleDepartmentUserCreateApiUrl}`, {
     method: "POST",
     headers: {
       "X-CSRFToken": csrfToken,
@@ -400,7 +402,7 @@ const departmentUserCreateHandler = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // Handle response
+      alert(data.message); // Handle response
       clearElement(singleDepartmentUserCreate);
     })
     .catch((error) => {
@@ -421,7 +423,7 @@ const getlevel = () => {
   courseList.innerHTML = "";
   tutionContainer.innerHTML = "";
 
-  fetch(`${address}${getupdate}`, {
+  fetch(`${getupdate}`, {
     method: "GET",
   })
     .then((response) => response.json())
@@ -430,15 +432,19 @@ const getlevel = () => {
       const program = response.program;
       const course = response.course;
       for (const x of level) {
-        levelList.innerHTML += `<li>${x}</li>`;
-        levelDataList.innerHTML += `<option value="${x}"></option>`;
-        tutionContainer.innerHTML += `<label for=academic-year-level-${x}">Fees for level ${x}</label>
-                    <input type="text" name="" placeholder="level ${x} fees" id="academic-year-level-${x}"><br>`;
+        if (x != "TestLevel") {
+          levelList.innerHTML += `<li>${x}</li>`;
+          levelDataList.innerHTML += `<option value="${x}"></option>`;
+          tutionContainer.innerHTML += `<label for=academic-year-level-${x}">Fees for level ${x}</label>
+                      <input type="text" name="" placeholder="level ${x} fees" id="academic-year-level-${x}"><br>`;
+        }
       }
       for (const x of program) {
-        programList.innerHTML += `<li>${x}</li>`;
-        programDataList.innerHTML += `<option value="${x}"></option>`;
-        programDataListMn.innerHTML += `<option value="${x}"></option>`;
+        if (x != "TestProgram") {
+          programList.innerHTML += `<li>${x}</li>`;
+          programDataList.innerHTML += `<option value="${x}"></option>`;
+          programDataListMn.innerHTML += `<option value="${x}"></option>`;
+        }
       }
       programDataList.innerHTML += `<option value="General Course"></option>`;
       for (const x of course) {
@@ -449,7 +455,7 @@ const getlevel = () => {
 }; //create-staff/
 
 const getSettings = () => {
-  fetch(`${address}${settingsApiUrl}`, {
+  fetch(`${settingsApiUrl}`, {
     method: "GET",
   })
     .then((response) => response.json())

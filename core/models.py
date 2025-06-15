@@ -251,7 +251,7 @@ class SettingsModel(models.Model):
 class TutionModel(models.Model):
     uid= models.CharField(default= uuid.uuid4, blank= False, null= False, unique= True, max_length= 255)
     student= models.ForeignKey(StudentstsModel, on_delete=models.CASCADE)
-    academicYear= models.CharField(max_length= 5, blank= False, null= False)
+    academicYear= models.CharField(max_length= 10, blank= False, null= False)
     amount= models.DecimalField(max_digits= 10, decimal_places= 2, blank=False, null=False)
     cleared= models.BooleanField(default=False)
     dateCreated= models.DateTimeField(blank=False, null=False, auto_now_add=True)
