@@ -125,7 +125,7 @@ def getActivationLink(request, user, special= False):
         mail_subject= 'Account Activation' #Email to be sent preparation process
         message= render_to_string('mail/accountactivation.html', {
             'user': user,
-            'domain': current_site,
+            'domain': 'https://khally91.pythonanywhere.com/',
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': token,
             'special': adminRequest,
