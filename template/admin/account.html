@@ -50,6 +50,8 @@
           {% endfor %}
         </div>
 
+        <div class="student-container debt" id="display-search"></div>
+
         {% for level, debtors in deptorsDict.items %}
         <div
           class="student-container debt {% if forloop.first %} active {% endif %}"
@@ -77,7 +79,7 @@
           <p {% if forloop.first %} class="selected" {% endif %}>{{level}}</p>
           {% endfor %}
         </div>
-
+        <div class="student-container w-debt" id="display-search-w"></div>
         {% for level, wdeptors in wdeptosDict.items %}
         <div
           class="student-container w-debt {% if forloop.first %} active {% endif %}"
@@ -85,7 +87,7 @@
           {% for student in wdeptors %}
           <div class="card">
             <p>{{ student.indexNumber }}</p>
-            <p>{{ student.surname }} {{ student.othername }}</p>
+            <p>&nbsp;{{ student.surname }} {{ student.othername }}</p>
             <input type="button" value="Add to debt" />
             <!-- Add more student fields as needed -->
           </div>

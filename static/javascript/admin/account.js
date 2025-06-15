@@ -52,7 +52,7 @@ sliderWSwitchers.forEach((x, index) => {
     });
     emptySearch();
     e.target.classList.add("selected");
-    deptWList[index].classList.add("active");
+    deptWList[index + 1].classList.add("active");
     currentlevel = x.textContent;
   });
 });
@@ -65,7 +65,7 @@ sliderSwitchers.forEach((x, index) => {
     });
     emptySearch();
     e.target.classList.add("selected");
-    deptList[index].classList.add("active");
+    deptList[index + 1].classList.add("active");
     currentlevel = x.textContent;
   });
 });
@@ -177,6 +177,10 @@ const getStaffInfo = () => {
 };
 
 searchInputElement.addEventListener("input", (e) => {
+  if (searchInputElement.value === "") {
+    // Call your function here
+    handleEmptySearch();
+  }
   if (currentlevel === "") {
     currentlevel =
       document.querySelector(".slider.dept > p.selected")?.textContent || "";
@@ -196,7 +200,37 @@ searchInputElement.addEventListener("input", (e) => {
     .then((response) => Promise.all([response.status, response.json()]))
     .then(([status, response]) => {
       if (status == 200) {
-        console.log(response);
+        const displaySearchResults = (dataList) => {
+          const studentContainer =
+            viewStatus == "with-debt"
+              ? document.querySelector(`#display-search`)
+              : document.querySelector(`#display-search-w`);
+          const combinationofDebtNonDebtList = document.querySelectorAll(
+            ".student-container.debt.active, .student-container.w-debt.active"
+          );
+          combinationofDebtNonDebtList.forEach((container) => {
+            container.classList.remove("active");
+          });
+          studentContainer.classList.add("active"); // Clear previous results
+          if (!dataList || dataList.length === 0) {
+            studentContainer.innerHTML = "<p>No students found.</p>";
+            return;
+          }
+          studentContainer.innerHTML = ""; // Clear previous results
+          dataList.forEach((student) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+              <p>${student.indexNumber}</p>
+              <p>&nbsp;${student.fullName}</p>
+              <input type="button" value="${
+                viewStatus === "with-debt" ? "Clear student" : "Debt student"
+              }">
+            `;
+            studentContainer.appendChild(card);
+          });
+        };
+        displaySearchResults(response.data);
       } else {
         console.error("Search failed:", response.message);
       }
@@ -205,5 +239,25 @@ searchInputElement.addEventListener("input", (e) => {
       console.error("Error during search:", error);
     });
 });
+
+function handleEmptySearch() {
+  const studentContainer =
+    viewStatus == "with-debt"
+      ? document.querySelector(`#display-search`)
+      : document.querySelector(`#display-search-w`);
+  studentContainer.classList.remove("active");
+  sliderSwitchers.forEach((x) => {
+    x.classList.remove("selected");
+    if (x.textContent == currentlevel && viewStatus == "with-debt") {
+      x.classList.add("selected");
+    }
+  });
+  sliderWSwitchers.forEach((x) => {
+    x.classList.remove("selected");
+    if (x.textContent == currentlevel && viewStatus == "without-debt") {
+      x.classList.add("selected");
+    }
+  });
+}
 
 getStaffInfo();
