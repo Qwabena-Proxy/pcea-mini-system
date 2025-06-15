@@ -33,8 +33,8 @@ export function removeTokens() {
 export function getToken() {
   const token = window.localStorage.getItem("token");
   const parsedToken = JSON.parse(token);
-  const accessToken = parsedToken.accessToken;
-  const refreshToken = parsedToken.refreshToken;
-  const userID = parsedToken.studentID;
+  const accessToken = parsedToken ? parsedToken.accessToken : null;
+  const refreshToken = parsedToken ? parsedToken.refreshToken : null;
+  const userID = parsedToken ? parsedToken.studentID : null;
   return [accessToken, refreshToken, userID];
 }

@@ -105,6 +105,11 @@ const logoutHandler = () => {
 
 const getStaffInfo = () => {
   const token = getToken();
+  if (token[0] == null || token[1] == null) {
+    alert("Session has expired. Please login again to continue");
+    window.location.href = "/login/";
+    return;
+  }
   fetch("/apis/v1/staff-info/", {
     method: "GET",
     headers: {
