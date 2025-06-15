@@ -29,6 +29,7 @@ urlpatterns = [
     # Account department Api
     path("clear-student/", ClearStudentView.as_view(), name='clear-student'),
     path("debt-student/", DebtStudentView.as_view(), name='debt-student'),
+    path("search-student/", FetchStudent.as_view(), name='search-student'),
 
 
 ]

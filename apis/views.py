@@ -14,6 +14,7 @@ from django.contrib.auth.models import auth
 from rest_framework import generics, status
 from django.db.utils import IntegrityError 
 from django.conf import settings
+from django.db.models import Q
 from .serializers import *
 from core.models import *
 from core.utils import *
@@ -679,7 +680,51 @@ class DebtStudentView(generics.GenericAPIView):
         tutionObject.save()
         return Response(data={'message': f'{tutionObject.student.indexNumber} was debt..'}, status=status.HTTP_200_OK)
 
-        
+
+class FetchStudent(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        studentName = request.data.get("name")
+        studentLevel = request.data.get("level")
+        currentView = request.data.get("currentView")
+
+        # Get the level object
+        try:
+            level_obj = LevelModel.objects.get(name=studentLevel)
+        except LevelModel.DoesNotExist:
+            return Response(data={'message': "Level not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Filter students by name and level
+        students = StudentstsModel.objects.filter(
+            (Q(surname__icontains=studentName) | Q(othername__icontains=studentName)),
+            level=level_obj
+        )
+
+        # If filtering for students with debt
+        if currentView == "with-debt":
+            students_with_debt_ids = TutionModel.objects.filter(
+                student__in=students,
+                cleared=False
+            ).values_list('student_id', flat=True)
+            students = students.filter(id__in=students_with_debt_ids)
+        else:
+            students_with_debt_ids = TutionModel.objects.filter(
+            student__in=students,
+            cleared= True
+            ).values_list('student_id', flat=True)
+            students = students.filter(id__in=students_with_debt_ids)
+
+        if not students.exists():
+            return Response(data={'message': "No student found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            studentList = []
+            for student in students:
+                studentList.append({
+                    'indexNumber': student.indexNumber,
+                    'fullName': f'{student.surname} {student.othername}',
+                    # Add more fields as needed
+                })
+            return Response(data={'message': "Students found", 'data': studentList}, status=status.HTTP_200_OK)
+
 class getUpdateM(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         levels= []

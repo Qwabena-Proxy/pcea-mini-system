@@ -15,9 +15,12 @@ const cards = document.querySelectorAll(".card");
 const staffName = document.getElementById("staff-name");
 const staffEmail = document.getElementById("staff-email");
 const staffDepartment = document.getElementById("staff-department");
+const searchInputElement = document.getElementById("student-name-search");
 const switcherBtnList = [btnWithDebt, btnWithoutDebt];
 
 const address = "http://127.0.0.1:8000";
+let viewStatus = "with-debt"; // Default view status
+let currentlevel = "";
 
 btnWithDebt.addEventListener("click", () => {
   contents.forEach((x, i) => {
@@ -26,6 +29,8 @@ btnWithDebt.addEventListener("click", () => {
   });
   contents[0].classList.add("active");
   switcherBtnList[0].classList.add("active");
+  viewStatus = "with-debt"; // Update view status
+  emptySearch();
 });
 
 btnWithoutDebt.addEventListener("click", () => {
@@ -35,6 +40,8 @@ btnWithoutDebt.addEventListener("click", () => {
   });
   contents[1].classList.add("active");
   switcherBtnList[1].classList.add("active");
+  viewStatus = "without-debt"; // Update view status
+  emptySearch();
 });
 
 sliderWSwitchers.forEach((x, index) => {
@@ -43,8 +50,10 @@ sliderWSwitchers.forEach((x, index) => {
       y.classList.remove("selected");
       deptWList[yIndex].classList.remove("active");
     });
+    emptySearch();
     e.target.classList.add("selected");
     deptWList[index].classList.add("active");
+    currentlevel = x.textContent;
   });
 });
 
@@ -54,10 +63,16 @@ sliderSwitchers.forEach((x, index) => {
       y.classList.remove("selected");
       deptList[yIndex].classList.remove("active");
     });
+    emptySearch();
     e.target.classList.add("selected");
     deptList[index].classList.add("active");
+    currentlevel = x.textContent;
   });
 });
+
+const emptySearch = () => {
+  searchInputElement.value = "";
+};
 
 cards.forEach((element, index) => {
   const btn = element.querySelector("input");
@@ -160,5 +175,35 @@ const getStaffInfo = () => {
     })
     .catch((err) => console.error(err));
 };
+
+searchInputElement.addEventListener("input", (e) => {
+  if (currentlevel === "") {
+    currentlevel =
+      document.querySelector(".slider.dept > p.selected")?.textContent || "";
+  }
+  fetch("/apis/v1/search-student/", {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrfToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: e.target.value,
+      currentView: viewStatus,
+      level: currentlevel,
+    }),
+  })
+    .then((response) => Promise.all([response.status, response.json()]))
+    .then(([status, response]) => {
+      if (status == 200) {
+        console.log(response);
+      } else {
+        console.error("Search failed:", response.message);
+      }
+    })
+    .catch((error) => {
+      console.error("Error during search:", error);
+    });
+});
 
 getStaffInfo();
