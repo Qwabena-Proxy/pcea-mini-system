@@ -350,11 +350,11 @@ class GetStudentsPrograms(generics.GenericAPIView):
             try:
                 majorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.name) , level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
             except ProgrameModel.DoesNotExist:
-                majorCourses= []
+                majorCourses= courseModel.objects.none()
             try:                
                 minorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.minor), level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
             except ProgrameModel.DoesNotExist:
-                minorCourses= []
+                minorCourses= courseModel.objects.none()
             generalCourses = courseModel.objects.filter(isGeneral= True, isJHS= True, semester= activeSettings.current_semester, level= LevelModel.objects.get(name= userID.level))
             # Combine all courses
             allCourses = majorCourses | minorCourses | generalCourses
