@@ -112,6 +112,7 @@ saveChanges.addEventListener("click", (e) => {
     .then(([status, response]) => {
       if (status == 200) {
         alert("Semester changes was successful");
+        reloadPage();
       }
       getSettings(); // Handle response
     })
@@ -163,6 +164,7 @@ const levelSubmitHandler = (e) => {
     .then((response) => response.json())
     .then((data) => {
       alert(data.message); // Handle response
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -183,19 +185,20 @@ const programSubmitHandler = (e) => {
     .then((response) => response.json())
     .then((data) => {
       alert(data.message); // Handle response
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 };
 
-courseProgramInput.addEventListener("input", function () {
-  if (this.value.trim() === "General Course") {
-    upgDiv.style.display = "block";
-  } else {
-    upgDiv.style.display = "none";
-  }
-});
+// courseProgramInput.addEventListener("input", function () {
+//   if (this.value.trim() === "General Course") {
+//     upgDiv.style.display = "block";
+//   } else {
+//     upgDiv.style.display = "none";
+//   }
+// });
 
 const courseSubmitHandler = (e) => {
   const courseCodeInputElement = document.getElementById("course-code");
@@ -242,9 +245,16 @@ const courseSubmitHandler = (e) => {
     },
     body: formData,
   })
-    .then((response) => response.json())
-    .then((data) => {
-      alert(data.message); // Handle response
+    .then((response) => Promise.all([response.json(), response.status]))
+    .then(([data, status]) => {
+      if (status != 400) {
+        alert(data.message);
+      } else {
+        alert(
+          "The course code or course title exist already. Please check you data again"
+        );
+      }
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -311,6 +321,7 @@ const saveAcademicYearHandler = (e) => {
     .then((response) => response.json())
     .then((data) => {
       alert(data.message); // Handle response
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -332,6 +343,7 @@ singleAccountSendBtn.addEventListener("click", () => {
     .then((response) => response.json())
     .then((response) => {
       alert(response.message);
+      reloadPage();
     })
     .catch((err) => console.error(err));
 });
@@ -354,6 +366,7 @@ const bulkAccountHandler = (e) => {
     .then((response) => response.json())
     .then((response) => {
       alert(response.message);
+      reloadPage();
     })
     .catch((err) => console.error(err));
 };
@@ -378,6 +391,7 @@ const departmentSubmitHandler = (e) => {
     .then((data) => {
       alert(data.message); // Handle response
       clearElement(departmentInputElement);
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -404,6 +418,7 @@ const departmentUserCreateHandler = (e) => {
     .then((data) => {
       alert(data.message); // Handle response
       clearElement(singleDepartmentUserCreate);
+      reloadPage();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -478,5 +493,10 @@ const getSettings = () => {
       console.error("Error:", error);
     });
 };
+
+const reloadPage = () => {
+  window.location.reload();
+};
+
 getSettings();
 getlevel();

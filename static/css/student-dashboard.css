@@ -1,161 +1,162 @@
 body[data-theme="light"] {
-    display: flex;
-    height: fit-content;
-    flex-direction: column;
-    background-color: var(--primarycolor);
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  background-color: var(--primarycolor);
 }
 
 body[data-theme="dark"] {
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
 }
 
 nav {
-    background-color: var(--general-background);
-    padding: 10px;
-    width: 100%;
-    box-shadow: 0px 5px 30px var(--dashboard-nav-dropshadow);
-    -webkit-box-shadow: -0px 5px 30px var(--dashboard-nav-dropshadow);
-    -moz-box-shadow: -0px 5px 30px var(--dashboard-nav-dropshadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--general-background);
+  padding: 10px;
+  width: 100%;
+  box-shadow: 0px 5px 30px var(--dashboard-nav-dropshadow);
+  -webkit-box-shadow: -0px 5px 30px var(--dashboard-nav-dropshadow);
+  -moz-box-shadow: -0px 5px 30px var(--dashboard-nav-dropshadow);
 }
 
-
 nav .menu-icon i {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--primarycolor);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primarycolor);
 }
 
 main {
-    height: 100%;
+  height: 100%;
 }
 
-
 .student-info {
-    width: 100%;
-    overflow-x: hidden;
-    height: fit-content;
-    padding: 25px 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+  width: 100%;
+  overflow-x: hidden;
+  height: fit-content;
+  padding: 25px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .student-info .profile-img img {
-    width: var(--participant-profile-size);
-    height: var(--participant-profile-size);
-    border-radius: 100%;
+  width: var(--participant-profile-size);
+  height: var(--participant-profile-size);
+  border-radius: 100%;
 }
 
 .student-info .text-info {
-    font-size: medium;
-    font-weight: bold;
-    color: var(--general-background);
+  font-size: medium;
+  font-weight: bold;
+  color: var(--general-background);
 }
 
 .container {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    border-top-left-radius: 15%;
-    border-top-right-radius: 15%;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    height: 65%;
-    background-color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-top-left-radius: 15%;
+  border-top-right-radius: 15%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 65%;
+  background-color: white;
 }
 
 .container .section-title {
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    margin: 10px;
-    color: var(--primarycolor);
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  color: var(--primarycolor);
 }
 
 .container .section-title p {
-    font-size: x-large;
-    font-weight: 600;
-    font-style: italic;
+  font-size: x-large;
+  font-weight: 600;
+  font-style: italic;
 }
 
 .container .cards-container {
-    width: 100%;
-    height: fit-content;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 15px;
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 15px;
 }
 
 .container .cards-container a {
-    text-decoration: none;
-    color: var(--primarytextcolor);
+  text-decoration: none;
+  color: var(--primarytextcolor);
 }
 
 .container .cards-container a .card {
-    background-color: honeydew;
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    border: 1px solid var(--primarycolor);
-    box-shadow: 0px 5px 30px var(--boxshadow-color);
-    -webkit-box-shadow: -0px 5px 30px var(--boxshadow-color);
-    -moz-box-shadow: -0px 5px 30px var(--boxshadow-color);
+  background-color: honeydew;
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--primarycolor);
+  box-shadow: 0px 5px 30px var(--boxshadow-color);
+  -webkit-box-shadow: -0px 5px 30px var(--boxshadow-color);
+  -moz-box-shadow: -0px 5px 30px var(--boxshadow-color);
 }
 
 .container .cards-container a .card .icon-container {
-    width: 100%;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container .cards-container a .card .icon-container i {
-    font-size: 3.5rem;
+  font-size: 3.5rem;
 }
 
 .container .cards-container a .card > p {
-    font-size: large;
-    font-weight: 600;
+  font-size: large;
+  font-weight: 600;
 }
 
 footer {
-    z-index: 1;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    overflow-x: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    gap: 5px;
-    box-shadow: -0px -5px 30px var(--boxshadow-color);
-    -webkit-box-shadow: -0px -5px 30px var(--boxshadow-color);
-    -moz-box-shadow: -0px -5px 30px var(--boxshadow-color);
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  gap: 5px;
+  box-shadow: -0px -5px 30px var(--boxshadow-color);
+  -webkit-box-shadow: -0px -5px 30px var(--boxshadow-color);
+  -moz-box-shadow: -0px -5px 30px var(--boxshadow-color);
 }
 
 footer img {
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
 }
 
 footer p {
-    font-size: 13px;
-    font-weight: bold;
-    font-style: italic;
+  font-size: 13px;
+  font-weight: bold;
+  font-style: italic;
 }

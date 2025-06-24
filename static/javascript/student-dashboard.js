@@ -1,4 +1,4 @@
-import { getToken, storeToken } from "./general.js";
+import { getToken, storeToken, removeTokens } from "./general.js";
 
 const csrfToken = document
   .querySelector('meta[name="csrf-token"]')
@@ -6,6 +6,7 @@ const csrfToken = document
 const studentName = document.getElementById("student-name");
 const studentProgramLevel = document.getElementById("student-program-level");
 const studentProgram = document.getElementById("student-program");
+const logoutBtn = document.getElementById("log-out-btn");
 const getStudentRegisterInfo = () => {
   const token = getToken();
   fetch("/apis/v1/student-info/", {
@@ -25,7 +26,7 @@ const getStudentRegisterInfo = () => {
             ? "Bachelor of Education (Upper Primary)"
             : "Bachelor of Education (J.H.S)";
       } else if (
-        status == 400 &&
+        status == 400 ||
         response.message ==
           "Access token has expired use your refresh token to generate new tokens and try again."
       ) {
@@ -63,6 +64,20 @@ const getStudentRegisterInfo = () => {
       }
     })
     .catch((err) => console.error(err));
+};
+
+logoutBtn.addEventListener("click", () => {
+  const confirmation = confirm(
+    "Are you sure you want to logout? You will be redirected to the login page."
+  );
+  if (confirmation) {
+    logoutHandler();
+  }
+});
+
+const logoutHandler = () => {
+  removeTokens();
+  window.location.href = "/login/";
 };
 
 getStudentRegisterInfo();
