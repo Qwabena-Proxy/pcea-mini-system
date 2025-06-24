@@ -42,7 +42,7 @@ const getStudentRegisterInfo = () => {
             ? "Bachelor of Education (Upper Primary)"
             : "Bachelor of Education (J.H.S)";
       } else if (
-        status == 400 &&
+        status == 400 ||
         response.message ==
           "Access token has expired use your refresh token to generate new tokens and try again."
       ) {
