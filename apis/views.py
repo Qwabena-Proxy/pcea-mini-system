@@ -347,9 +347,14 @@ class GetStudentsPrograms(generics.GenericAPIView):
                     return Response(data={'message': "You have an outstanding debt, please vist the account office to clear it before registering for courses"}, status=status.HTTP_400_BAD_REQUEST)
             except TutionModel.DoesNotExist:
                 return Response(data={'message': "You have not paid your tuition fees for this academic year"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            majorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.name) , level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
-            minorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.minor), level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
+            try:
+                majorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.name) , level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
+            except ProgrameModel.DoesNotExist:
+                majorCourses= []
+            try:                
+                minorCourses = courseModel.objects.filter(program= ProgrameModel.objects.get(name= userID.program.minor), level= LevelModel.objects.get(name= userID.level), isGeneral= False, semester= activeSettings.current_semester)
+            except ProgrameModel.DoesNotExist:
+                minorCourses= []
             generalCourses = courseModel.objects.filter(isGeneral= True, isJHS= True, semester= activeSettings.current_semester, level= LevelModel.objects.get(name= userID.level))
             # Combine all courses
             allCourses = majorCourses | minorCourses | generalCourses
