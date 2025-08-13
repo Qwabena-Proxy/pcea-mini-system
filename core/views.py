@@ -171,3 +171,9 @@ def sendActivationLink(request, email, userType, special= False):
         else:
             return False, 'Account has been created but failed to send activation link'
 
+
+def graduationRegistration(request):
+    context= {
+
+    }
+    return render(request, 'students/graduationRegistration.html', context= context)

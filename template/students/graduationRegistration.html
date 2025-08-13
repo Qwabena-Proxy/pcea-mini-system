@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCE Graduation Registration</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/graduationRegistration.css' %}"
+    />
+    <script
+      defer
+      src="{% static 'javascript/graduationRegistration.js' %}"
+    ></script>
+  </head>
+  <body>
+    <head>
+      <nav>
+        <h3>Graduation Registration</h3>
+      </nav>
+    </head>
+    <main>
+      <section class="verification active">
+        <div class="container">
+          <h3>
+            Dear Student, please enter your student's index number below to
+            verify if you do not have any outstanding debt before you proceed
+            with your graduation registration.
+          </h3>
+          <input
+            type="text"
+            placeholder="Enter your index number"
+            id="index-number"
+          />
+          <button id="submit-id-btn">
+            <span class="icon"><i class="ri-send-plane-line"></i></span
+            ><span class="text">Submit</span>
+          </button>
+          <p id="server-response">response if verification fails</p>
+        </div>
+      </section>
+      <section class="registration">
+        <div class="container">
+          <h3>Please fill in the details below</h3>
+          <div class="input-group">
+            <label for="name">Enter Full Name</label>
+            <input type="text" placeholder="Full Name" id="name" />
+          </div>
+          <div class="input-group">
+            <label for="index-number">Enter Index Number</label>
+            <input type="text" placeholder="Index Number" id="index-number" />
+          </div>
+          <div class="input-group">
+            <label for="program">Enter Program</label>
+            <input type="text" placeholder="Program" id="program" />
+          </div>
+          <div class="input-group">
+            <label for="class">Enter Class</label>
+            <input type="text" placeholder="Class" id="class" />
+          </div>
+          <button id="submit-details-btn">
+            <span class="icon"><i class="ri-send-plane-line"></i></span
+            ><span class="text">Submit</span>
+          </button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

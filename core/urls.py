@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import *
+from .views import (
+    index, loginView, updateStaffInfo, updateStudentInfo,
+    dashBoard, academics, courseRegistration, registeredCourses,
+    accountActivation, accountOffice, graduationRegistration,
+)
 
 urlpatterns = [
     path('', index, name='index-page'),
@@ -12,4 +16,5 @@ urlpatterns = [
     path('students/academics/registered-courses/', registeredCourses, name='students-academics-registered-courses'),
     path('activate/<str:uidb64>/<str:token>/<int:special>/', accountActivation, name='activate-account'),
     path('account-office/', accountOffice, name='account-office'),
+    path('graduation-registration/', graduationRegistration, name='graduation-registration'),
 ]
