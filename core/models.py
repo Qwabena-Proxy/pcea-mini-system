@@ -270,3 +270,20 @@ class TutionModel(models.Model):
 #     semester= models.CharField(max_length= 5, blank= False, null= False)
 #     dateUploaded= models.DateTimeField(blank=False, null=False, auto_now_add= True)
 #     uploadedBy= models.CharField(max_length= 255, blank= False, null= False, unique= True)
+
+
+class QualifiedStudents(models.Model):
+    indexNumber= models.CharField(blank= False, null= False, unique= True, max_length= 20)
+
+    def __str__(self):
+        return f'{self.indexNumber}'
+    
+class GraduationRegistration(models.Model):
+    name= models.CharField(blank= False, null= False, max_length= 255)
+    indexNumber= models.CharField(blank= False, null= False, unique= True, max_length= 20)
+    program= models.CharField(blank= False, null= False, max_length= 100)
+    gpa= models.CharField(blank= False, null= False, max_length= 20)
+    gpaClass= models.CharField(blank= False, null= False, max_length= 30)
+
+    def __str__(self):
+        return f'{self.name} --- {self.gpaClass}'

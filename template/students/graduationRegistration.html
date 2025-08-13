@@ -21,7 +21,7 @@
   <body>
     <head>
       <nav>
-        <h3>Graduation Registration</h3>
+        <h3>PCE Graduation Registration</h3>
       </nav>
     </head>
     <main>
@@ -41,7 +41,7 @@
             <span class="icon"><i class="ri-send-plane-line"></i></span
             ><span class="text">Submit</span>
           </button>
-          <p id="server-response">response if verification fails</p>
+          <p id="server-response"></p>
         </div>
       </section>
       <section class="registration">
@@ -53,16 +53,21 @@
           </div>
           <div class="input-group">
             <label for="index-number">Enter Index Number</label>
-            <input type="text" placeholder="Index Number" id="index-number" />
+            <input type="text" placeholder="Index Number" id="index-number-f" />
           </div>
           <div class="input-group">
             <label for="program">Enter Program</label>
             <input type="text" placeholder="Program" id="program" />
           </div>
           <div class="input-group">
+            <label for="gpa">Enter GPA</label>
+            <input type="text" placeholder="GPA" id="gpa" />
+          </div>
+          <div class="input-group">
             <label for="class">Enter Class</label>
             <input type="text" placeholder="Class" id="class" />
           </div>
+          <p id="server-response-final"></p>
           <button id="submit-details-btn">
             <span class="icon"><i class="ri-send-plane-line"></i></span
             ><span class="text">Submit</span>

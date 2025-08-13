@@ -13,6 +13,7 @@
   --textcolorWhite: #f5f5f5;
   --headerFont: "Poppins", sans-serif;
   --textFont: "Inter", sans-serif;
+  --system-red: #c52020d5;
 }
 
 body::-webkit-scrollbar {
@@ -174,6 +175,15 @@ main section.registration .container .input-group input:focus {
 
 #submit-details-btn {
   margin-top: 0.5rem;
+}
+
+#server-response,
+#server-response-final {
+  color: var(--system-red);
+}
+
+#server-response-final {
+  margin: 0.4rem;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {

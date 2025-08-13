@@ -171,9 +171,46 @@ def sendActivationLink(request, email, userType, special= False):
         else:
             return False, 'Account has been created but failed to send activation link'
 
-
+@csrf_exempt
 def graduationRegistration(request):
+    if request.method == 'POST':
+        indexNumber= request.POST.get('indexNumber')
+        try:
+            check= GraduationRegistration.objects.get(indexNumber= indexNumber)
+            return JsonResponse({'message': f'{check.name} you have already registered', 'code': 400})
+        except GraduationRegistration.DoesNotExist:
+            try:
+                QualifiedStudents.objects.get(indexNumber= indexNumber)
+                return JsonResponse({'message': 'Student is qualified', 'code': 200})
+            except QualifiedStudents.DoesNotExist:
+                return JsonResponse({'message': 'Student is not qualified to register', 'code': 400})
     context= {
-
     }
     return render(request, 'students/graduationRegistration.html', context= context)
+
+@csrf_exempt
+def registerGraduant(request):
+    if request.method == 'POST':
+        name= request.POST.get('name')
+        indexNumber= request.POST.get('indexNumber')
+        program= request.POST.get('program')
+        gpa= request.POST.get('gpa')
+        gpaClass= request.POST.get('gpaClass')
+
+        try:
+            QualifiedStudents.objects.get(indexNumber= indexNumber)
+            try:
+                newGraduant= GraduationRegistration.objects.create(
+                    name= name,
+                    indexNumber= indexNumber,
+                    program= program,
+                    gpa= gpa,
+                    gpaClass= gpaClass
+                )
+                newGraduant.save()
+                return JsonResponse({'message': 'Details saved', 'code': 200})
+            except:
+                return JsonResponse({'message': 'Something happened...Please try again', 'code': 400})
+        except QualifiedStudents.DoesNotExist:
+            return JsonResponse({'message': 'Student is not qualified to register', 'code': 400})
+
