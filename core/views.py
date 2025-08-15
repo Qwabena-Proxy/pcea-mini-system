@@ -186,7 +186,7 @@ def graduationRegistration(request):
             except QualifiedStudents.DoesNotExist:
                 try:
                     std= Graduants.objects.get(indexNumber= indexNumber)
-                    return JsonResponse({'message': f'{std.name} you do not qualify to register please visit the account office to clear all debts', 'code': 200})
+                    return JsonResponse({'message': f'{std.name} you do not qualify to register please visit the account office to clear all debts', 'code': 400})
                 except Graduants.DoesNotExist:
                     return JsonResponse({'message': 'Student data does not exist, please visit the account office to make corrections', 'code': 400})
     context= {
