@@ -16,7 +16,8 @@
   --system-red: #c52020d5;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+main::-webkit-scrollbar {
   display: none;
 }
 
@@ -36,10 +37,11 @@ nav h3 {
 
 main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  height: 90vh;
-  overflow: hidden;
+  /* height: 80vh; */
+  overflow-y: scroll;
+  transform: translateY(15%);
 }
 
 main section {

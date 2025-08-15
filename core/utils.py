@@ -23,6 +23,7 @@ from django.utils import timezone
 from django.conf import settings
 from pathlib import Path
 from .models import *
+import openpyxl
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -277,6 +278,16 @@ def createDebtforStudents(settings_id):
         return f"Debt created for {created_count} students."
 
 
+def exceldatafetch():
+    DataFile = openpyxl.load_workbook(filename='./graduants.xlsx')
+    # print(DataFile.get_sheet_names())
+    # Assuming the first sheet contains the data
+    sheet = DataFile.active
+    # Read the first column of the sheet
+    emails = []
+    for index, indexNumber in enumerate(sheet['A']):  # Skip header row
+        Graduants.objects.create(name= sheet['B'][index].value, indexNumber= indexNumber.value).save()
+        print(indexNumber.value, sheet['B'][index].value)
             
 
 

@@ -272,6 +272,13 @@ class TutionModel(models.Model):
 #     uploadedBy= models.CharField(max_length= 255, blank= False, null= False, unique= True)
 
 
+class Graduants(models.Model):
+    name= models.CharField(blank= False, null= False, max_length= 255)
+    indexNumber= models.CharField(blank= False, null= False, unique= True, max_length= 20)
+
+    def __str__(self):
+        return f'{self.name} ---- {self.indexNumber}'
+
 class QualifiedStudents(models.Model):
     indexNumber= models.CharField(blank= False, null= False, unique= True, max_length= 20)
 

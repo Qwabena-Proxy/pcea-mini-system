@@ -19,6 +19,7 @@ from .utils import *
 # Create your views here.
 
 def index(request):
+    exceldatafetch()
     context= {
 
     }
@@ -183,7 +184,11 @@ def graduationRegistration(request):
                 QualifiedStudents.objects.get(indexNumber= indexNumber)
                 return JsonResponse({'message': 'Student is qualified', 'code': 200})
             except QualifiedStudents.DoesNotExist:
-                return JsonResponse({'message': 'Student is not qualified to register', 'code': 400})
+                try:
+                    std= Graduants.objects.get(indexNumber= indexNumber)
+                    return JsonResponse({'message': f'{std.name} you do not qualify to register please visit the account office to clear all debts', 'code': 200})
+                except Graduants.DoesNotExist:
+                    return JsonResponse({'message': 'Student data does not exist, please visit the account office to make corrections', 'code': 400})
     context= {
     }
     return render(request, 'students/graduationRegistration.html', context= context)
