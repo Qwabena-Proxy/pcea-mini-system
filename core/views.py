@@ -19,7 +19,7 @@ from .utils import *
 # Create your views here.
 
 def index(request):
-    exceldatafetch()
+    # exceldatafetch()
     context= {
 
     }
