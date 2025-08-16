@@ -279,15 +279,63 @@ def createDebtforStudents(settings_id):
 
 
 def exceldatafetch():
-    DataFile = openpyxl.load_workbook(filename='./graduants.xlsx')
-    # print(DataFile.get_sheet_names())
-    # Assuming the first sheet contains the data
-    sheet = DataFile.active
-    # Read the first column of the sheet
-    emails = []
-    for index, indexNumber in enumerate(sheet['A']):  # Skip header row
-        Graduants.objects.create(name= sheet['B'][index].value, indexNumber= indexNumber.value).save()
-        print(indexNumber.value, sheet['B'][index].value)
+    DataFile = openpyxl.load_workbook(filename=os.path.join(BASE_DIR, 'graduants.xlsx'))
+    sheet_students = DataFile['STUDENTS']
+    sheet_qualified = DataFile['QUALIFIED']
+
+    # Remove leading/trailing spaces from names in QUALIFIED
+    qualified_names = [cell.value.strip() for cell in sheet_qualified['A'] if cell.value]
+
+    # Build a mapping of name -> index from STUDENTS sheet (also strip names)
+    student_map = {}
+    for idx_cell, name_cell in zip(sheet_students['A'], sheet_students['B']):
+        if name_cell.value and idx_cell.value:
+            student_map[name_cell.value.strip()] = idx_cell.value
+
+    # For each qualified name, get index number if exists
+    qualified_indexes = []
+    matched= 0
+    unmatched= 0
+    total= 0
+    for name in qualified_names:
+        index = student_map.get(name)
+        if index:
+            qualified_indexes.append(index)
+            matched += 1
+            QualifiedStudents.objects.create(indexNumber= index).save()
+        else:
+            unmatched += 1
+            print(f"Name not found: {name}")
+        total += 1
+    print(f'um: {unmatched}/n m: {matched} /n t:{total}')
+
+    return qualified_indexes
+            
+# def exceldatafetch():
+#     DataFile = openpyxl.load_workbook(filename=os.path.join(BASE_DIR, 'graduants.xlsx'))
+#     sheet_students = DataFile['STUDENTS']
+#     sheet_qualified = DataFile['QUALIFIED']
+
+#     # Get all names from QUALIFIED sheet (column A)
+#     qualified_names = [cell.value for cell in sheet_qualified['A'] if cell.value]
+
+#     # Build a mapping of name -> index from STUDENTS sheet
+#     student_map = {}
+#     for idx_cell, name_cell in zip(sheet_students['A'], sheet_students['B']):
+#         if name_cell.value and idx_cell.value:
+#             student_map[name_cell.value] = idx_cell.value
+
+#     # For each qualified name, get index number if exists
+#     qualified_indexes = []
+#     for name in qualified_names:
+#         index = student_map.get(name)
+#         if index:
+#             qualified_indexes.append(index)
+#             print(index)  # Print index number for matched name
+#         else:
+#             print(f"Name not found: {name}")
+
+#     print(qualified_indexes)
             
 
 
