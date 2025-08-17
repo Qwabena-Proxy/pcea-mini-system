@@ -3,7 +3,7 @@ from .views import (
     index, loginView, updateStaffInfo, updateStudentInfo,
     dashBoard, academics, courseRegistration, registeredCourses,
     accountActivation, accountOffice, graduationRegistration,
-    registerGraduant,
+    registerGraduant, accountOfficeGraduation
 )
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     path('students/academics/registered-courses/', registeredCourses, name='students-academics-registered-courses'),
     path('activate/<str:uidb64>/<str:token>/<int:special>/', accountActivation, name='activate-account'),
     path('account-office/', accountOffice, name='account-office'),
+    path('account-office/graduants/', accountOfficeGraduation, name='account-office-graduants'),
     path('graduation-registration/', graduationRegistration, name='graduation-registration'),
     path('graduation-registration/register', registerGraduant, name='graduation-registration-register'),
 ]

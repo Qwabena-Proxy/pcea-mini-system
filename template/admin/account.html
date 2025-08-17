@@ -31,8 +31,12 @@
       </div>
       <div class="links">
         <ul>
-          <li>Clear students</li>
-          <li>Update Info</li>
+          <li><a href="{% url 'account-office' %}">Clear Students</a></li>
+          <li>
+            <a href="{% url 'account-office-graduants' %}"
+              >Registered Graduants</a
+            >
+          </li>
         </ul>
         <ul>
           <li id="logout">LogOut</li>

@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/admin/account_graduation.css' %}"
+    />
+    <script
+      type="module"
+      src="{% static 'javascript/admin/accountG.js' %}"
+    ></script>
+    <title>Registered Students</title>
+  </head>
+  <body data-theme="light">
+    <nav>
+      <div class="user-info">
+        <div class="profile">
+          <img src="{% static 'assets/images/windows.jpg' %}" alt="profile" />
+        </div>
+        <div class="user-data">
+          <p id="staff-name"></p>
+          <p id="staff-email"></p>
+          <p id="staff-department"></p>
+        </div>
+      </div>
+      <div class="links">
+        <ul>
+          <li><a href="{% url 'account-office' %}">Clear Students</a></li>
+          <li>
+            <a href="{% url 'account-office-graduants' %}"
+              >Registered Graduants</a
+            >
+          </li>
+        </ul>
+        <ul>
+          <li id="logout">LogOut</li>
+        </ul>
+      </div>
+    </nav>
+    <main>
+      <div class="depts-container active">
+        <div class="head">
+          <h1>Registered Student's</h1>
+          <input
+            type="text"
+            name="std-name"
+            id="std-name"
+            placeholder="Search by name"
+          />
+        </div>
+        <div class="course-table">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="5">Name</th>
+                <th>Index Number</th>
+                <th colspan="3">Program</th>
+                <th>GPA</th>
+                <th>Class</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in registered %}
+              <tr>
+                <td colspan="5">{{student.name}}</td>
+                <td>{{student.indexNumber}}</td>
+                <td colspan="3">{{student.program}}</td>
+                <td>{{student.gpa}}</td>
+                <td>{{student.gpaClass}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="action">
+          <p id="students-count">Total number of registered students: {{tc}}</p>
+          <input type="button" value="Print List" />
+        </div>
+      </div>
+      <div class="w-dept-container">
+        <div class="head">
+          <h1>Student's Without Debt's Data</h1>
+        </div>
+        <div class="slider w-dept">
+          <p class="selected">2022</p>
+          <p>2023</p>
+          <p>2024</p>
+          <p>2025</p>
+        </div>
+        <div class="student-container w-debt active" id="2022">
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+        </div>
+        <div class="student-container w-debt" id="2023">
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+        </div>
+        <div class="student-container w-debt" id="2024"></div>
+        <div class="student-container w-debt" id="2025">
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+          <div class="card">
+            <p>2050152</p>
+            <p>Osei Michael Nana Bonsu</p>
+            <input type="button" value="Clear student" />
+          </div>
+        </div>
+        <div class="action">
+          <input type="button" value="Print List" />
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

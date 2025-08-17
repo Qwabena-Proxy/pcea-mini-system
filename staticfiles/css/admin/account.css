@@ -70,6 +70,11 @@ nav .links ul:first-child li:first-child {
   border-bottom: none;
 }
 
+nav .links ul li a {
+  text-decoration: none;
+  color: var(--primarycolor);
+}
+
 main {
   flex: 5;
   display: flex;

@@ -1,29 +1,37 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/general.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <script type="module" src="{% static 'javascript/login.js' %}"></script>
-    <title>Document</title>
-</head>
-<body data-theme="light">
+    <title>PCE | Login</title>
+  </head>
+  <body data-theme="light">
     {% csrf_token %}
     <div class="container">
-        <div class="selectors">
-            <h2 class="active">Student</h2>
-            <h2>Staff</h2>
-        </div>
-        <div class="inputs-group">
-            <input type="text" name="email" placeholder="email" id="auth-email">
-            <input type="password" name="password" placeholder="password" id="auth-password">
-        </div>
-        <div class="auth-btn">
-            <input type="button" value="LogIn" id="auth-btn">
-        </div>
+      <div class="selectors">
+        <h2 class="active">Student</h2>
+        <h2>Staff</h2>
+      </div>
+      <div class="inputs-group">
+        <input type="text" name="email" placeholder="email" id="auth-email" />
+        <input
+          type="password"
+          name="password"
+          placeholder="password"
+          id="auth-password"
+        />
+      </div>
+      <div class="auth-btn">
+        <input type="button" value="LogIn" id="auth-btn" />
+      </div>
     </div>
-</body>
+  </body>
 </html>

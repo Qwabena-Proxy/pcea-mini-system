@@ -99,7 +99,16 @@ def accountOffice(request):
         'deptorsDict': deptorsDict,
         'wdeptosDict': wdeptosDict,
     }
-    return render(request, 'admin/account.html', context= context)
+    return redirect('account-office-graduants')
+    # return render(request, 'admin/account.html', context= context)
+
+def accountOfficeGraduation(request):
+    registered= GraduationRegistration.objects.all()
+    context={
+        'registered': registered,
+        'tc': len(registered),
+    }
+    return render(request, 'admin/account_graduation.html', context= context)
 
 def accountActivation(request, uidb64, token, special):
     activationStatus, userEmail, activationMessage= activateAccount(uidb64, token, special)

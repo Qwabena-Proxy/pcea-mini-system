@@ -7,8 +7,11 @@ const program = document.getElementById("program");
 const gpa = document.getElementById("gpa");
 const gpaClass = document.getElementById("class");
 
+let currentIndex;
+
 submitIndexNumber.addEventListener("click", (e) => {
   if (indexNumberInput.value) {
+    currentIndex = indexNumberInput.value;
     changeVerificationStatus();
     let formData = new FormData();
     formData.append("indexNumber", indexNumberInput.value.trim());
@@ -48,37 +51,42 @@ submitDetails.addEventListener("click", (e) => {
     gpa.value &&
     gpaClass.value
   ) {
-    changeRegistrationStatus();
-    let formData = new FormData();
-    formData.append("name", fullName.value);
-    formData.append("indexNumber", indexNumber.value);
-    formData.append("program", program.value);
-    formData.append("gpa", gpa.value);
-    formData.append("gpaClass", gpaClass.value);
-    fetch("/graduation-registration/register", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        changeRegistrationStatus();
-        if (response.code == 200) {
-          alert(response.message);
-          const sections = document.querySelectorAll("section");
-          sections.forEach((x, i) => {
-            if (x.classList.contains("active")) {
-              x.classList.remove("active");
-            }
-            if (i == 0) {
-              document.getElementById("server-response-final").textContent = "";
-              x.classList.add("active");
-            }
-          });
-        } else {
-          document.getElementById("server-response-final").textContent =
-            response.message;
-        }
-      });
+    if (indexNumber.value == currentIndex) {
+      changeRegistrationStatus();
+      let formData = new FormData();
+      formData.append("name", fullName.value);
+      formData.append("indexNumber", indexNumber.value);
+      formData.append("program", program.value);
+      formData.append("gpa", gpa.value);
+      formData.append("gpaClass", gpaClass.value);
+      fetch("/graduation-registration/register", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          changeRegistrationStatus();
+          if (response.code == 200) {
+            alert(response.message);
+            const sections = document.querySelectorAll("section");
+            sections.forEach((x, i) => {
+              if (x.classList.contains("active")) {
+                x.classList.remove("active");
+              }
+              if (i == 0) {
+                document.getElementById("server-response-final").textContent =
+                  "";
+                x.classList.add("active");
+              }
+            });
+          } else {
+            document.getElementById("server-response-final").textContent =
+              response.message;
+          }
+        });
+    } else {
+      alert("Please the right index number");
+    }
   } else {
     alert("Please provide all the details");
   }
