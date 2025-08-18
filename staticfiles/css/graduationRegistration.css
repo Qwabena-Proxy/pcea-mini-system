@@ -27,12 +27,19 @@ nav {
   padding: 12px 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 nav h3 {
   font-size: var(--heading-font-size);
   font-family: var(--headerFont);
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--textcolorWhite);
+  font-size: large;
+  font-weight: bold;
 }
 
 main {
