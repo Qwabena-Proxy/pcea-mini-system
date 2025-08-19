@@ -54,6 +54,7 @@
             name="std-name"
             id="std-name"
             placeholder="Search by name"
+            hidden
           />
         </div>
         <div class="course-table">
@@ -82,7 +83,8 @@
         </div>
         <div class="action">
           <p id="students-count">Total number of registered students: {{tc}}</p>
-          <input type="button" value="Print List" />
+          <input type="button" value="Convert Data To Excel" id="print-data" />
+          <a href="" id="file-url" hidden download=""></a>
         </div>
       </div>
       <div class="w-dept-container">

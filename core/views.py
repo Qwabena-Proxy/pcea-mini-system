@@ -1,20 +1,23 @@
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+# from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.decorators import login_required
-from django.utils.encoding import force_bytes, force_str
+# from django.contrib.auth.decorators import login_required
+# from django.utils.encoding import force_bytes, force_str
 from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
+# from django.template.loader import render_to_string
 from django.contrib.auth.models import User, auth 
 # from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 from django.http import JsonResponse
-from django.contrib import messages
+# from django.contrib import messages
 from django.conf import settings
-from django.urls import reverse
-from pathlib import Path
+from django.core.files import File
+# from django.urls import reverse
+# from pathlib import Path
 from .models import *
 from .utils import *
+import openpyxl
+from datetime import datetime
 
 # Create your views here.
 
@@ -189,7 +192,6 @@ def sendActivationLink(request, email, userType, special= False):
 @csrf_exempt
 def graduationRegistration(request):
     Programs= ProgrameModel.objects.exclude(name="TestProgram")
-    print(Programs)
     if request.method == 'POST':
         indexNumber= request.POST.get('indexNumber')
         try:
@@ -236,3 +238,33 @@ def registerGraduant(request):
         except QualifiedStudents.DoesNotExist:
             return JsonResponse({'message': 'Student is not qualified to register', 'code': 400})
 
+def generateExcelData(request):
+    excelFileDir= os.path.join(settings.MEDIA_ROOT, 'xlsFilesTemp')
+    os.makedirs(excelFileDir, exist_ok= True)
+    newWorkBook = openpyxl.Workbook()
+    newWorksheet = newWorkBook.active
+    sheetListdata= [
+        ['Name', 'Index Number', 'Program', 'GPA','Class'],
+    ]
+    students= GraduationRegistration.objects.all()
+    for student in students:
+        sheetListdata.append([
+            student.name,
+            student.indexNumber,
+            student.program,
+            student.gpa,
+            student.gpaClass
+        ])
+    for i in sheetListdata:
+        newWorksheet.append(i)
+    fileTime= f'{datetime.now().strftime('%B')}_{int(datetime.now().second)}_{int(datetime.now().minute)}_{int(datetime.now().hour)}'
+    filenames= f'Graduation List_{fileTime}.xlsx'
+    filepath= os.path.join(excelFileDir, filenames)
+    newWorkBook.save(filepath)
+    saveFileToServer= GraduationList.objects.create(xlsName= filenames)
+    with open(filepath, 'rb') as f:
+        saveFileToServer.xlsFile.save(filenames, File(f))
+    saveFileToServer.save()
+    os.remove(filepath)
+    fileurl= f'{saveFileToServer.xlsFile.url}'
+    return JsonResponse({'message': f'{fileurl}', 'code': 200})

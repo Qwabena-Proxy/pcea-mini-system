@@ -294,3 +294,10 @@ class GraduationRegistration(models.Model):
 
     def __str__(self):
         return f'{self.name} --- {self.gpaClass}'
+
+class GraduationList(models.Model):
+    xlsName= models.CharField(default= '', blank= False, null= False, max_length= 255)
+    xlsFile= models.FileField(upload_to='xlsFiles/', null= True, blank= True)
+    
+    def __str__(self):
+        return f'{self.pk}'
