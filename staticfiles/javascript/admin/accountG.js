@@ -4,6 +4,7 @@ const logoutBtn = document.getElementById("logout");
 const staffName = document.getElementById("staff-name");
 const staffEmail = document.getElementById("staff-email");
 const staffDepartment = document.getElementById("staff-department");
+const printBtn = document.getElementById("print-data");
 
 logoutBtn.addEventListener("click", () => {
   const confirmation = confirm(
@@ -76,5 +77,31 @@ const getStaffInfo = () => {
     })
     .catch((err) => console.error(err));
 };
+
+printBtn.addEventListener("click", (e) => {
+  if (e.target.value == "Convert Data To Excel") {
+    e.target.value = "Processing..";
+    fetch("/account-office/graduants/list/", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.code == 200) {
+          const linkEl = document.getElementById("file-url");
+          linkEl.href = `${response.message}`;
+          e.target.value = "Download Excel File";
+        } else {
+          e.target.value = "Convert Data To Excel";
+        }
+      });
+  } else if (e.target.value == "Download Excel File") {
+    downloadFile();
+  }
+});
+
+function downloadFile() {
+  const linkEl = document.getElementById("file-url");
+  linkEl.click();
+}
 
 getStaffInfo();
