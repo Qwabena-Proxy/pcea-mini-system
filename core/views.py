@@ -257,7 +257,7 @@ def generateExcelData(request):
         ])
     for i in sheetListdata:
         newWorksheet.append(i)
-    fileTime= f'{datetime.now().strftime('%B')}_{int(datetime.now().second)}_{int(datetime.now().minute)}_{int(datetime.now().hour)}'
+    fileTime= f"{datetime.now().strftime('%B')}_{int(datetime.now().second)}_{int(datetime.now().minute)}_{int(datetime.now().hour)}"
     filenames= f'Graduation List_{fileTime}.xlsx'
     filepath= os.path.join(excelFileDir, filenames)
     newWorkBook.save(filepath)
