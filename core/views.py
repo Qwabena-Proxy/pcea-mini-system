@@ -18,6 +18,11 @@ from .utils import *
 
 # Create your views here.
 
+def home(request):
+    context = {}
+    return redirect('graduation-registration')
+    # return render(request, '', context= context)
+
 def index(request):
     # exceldatafetch()
     context= {
@@ -183,6 +188,8 @@ def sendActivationLink(request, email, userType, special= False):
 
 @csrf_exempt
 def graduationRegistration(request):
+    Programs= ProgrameModel.objects.exclude(name="TestProgram")
+    print(Programs)
     if request.method == 'POST':
         indexNumber= request.POST.get('indexNumber')
         try:
@@ -199,6 +206,7 @@ def graduationRegistration(request):
                 except Graduants.DoesNotExist:
                     return JsonResponse({'message': 'Student data does not exist, please visit the account office to make corrections', 'code': 400})
     context= {
+        'programs': Programs,
     }
     return render(request, 'students/graduationRegistration.html', context= context)
 

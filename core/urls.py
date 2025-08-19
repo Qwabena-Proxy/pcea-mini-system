@@ -3,12 +3,12 @@ from .views import (
     index, loginView, updateStaffInfo, updateStudentInfo,
     dashBoard, academics, courseRegistration, registeredCourses,
     accountActivation, accountOffice, graduationRegistration,
-    registerGraduant, accountOfficeGraduation
+    registerGraduant, accountOfficeGraduation, home,
 )
 
 urlpatterns = [
+    path('', home, name='home'),
     path('home/', index, name='index-page'),
-    # path('', loginView, name='login-page'),
     path('login/', loginView, name='login-page'),
     path('students/update-info/', updateStudentInfo, name='students-update-info'),
     path('staff/update-info/', updateStaffInfo, name='staff-update-info'),
@@ -19,7 +19,6 @@ urlpatterns = [
     path('activate/<str:uidb64>/<str:token>/<int:special>/', accountActivation, name='activate-account'),
     path('account-office/', accountOffice, name='account-office'),
     path('account-office/graduants/', accountOfficeGraduation, name='account-office-graduants'),
-    path('', graduationRegistration, name='graduation-registration'),
-    # path('graduation-registration/', graduationRegistration, name='graduation-registration'),
+    path('graduation-registration/', graduationRegistration, name='graduation-registration'),
     path('graduation-registration/register', registerGraduant, name='graduation-registration-register'),
 ]

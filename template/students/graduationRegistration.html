@@ -60,7 +60,12 @@
           </div>
           <div class="input-group">
             <label for="program">Enter Program</label>
-            <input type="text" placeholder="Program" id="program" />
+            <input
+              type="text"
+              placeholder="Program"
+              id="program"
+              list="programs"
+            />
           </div>
           <div class="input-group">
             <label for="gpa">Enter GPA</label>
@@ -68,7 +73,12 @@
           </div>
           <div class="input-group">
             <label for="class">Enter Class</label>
-            <input type="text" placeholder="Class" id="class" />
+            <input
+              type="text"
+              placeholder="Class"
+              id="class"
+              list="gpClassObtained"
+            />
           </div>
           <p id="server-response-final"></p>
           <button id="submit-details-btn">
@@ -77,6 +87,18 @@
           </button>
         </div>
       </section>
+      <datalist id="programs">
+        {% for program in programs %}
+        <option value="{{program.name}}"></option>
+        {% endfor %}
+      </datalist>
+      <datalist id="gpClassObtained">
+        <option value="First Class"></option>
+        <option value="Second Upper Class"></option>
+        <option value="Second Lower Class"></option>
+        <option value="Third Class"></option>
+        <option value="Pass"></option>
+      </datalist>
     </main>
   </body>
 </html>
