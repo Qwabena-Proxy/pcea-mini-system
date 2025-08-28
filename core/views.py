@@ -23,7 +23,8 @@ from datetime import datetime
 
 def home(request):
     context = {}
-    return redirect('graduation-registration')
+    return redirect('login-page')
+    # return redirect('graduation-registration')
     # return render(request, '', context= context)
 
 def index(request):
@@ -107,8 +108,8 @@ def accountOffice(request):
         'deptorsDict': deptorsDict,
         'wdeptosDict': wdeptosDict,
     }
-    return redirect('account-office-graduants')
-    # return render(request, 'admin/account.html', context= context)
+    # return redirect('account-office-graduants')
+    return render(request, 'admin/account.html', context= context)
 
 def accountOfficeGraduation(request):
     registered= GraduationRegistration.objects.all()
